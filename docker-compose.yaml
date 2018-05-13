@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  gather-turtles:
+    build:
+      context: .
+      dockerfile: Dockerfile-go
+    container_name: gather-turtles
+    restart: always
+    networks:
+      - gather-turtles
+    depends_on:
+      - timescale
+    environment:
+      - DB_USER=go
+      - DB_NAME=trtl
+      - DB_PASSWORD=98765
+      - DB_HOST=timescale
+      - DB_PORT=5432
+      - DB_SSLMODE=disable
+    dns: 
+      - 8.8.8.8
+      - 8.8.4.4
+
+  timescale:
+    build:
+      context: .
+      dockerfile: Dockerfile-db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - GO_PASSWORD=98765
+      - WEB_PASSWORD=98765
+    container_name: timescale
+    volumes:
+      - timescale:/var/lib/postgresql/data
+    networks:
+      - gather-turtles
+
+networks:
+  gather-turtles:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.20.0.0/16
+
+volumes:
+  timescale:
