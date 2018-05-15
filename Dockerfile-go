@@ -1,6 +1,7 @@
 FROM golang:alpine as builder
 
 COPY ./go/main.go /go
+COPY ./go/wait-for-postgres.sh /go
 
 WORKDIR /go
 
@@ -22,9 +23,10 @@ ENV DB_PORT=${DB_PORT}
 ARG DB_SSLMODE=disable
 ENV DB_SSLMODE=${DB_SSLMODE}
 
-RUN apk add --no-cache git && \
+RUN apk add --no-cache git postgresql-client && \
     go get github.com/lib/pq && \
     go get github.com/robfig/cron && \
-    CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags="-s" -o go-gather-turtles
+    CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags="-s" -o go-gather-turtles && \
+    chmod +x wait-for-postgres.sh
 
-CMD ./go-gather-turtles -db-user=${DB_USER} -db-name=${DB_NAME} -db-password=${DB_PASSWORD} -db-host=${DB_HOST} -db-port=${DB_PORT} -db-ssl-mode=${DB_SSLMODE}
+CMD ./wait-for-postgres.sh ${DB_HOST} ${DB_PORT} ${DB_USER} ${DB_PASSWORD} ${DB_NAME} ./go-gather-turtles -db-user=${DB_USER} -db-name=${DB_NAME} -db-password=${DB_PASSWORD} -db-host=${DB_HOST} -db-port=${DB_PORT} -db-ssl-mode=${DB_SSLMODE}

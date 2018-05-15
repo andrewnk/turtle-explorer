@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  gather-turtles:
+    volumes:
+      - ./go:/go
+    command: tail -f /dev/null

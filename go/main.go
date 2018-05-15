@@ -14,14 +14,17 @@ import (
     "github.com/robfig/cron"
 )
 
-var poolsJsonLink string = "https://raw.githubusercontent.com/turtlecoin/turtlecoin-pools-json/master/v2/turtlecoin-pools.json"
-var nodesJsonLink string = "https://raw.githubusercontent.com/turtlecoin/turtlecoin-nodes-json/master/turtlecoin-nodes.json"
-var dbUser string
-var dbName string
-var dbPassword string
-var dbHost string
-var dbPort string
-var dbSSLMode string
+var (
+    poolsJsonLink string = "https://raw.githubusercontent.com/turtlecoin/turtlecoin-pools-json/master/v2/turtlecoin-pools.json"
+    nodesJsonLink string = "https://raw.githubusercontent.com/turtlecoin/turtlecoin-nodes-json/master/turtlecoin-nodes.json"
+    dbUser string
+    dbName string
+    dbPassword string
+    dbHost string
+    dbPort string
+    dbSSLMode string
+    db *sql.DB
+)
 
 type Node struct {
     Name string `json:"name"`
@@ -53,81 +56,167 @@ func main() {
     flag.StringVar(&dbSSLMode, "db-ssl-mode", "", "Database SSL Mode")
     flag.Parse()
 
+    initDb()
+    setNodes()
+    setPools()
+
     c := cron.New()
     c.Start()
-
+    // update node and pool stats every 30 seconds
     c.AddFunc("30 * * * * *", func() {
-        getNodeData()
-        getPoolData()
+        setNodeData()
+        setPoolData()
+    })
+
+    // update nodes and pools every 12 hours
+    c.AddFunc("@every 12h", func() {
+        setNodes()
+        setPools()
     })
 
     select{}
 }
 
-func openConn() *sql.DB {
-    db, conErr := sql.Open("postgres", fmt.Sprintf("user=%[1]s dbname=%[2]s password=%[3]s host=%[4]s port=%[5]s sslmode=%[6]s", dbUser, dbName, dbPassword, dbHost, dbPort, dbSSLMode))
-    if conErr != nil {
-        log.Println(conErr)
-    }
-
-    return db
-}
-
-func insertDataIntoDb(table string, name string, json string) {
-    db := openConn()
-    insertStatment := fmt.Sprintf("INSERT INTO %[1]s(time, name, data) VALUES (NOW(), $1, $2)", table)
-    rows, insertErr := db.Query(insertStatment, name, json)
-
-    rows.Close()
-    db.Close()
-
-    if insertErr != nil {
-        log.Println(insertErr)
+func initDb() {
+    var err error
+    db, err = sql.Open("postgres", fmt.Sprintf("user=%[1]s dbname=%[2]s password=%[3]s host=%[4]s port=%[5]s sslmode=%[6]s", dbUser, dbName, dbPassword, dbHost, dbPort, dbSSLMode))
+    if err != nil {
+        log.Println("Error connecting to the database: ", err)
+    } else {
+        log.Println("Connected to the database")
     }
 }
 
-func getNodeData() {
-    nodes := getNodes()
+func setNodeData() {
+    nodes, _ := db.Query("SELECT id, url, port FROM nodes")
+    defer nodes.Close()
+    for nodes.Next() {
+        var id int
+        var url string
+        var port int
+        err := nodes.Scan(&id, &url, &port)
+
+        if err != nil {
+            log.Println("There was a problem getting the node values from the db: ", err)
+        } else {
+            url := fmt.Sprintf("%[1]s:%#[2]s/getinfo", url, strconv.Itoa(port))
+            var response []byte = queryApi(url, "GET")
+
+            if isValidJson(response) && len(response) > 0 {
+                stmt, err := db.Prepare("INSERT INTO node_data(time, node_id, data) VALUES(NOW(),$1,$2)")
+                if err != nil {
+                    log.Println("There was an error preparing to insert the node data: ", err)
+                }
+
+                _, err = stmt.Exec(id, string(response))
+                if err != nil {
+                    log.Println("There was a problem inserting the node data: ", err)
+                }
+                stmt.Close()
+            }
+        }
+    }
+}
+
+func setPoolData() {
+    pools, _ := db.Query("SELECT id, api FROM pools")
+    defer pools.Close()
+    for pools.Next() {
+        var id int
+        var api string
+        err := pools.Scan(&id, &api)
+
+        if err != nil {
+            log.Println("There was a problem getting the pool values from the db: ", err)
+        } else {
+            url := fmt.Sprintf("%[1]sstats", api)
+            var response []byte = queryApi(url, "GET")
+
+            if isValidJson(response) && len(response) > 0 {
+                stmt, err := db.Prepare("INSERT INTO pool_data(time, pool_id, data) VALUES (NOW(),$1,$2)")
+                if err != nil {
+                    log.Println("There was an error preparing to insert the pool data: ", err)
+                }
+
+                _, err = stmt.Exec(id, string(response))
+                if err != nil {
+                    log.Println("There was a problem inserting the pool data: ", err)
+                }
+                stmt.Close()
+            }
+        }
+    }
+}
+
+func setNodes() {
+    nodes := getNodeJson()
+
     for i := 0; i < len(nodes.Nodes); i++ {
-        url := fmt.Sprintf("%[1]s:%#[2]s/getinfo", nodes.Nodes[i].Url, strconv.Itoa(nodes.Nodes[i].Port))
-        var response []byte = queryApi(url, "GET")
+        var name string
+        err := db.QueryRow("SELECT name FROM nodes WHERE name = $1 LIMIT 1", nodes.Nodes[i].Name).Scan(&name)
 
-        if isValidJson(response) {
-            insertDataIntoDb("nodes", nodes.Nodes[i].Name, string(response))
+        if err == sql.ErrNoRows {
+            insertNode, insertErr := db.Query("INSERT INTO nodes(name, url, port) VALUES ($1, $2, $3)", nodes.Nodes[i].Name, nodes.Nodes[i].Url, nodes.Nodes[i].Port)
+
+            if insertErr != nil {
+                log.Println("There was a problem inserting the node into the database: ", insertErr)
+            }
+
+            insertNode.Close()
         }
+
     }
+
+    return
 }
 
-func getPoolData() {
-    pools := getPools()
-    for i := 0; i < len(pools.Pools); i++ {
-        var response []byte = queryApi(fmt.Sprintf("%[1]sstats", pools.Pools[i].Api), "GET")
-
-        if isValidJson(response) {
-            insertDataIntoDb("pools", pools.Pools[i].Name, string(response))
-        }
-    }
-}
-
-func isValidJson(data []byte) bool {
-    var js map[string]interface{}
-    return json.Unmarshal(data, &js) == nil
-}
-
-func getNodes() Nodes {
+func getNodeJson() Nodes {
     var response []byte = queryApi(nodesJsonLink, "GET")
 
     var nodes Nodes
-    json.Unmarshal(response, &nodes)
+    err := json.Unmarshal(response, &nodes)
+
+    if err != nil {
+        log.Println("There was a problem getting the nodes", err)
+    } else {
+        log.Println("Successfully got nodes")
+    }
 
     return nodes
 }
 
-func getPools() Pools {
+func setPools() {
+    pools := getPoolJson()
+
+    for i := 0; i < len(pools.Pools); i++ {
+        var name string
+        err := db.QueryRow("SELECT name FROM pools WHERE name = $1 LIMIT 1", pools.Pools[i].Name).Scan(&name)
+
+        if err == sql.ErrNoRows {
+            insertPool, err := db.Query("INSERT INTO pools(name, url, api, type) VALUES ($1, $2, $3, $4)", pools.Pools[i].Name, pools.Pools[i].Url, pools.Pools[i].Api, pools.Pools[i].Type)
+
+            if err != nil {
+                log.Println("There was a problem inserting the pool into the database: ", err)
+            }
+
+            insertPool.Close()
+        }
+
+    }
+
+    return
+}
+
+func getPoolJson() Pools {
     var response []byte = queryApi(poolsJsonLink, "GET")
 
     var pools Pools
-    json.Unmarshal(response, &pools)
+    err := json.Unmarshal(response, &pools)
+    if err != nil {
+        log.Println("There was a problem getting the pools", err)
+    } else {
+        log.Println("Successfully got pools")
+    }
 
     return pools
 }
@@ -142,8 +231,8 @@ func queryApi(url string, action string) []byte {
     response, err := request.Do(r)
 
     if err != nil {
-        // if error return empty
-        log.Println(err)
+        // if error log, but return empty
+        log.Println("There was a problem querying the url: ", err)
         return []byte{}
     }
 
@@ -151,8 +240,13 @@ func queryApi(url string, action string) []byte {
 
     responseData, err := ioutil.ReadAll(response.Body)
     if err != nil {
-        log.Println(err)
+        log.Println("There was a problem reading the response: ", err)
     }
 
     return responseData
+}
+
+func isValidJson(data []byte) bool {
+    var js map[string]interface{}
+    return json.Unmarshal(data, &js) == nil
 }
