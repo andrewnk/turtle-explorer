@@ -17,5 +17,4 @@ until PGPASSWORD="$password" psql -h "$host" -p "$port" -U "$user" -d "$dbname" 
 done
 
 >&2 echo "Postgres is up - executing command"
-echo $cmd
 exec $cmd
