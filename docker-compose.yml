@@ -18,9 +18,6 @@ services:
       - DB_HOST=timescale
       - DB_PORT=5432
       - DB_SSLMODE=disable
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
 
   timescale:
     build:
