@@ -102,7 +102,7 @@ func setNodeData() {
         err := nodes.Scan(&id, &url, &port)
 
         if err != nil {
-            log.Println("There was a problem getting the nodes from the db: ", err)
+            log.Println("There was an error getting the nodes from the db: ", err)
         } else {
             url := fmt.Sprintf("%[1]s:%#[2]s/getinfo", url, strconv.Itoa(port))
             var response []byte = queryApi(url, "GET")
@@ -115,7 +115,7 @@ func setNodeData() {
 
                 _, err = stmt.Exec(id, string(response))
                 if err != nil {
-                    log.Println("There was a problem inserting the node data: ", err)
+                    log.Println("There was an error inserting the node data: ", err)
                 }
                 stmt.Close()
             }
@@ -137,7 +137,7 @@ func setPoolData() {
         err := pools.Scan(&id, &api)
 
         if err != nil {
-            log.Println("There was a problem getting the pool values from the db: ", err)
+            log.Println("There was an error getting the pool values from the db: ", err)
         } else {
             url := fmt.Sprintf("%[1]sstats", api)
             var response []byte = queryApi(url, "GET")
@@ -150,7 +150,7 @@ func setPoolData() {
 
                 _, err = stmt.Exec(id, string(response))
                 if err != nil {
-                    log.Println("There was a problem inserting the pool data: ", err)
+                    log.Println("There was an error inserting the pool data: ", err)
                 }
                 stmt.Close()
             }
@@ -173,7 +173,7 @@ func setNodes() {
 
             _, err = stmt.Exec(nodes.Nodes[i].Name, nodes.Nodes[i].Url, nodes.Nodes[i].Port)
             if err != nil {
-                log.Println("There was a problem inserting the node into the database: ", err)
+                log.Println("There was an error inserting the node into the database: ", err)
             }
             stmt.Close()
         }
@@ -190,7 +190,7 @@ func getNodeJson() Nodes {
     err := json.Unmarshal(response, &nodes)
 
     if err != nil {
-        log.Println("There was a problem getting the nodes", err)
+        log.Println("There was an error getting the nodes", err)
     } else {
         log.Println("Successfully got nodes")
     }
@@ -213,7 +213,7 @@ func setPools() {
 
             _, err = stmt.Exec(pools.Pools[i].Name, pools.Pools[i].Url, pools.Pools[i].Api, pools.Pools[i].Type)
             if err != nil {
-                log.Println("There was a problem inserting the pool into the database: ", err)
+                log.Println("There was an error inserting the pool into the database: ", err)
             }
             stmt.Close()
         }
@@ -228,7 +228,7 @@ func getPoolJson() Pools {
     var pools Pools
     err := json.Unmarshal(response, &pools)
     if err != nil {
-        log.Println("There was a problem getting the pools", err)
+        log.Println("There was an error getting the pools", err)
     } else {
         log.Println("Successfully got pools")
     }
@@ -238,16 +238,16 @@ func getPoolJson() Pools {
 
 func queryApi(url string, action string) []byte {
     request := &http.Client{
-        Timeout: 15 * time.Second,
+        Timeout: 30 * time.Second,
     }
 
     r, err := http.NewRequest(action, url, nil)
-    r.Header.Add("User-Agent", "Go_Gather_Turtles/1.0")
+    r.Header.Add("User-Agent", "Turtle-Explorer/1.0")
     response, err := request.Do(r)
 
     if err != nil {
         // if error log, but return empty
-        log.Println("There was a problem querying the url: ", err)
+        log.Println("There was an error querying the url: ", err)
         return []byte{}
     }
 
@@ -255,7 +255,7 @@ func queryApi(url string, action string) []byte {
 
     responseData, err := ioutil.ReadAll(response.Body)
     if err != nil {
-        log.Println("There was a problem reading the response: ", err)
+        log.Println("There was an error reading the response: ", err)
     }
 
     return responseData
