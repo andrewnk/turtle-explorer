@@ -4,14 +4,16 @@ services:
   gather-turtles:
     volumes:
       - ./go:/go
-    tty: true
+    command: tail -f /dev/null
 
   web-backend:
     volumes:
       - ./web/backend:/home/node
-    tty: true
+    command: tail -f /dev/null
+    ports:
+      - 3030:3030
 
   web-frontend:
     volumes:
       - ./web/frontend:/home/node
-    tty: true
+    command: tail -f /dev/null
