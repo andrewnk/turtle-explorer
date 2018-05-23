@@ -8,10 +8,10 @@ services:
 
   web-backend:
     volumes:
-      - ./web/backend:/node
+      - ./web/backend:/home/node
     tty: true
 
   web-frontend:
     volumes:
-      - ./web/frontend:/node
+      - ./web/frontend:/home/node
     tty: true
