@@ -4,4 +4,14 @@ services:
   gather-turtles:
     volumes:
       - ./go:/go
-    command: tail -f /dev/null
+    tty: true
+
+  web-backend:
+    volumes:
+      - ./web/backend:/node
+    tty: true
+
+  web-frontend:
+    volumes:
+      - ./web/frontend:/node
+    tty: true

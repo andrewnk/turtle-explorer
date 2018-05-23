@@ -8,7 +8,7 @@ services:
     container_name: gather-turtles
     restart: always
     networks:
-      - gather-turtles
+      - backend
     depends_on:
       - timescale
     environment:
@@ -18,9 +18,6 @@ services:
       - DB_HOST=timescale
       - DB_PORT=5432
       - DB_SSLMODE=disable
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
 
   timescale:
     build:
@@ -36,15 +33,50 @@ services:
     volumes:
       - timescale:/var/lib/postgresql/data
     networks:
+      - backend
+
+  web-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile-web-backend
+    restart: always
+    container_name: web-backend
+    environment:
+      - DB_USER=web
+      - DB_PASSWORD=98765
+      - DB_PORT=5432
+      - DB_HOST=timescale
+      - DB_NAME=trtl
+    depends_on:
+      - timescale
       - gather-turtles
+    networks:
+      - backend
+      - frontend
+
+  web-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile-web-frontend
+    restart: always
+    container_name: web-frontend
+    networks:
+      - frontend
+    depends_on:
+      - timescale
+      - gather-turtles
+      - web-backend
+    ports:
+      - 80:3000
 
 networks:
-  gather-turtles:
+  backend:
     driver: bridge
     ipam:
       driver: default
       config:
       - subnet: 172.20.0.0/16
+  frontend:
 
 volumes:
   timescale:

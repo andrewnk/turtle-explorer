@@ -1,0 +1,21 @@
+@import 'overrides';
+
+.navbar, .footer, #app {
+  background-color: $background;
+}
+
+.navbar {
+    border-bottom: 1px solid $primary;
+}
+
+.footer {
+    padding-bottom:1.5rem;
+    border-top: 1px solid $primary;
+}
+
+.page-enter-active, .page-leave-active {
+  transition: opacity .3s;
+}
+.page-enter, .page-leave-to {
+  opacity: 0;
+}
