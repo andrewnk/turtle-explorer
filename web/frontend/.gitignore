@@ -9,3 +9,6 @@ node_modules
 
 # Nuxt generate
 dist
+
+.npm
+.ash_history
