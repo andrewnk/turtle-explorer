@@ -1,7 +1,7 @@
-// Initializes the `pools` service on path `/pools`
+// Initializes the `node` service on path `/node`
 const createService = require('feathers-sequelize');
-const createModel = require('../../models/pools.model');
-const hooks = require('./pools.hooks');
+const createModel = require('../../models/node.model');
+const hooks = require('./node.hooks');
 
 module.exports = function (app) {
   const Model = createModel(app);
@@ -13,10 +13,10 @@ module.exports = function (app) {
   };
 
   // Initialize our service with any options it requires
-  app.use('/pools', createService(options));
+  app.use('/node', createService(options));
 
   // Get our initialized service so that we can register hooks and filters
-  const service = app.service('pools');
+  const service = app.service('node');
 
   service.hooks(hooks);
 };

@@ -8,17 +8,18 @@ module.exports = function (app) {
   const poolData = sequelizeClient.define('pool_data', {
     time: {
       type: DataTypes.TIME,
-      allowNull: false
+      primaryKey: true
     },
     pool_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+      type: DataTypes.INTEGER
     },
     data: {
-      type: DataTypes.JSONB,
-      allowNull: false
+      type: DataTypes.JSONB
     }
   }, {
+    timestamps: true,
+    createdAt: 'time',
+    updatedAt: false,
     hooks: {
       beforeCount(options) {
         options.raw = true;
@@ -28,8 +29,7 @@ module.exports = function (app) {
 
   // eslint-disable-next-line no-unused-vars
   poolData.associate = function (models) {
-    // Define associations here
-    // See http://docs.sequelizejs.com/en/latest/docs/associations/
+    poolData.belongsTo(models.pool, {foreignKey: 'pool_id', sourceKey: 'id'})
   };
 
   return poolData;

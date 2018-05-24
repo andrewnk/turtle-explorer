@@ -88,7 +88,7 @@ func initDb() {
 }
 
 func setNodeData() {
-    nodes, err := db.Query("SELECT id, url, port FROM nodes")
+    nodes, err := db.Query("SELECT id, url, port FROM node")
 
     if err != nil {
         log.Println("There was an error getting the nodes from the db: ", err)
@@ -124,7 +124,7 @@ func setNodeData() {
 }
 
 func setPoolData() {
-    pools, err := db.Query("SELECT id, api FROM pools")
+    pools, err := db.Query("SELECT id, api FROM pool")
 
     if err != nil {
         log.Println("There was an error getting the pools from the db: ", err)
@@ -163,10 +163,10 @@ func setNodes() {
 
     for i := 0; i < len(nodes.Nodes); i++ {
         var name string
-        err := db.QueryRow("SELECT name FROM nodes WHERE name = $1 LIMIT 1", nodes.Nodes[i].Name).Scan(&name)
+        err := db.QueryRow("SELECT name FROM node WHERE name = $1 LIMIT 1", nodes.Nodes[i].Name).Scan(&name)
 
         if err == sql.ErrNoRows {
-            stmt, err := db.Prepare("INSERT INTO nodes(name, url, port) VALUES ($1, $2, $3)")
+            stmt, err := db.Prepare("INSERT INTO node(name, url, port) VALUES ($1, $2, $3)")
             if err != nil {
                 log.Println("There was an error preparing to insert the node: ", err)
             }
@@ -203,10 +203,10 @@ func setPools() {
 
     for i := 0; i < len(pools.Pools); i++ {
         var name string
-        err := db.QueryRow("SELECT name FROM pools WHERE name = $1 LIMIT 1", pools.Pools[i].Name).Scan(&name)
+        err := db.QueryRow("SELECT name FROM pool WHERE name = $1 LIMIT 1", pools.Pools[i].Name).Scan(&name)
 
         if err == sql.ErrNoRows {
-            stmt, err := db.Prepare("INSERT INTO pools(name, url, api, type) VALUES ($1, $2, $3, $4)")
+            stmt, err := db.Prepare("INSERT INTO pool(name, url, api, type) VALUES ($1, $2, $3, $4)")
             if err != nil {
                 log.Println("There was an error preparing to insert the pool: ", err)
             }

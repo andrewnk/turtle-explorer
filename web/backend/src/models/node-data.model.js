@@ -8,17 +8,18 @@ module.exports = function (app) {
   const nodeData = sequelizeClient.define('node_data', {
     time: {
       type: DataTypes.TIME,
-      allowNull: false
+      primaryKey: true
     },
     node_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+      type: DataTypes.INTEGER
     },
     data: {
-      type: DataTypes.JSONB,
-      allowNull: false
+      type: DataTypes.JSONB
     }
   }, {
+    timestamps: true,
+    createdAt: 'time',
+    updatedAt: false,
     hooks: {
       beforeCount(options) {
         options.raw = true;
@@ -28,8 +29,7 @@ module.exports = function (app) {
 
   // eslint-disable-next-line no-unused-vars
   nodeData.associate = function (models) {
-    // Define associations here
-    // See http://docs.sequelizejs.com/en/latest/docs/associations/
+    nodeData.belongsTo(models.node, {foreignKey: 'node_id', sourceKey: 'id'})
   };
 
   return nodeData;

@@ -5,12 +5,18 @@ const DataTypes = Sequelize.DataTypes;
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const pools = sequelizeClient.define('pools', {
-    text: {
+  const node = sequelizeClient.define('node', {
+    name: {
       type: DataTypes.STRING,
-      allowNull: false
+    },
+    url: {
+      type: DataTypes.STRING,
+    },
+    port: {
+      type: DataTypes.STRING,
     }
   }, {
+    timestamps: false,
     hooks: {
       beforeCount(options) {
         options.raw = true;
@@ -19,10 +25,9 @@ module.exports = function (app) {
   });
 
   // eslint-disable-next-line no-unused-vars
-  pools.associate = function (models) {
-    // Define associations here
-    // See http://docs.sequelizejs.com/en/latest/docs/associations/
+  node.associate = function (models) {
+    node.hasMany(models.node_data, {foreignKey: 'node_id', sourceKey: 'id'})
   };
 
-  return pools;
+  return node;
 };
