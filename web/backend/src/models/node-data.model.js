@@ -7,7 +7,7 @@ module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
   const nodeData = sequelizeClient.define('node_data', {
     time: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
       primaryKey: true
     },
     node_id: {
@@ -29,7 +29,7 @@ module.exports = function (app) {
 
   // eslint-disable-next-line no-unused-vars
   nodeData.associate = function (models) {
-    nodeData.belongsTo(models.node, {foreignKey: 'node_id', sourceKey: 'id'})
+    nodeData.belongsTo(models.node, {foreignKey: 'node_id', targetKey: 'id'})
   };
 
   return nodeData;

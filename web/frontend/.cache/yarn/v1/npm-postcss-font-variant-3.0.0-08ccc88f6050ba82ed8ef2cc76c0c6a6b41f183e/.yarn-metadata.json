@@ -1,0 +1,57 @@
+{
+  "manifest": {
+    "name": "postcss-font-variant",
+    "version": "3.0.0",
+    "description": "PostCSS plugin to transform W3C font-variant properties to more compatible CSS  (font-feature-settings)",
+    "keywords": [
+      "css",
+      "postcss",
+      "postcss-plugin",
+      "font",
+      "variant",
+      "font-variant"
+    ],
+    "author": {
+      "name": "Maxime Thirouin"
+    },
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/postcss/postcss-font-variant.git"
+    },
+    "files": [
+      "index.js"
+    ],
+    "dependencies": {
+      "postcss": "^6.0.1"
+    },
+    "devDependencies": {
+      "jscs": "^3.0.7",
+      "jshint": "^2.9.4",
+      "npmpub": "^3.1.0",
+      "tape": "^4.6.3"
+    },
+    "scripts": {
+      "lint": "npm run jscs && npm run jshint",
+      "jscs": "jscs index.js test/index.js",
+      "jshint": "jshint . --exclude-path .gitignore",
+      "test": "npm run lint && tape test",
+      "release": "npmpub"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-postcss-font-variant-3.0.0-08ccc88f6050ba82ed8ef2cc76c0c6a6b41f183e/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# postcss-font-variant [![Build Status](https://travis-ci.org/postcss/postcss-font-variant.png)](https://travis-ci.org/postcss/postcss-font-variant)\n\n> [PostCSS](https://github.com/postcss/postcss) plugin to transform [W3C CSS font variant](http://dev.w3.org/csswg/css-fonts/#propdef-font-variant) properties to more compatible CSS (font-feature-settings).\n\n## Installation\n\n```console\n$ npm install postcss-font-variant\n```\n\n## Usage\n\n```js\n// dependencies\nvar postcss = require(\"postcss\")\nvar fontVariant = require(\"postcss-font-variant\")\n\n// css to be processed\nvar css = fs.readFileSync(\"input.css\", \"utf8\")\n\n// process css using postcss-font-variant\nvar out = postcss()\n  .use(fontVariant())\n  .process(css)\n  .css\n```\n\nUsing this `input.css`:\n\n```css\nh2 {\n  font-variant-caps: small-caps;\n}\n\ntable {\n  font-variant-numeric: lining-nums;\n}\n```\n\nyou will get:\n\n```css\nh2 {\n  font-feature-settings: \"c2sc\";\n  font-variant-caps: small-caps;\n}\n\ntable {\n  font-feature-settings: \"lnum\";\n  font-variant-numeric: lining-nums;\n}\n\n```\n\nCheckout [tests](test) for more examples.\n\n---\n\n## Contributing\n\nWork on a branch, install dev-dependencies, respect coding style & run tests before submitting a bug fix or a feature.\n\n    $ git clone https://github.com/postcss/postcss-font-variant.git\n    $ git checkout -b patch-1\n    $ npm install\n    $ npm test\n\n## [Changelog](CHANGELOG.md)\n\n## [License](LICENSE)\n",
+    "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2014 Maxime Thirouin & Ian Storm Taylor\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/postcss-font-variant/-/postcss-font-variant-3.0.0.tgz#08ccc88f6050ba82ed8ef2cc76c0c6a6b41f183e",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/postcss-font-variant/-/postcss-font-variant-3.0.0.tgz",
+    "hash": "08ccc88f6050ba82ed8ef2cc76c0c6a6b41f183e",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "08ccc88f6050ba82ed8ef2cc76c0c6a6b41f183e"
+}

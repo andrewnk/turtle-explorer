@@ -1,0 +1,96 @@
+{
+  "manifest": {
+    "name": "vuex",
+    "version": "3.0.1",
+    "description": "state management for Vue.js",
+    "main": "dist/vuex.common.js",
+    "module": "dist/vuex.esm.js",
+    "unpkg": "dist/vuex.js",
+    "typings": "types/index.d.ts",
+    "files": [
+      "dist",
+      "types/index.d.ts",
+      "types/helpers.d.ts",
+      "types/vue.d.ts"
+    ],
+    "scripts": {
+      "dev": "node examples/server.js",
+      "dev:dist": "rollup -wm -c build/rollup.dev.config.js",
+      "build": "npm run build:main && npm run build:logger",
+      "build:main": "node build/build.main.js",
+      "build:logger": "rollup -c build/rollup.logger.config.js",
+      "lint": "eslint src test",
+      "test": "npm run lint && npm run test:types && npm run test:unit && npm run test:ssr && npm run test:e2e",
+      "test:unit": "rollup -c build/rollup.dev.config.js && jasmine JASMINE_CONFIG_PATH=test/unit/jasmine.json",
+      "test:e2e": "node test/e2e/runner.js",
+      "test:ssr": "rollup -c build/rollup.dev.config.js && VUE_ENV=server jasmine JASMINE_CONFIG_PATH=test/unit/jasmine.json",
+      "test:types": "tsc -p types/test",
+      "release": "bash build/release.sh",
+      "docs": "cd docs && gitbook install && gitbook serve",
+      "docs:deploy": "cd docs && ./deploy.sh"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/vuejs/vuex.git"
+    },
+    "author": {
+      "name": "Evan You"
+    },
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/vuejs/vuex/issues"
+    },
+    "homepage": "https://github.com/vuejs/vuex#readme",
+    "devDependencies": {
+      "babel-core": "^6.22.1",
+      "babel-loader": "^7.1.2",
+      "babel-plugin-transform-object-rest-spread": "^6.23.0",
+      "babel-polyfill": "^6.22.0",
+      "babel-preset-env": "^1.5.1",
+      "chromedriver": "^2.32.3",
+      "cross-spawn": "^5.0.1",
+      "css-loader": "^0.28.7",
+      "eslint": "^3.19.0",
+      "eslint-plugin-vue-libs": "^1.2.0",
+      "express": "^4.14.1",
+      "gitbook-plugin-edit-link": "^2.0.2",
+      "gitbook-plugin-github": "^3.0.0",
+      "gitbook-plugin-prism": "^2.3.0",
+      "gitbook-plugin-theme-vuejs": "^1.1.0",
+      "jasmine": "2.8.0",
+      "jasmine-core": "2.8.0",
+      "nightwatch": "^0.9.12",
+      "nightwatch-helpers": "^1.2.0",
+      "phantomjs-prebuilt": "^2.1.14",
+      "rollup": "^0.50.0",
+      "rollup-plugin-buble": "^0.16.0",
+      "rollup-plugin-replace": "^2.0.0",
+      "rollup-watch": "^4.3.1",
+      "selenium-server": "^2.53.1",
+      "todomvc-app-css": "^2.1.0",
+      "typescript": "^2.5.3",
+      "uglify-js": "^3.1.2",
+      "vue": "^2.5.0",
+      "vue-loader": "^13.3.0",
+      "vue-template-compiler": "^2.5.0",
+      "webpack": "^3.7.1",
+      "webpack-dev-middleware": "^1.10.0",
+      "webpack-hot-middleware": "^2.19.1"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-vuex-3.0.1-e761352ebe0af537d4bb755a9b9dc4be3df7efd2/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# Vuex [![Build Status](https://circleci.com/gh/vuejs/vuex/tree/dev.png?style=shield)](https://circleci.com/gh/vuejs/vuex)\n\n> Centralized State Management for Vue.js.\n\n<p align=\"center\">\n  <img width=\"700px\" src=\"https://raw.githubusercontent.com/vuejs/vuex/dev/docs/en/images/vuex.png\">\n</p>\n\n- [What is Vuex?](http://vuex.vuejs.org/en/intro.html)\n- [Full Documentation](http://vuex.vuejs.org/)\n\n## Examples\n\n- [Counter](https://github.com/vuejs/vuex/tree/dev/examples/counter)\n- [Counter with Hot Reload](https://github.com/vuejs/vuex/tree/dev/examples/counter-hot)\n- [TodoMVC](https://github.com/vuejs/vuex/tree/dev/examples/todomvc)\n- [Flux Chat](https://github.com/vuejs/vuex/tree/dev/examples/chat)\n- [Shopping Cart](https://github.com/vuejs/vuex/tree/dev/examples/shopping-cart)\n\nRunning the examples:\n\n``` bash\n$ npm install\n$ npm run dev # serve examples at localhost:8080\n```\n\n## License\n\n[MIT](http://opensource.org/licenses/MIT)\n",
+    "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-2016 Evan You\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/vuex/-/vuex-3.0.1.tgz#e761352ebe0af537d4bb755a9b9dc4be3df7efd2",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/vuex/-/vuex-3.0.1.tgz",
+    "hash": "e761352ebe0af537d4bb755a9b9dc4be3df7efd2",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "e761352ebe0af537d4bb755a9b9dc4be3df7efd2"
+}

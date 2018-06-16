@@ -1,0 +1,62 @@
+{
+  "manifest": {
+    "name": "reduce-function-call",
+    "version": "1.0.2",
+    "description": "Reduce function calls in a string, using a callback",
+    "keywords": [
+      "string",
+      "reduce",
+      "replacement",
+      "function",
+      "call",
+      "eval",
+      "interpret"
+    ],
+    "author": {
+      "name": "MoOx"
+    },
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/MoOx/reduce-function-call.git"
+    },
+    "files": [
+      "CHANGELOG.md",
+      "LICENSE",
+      "README.md",
+      "index.js"
+    ],
+    "dependencies": {
+      "balanced-match": "^0.4.2"
+    },
+    "devDependencies": {
+      "jscs": "^2.0.0",
+      "jshint": "^2.8.0",
+      "jshint-stylish": "^2.0.1",
+      "npmpub": "^3.1.0",
+      "tap-colorize": "^1.2.0",
+      "tape": "^4.0.3"
+    },
+    "scripts": {
+      "jscs": "jscs *.js **/*.js",
+      "jshint": "jshint . --exclude node_modules --reporter node_modules/jshint-stylish/index.js",
+      "test": "npm run jscs && npm run jshint && tape test | tap-colorize",
+      "release": "npmpub"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-reduce-function-call-1.0.2-5a200bf92e0e37751752fe45b0ab330fd4b6be99/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# reduce-function-call [![Build Status](https://travis-ci.org/MoOx/reduce-function-call.png)](https://travis-ci.org/MoOx/reduce-function-call)\n\n> Reduce function calls in a string, using a callback\n\n## Installation\n\n```bash\nnpm install reduce-function-call\n```\n\n## Usage\n\n```js\nvar reduceFunctionCall = require(\"reduce-function-call\")\n\nreduceFunctionCall(\"foo(1)\", \"foo\", function(body) {\n  // body === \"1\"\n  return parseInt(body, 10) + 1\n})\n// \"2\"\n\nvar nothingOrUpper = function(body, functionIdentifier) {\n  // ignore empty value\n  if (body === \"\") {\n    return functionIdentifier + \"()\"\n  }\n\n  return body.toUpperCase()\n}\n\nreduceFunctionCall(\"bar()\", \"bar\", nothingOrUpper)\n// \"bar()\"\n\nreduceFunctionCall(\"upper(baz)\", \"upper\", nothingOrUpper)\n// \"BAZ\"\n\nreduceFunctionCall(\"math(math(2 + 2) * 4 + math(2 + 2)) and other things\", \"math\", function(body, functionIdentifier, call) {\n  try {\n    return eval(body)\n  }\n  catch (e) {\n    return call\n  }\n})\n// \"20 and other things\"\n\nreduceFunctionCall(\"sha bla blah() blaa bla() abla() aabla() blaaa()\", /\\b([a-z]?bla[a-z]?)\\(/, function(body, functionIdentifier) {\n  if (functionIdentifier === \"bla\") {\n    return \"ABRACADABRA\"\n  }\n  return functionIdentifier.replace(\"bla\", \"!\")\n}\n// \"sha bla !h blaa ABRACADABRA a! aabla() blaaa()\"\n```\n\nSee [unit tests](test/index.js) for others examples.\n\n## Contributing\n\nWork on a branch, install dev-dependencies, respect coding style & run tests before submitting a bug fix or a feature.\n\n```bash\ngit clone https://github.com/MoOx/reduce-function-call.git\ngit checkout -b patch-1\nnpm install\nnpm test\n```\n\n## [Changelog](CHANGELOG.md)\n\n## [License](LICENSE-MIT)\n",
+    "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2014 \"MoOx\" Maxime Thirouin\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/reduce-function-call/-/reduce-function-call-1.0.2.tgz#5a200bf92e0e37751752fe45b0ab330fd4b6be99",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/reduce-function-call/-/reduce-function-call-1.0.2.tgz",
+    "hash": "5a200bf92e0e37751752fe45b0ab330fd4b6be99",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "5a200bf92e0e37751752fe45b0ab330fd4b6be99"
+}

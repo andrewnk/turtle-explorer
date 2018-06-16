@@ -7,7 +7,7 @@ module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
   const poolData = sequelizeClient.define('pool_data', {
     time: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
       primaryKey: true
     },
     pool_id: {

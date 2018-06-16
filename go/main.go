@@ -12,6 +12,7 @@ import (
     "flag"
     _ "github.com/lib/pq"
     "github.com/robfig/cron"
+    "github.com/tidwall/sjson"
 )
 
 var (
@@ -74,6 +75,7 @@ func main() {
         setPools()
     })
 
+    // keep the program running indefinitely
     select{}
 }
 
@@ -105,7 +107,7 @@ func setNodeData() {
             log.Println("There was an error getting the nodes from the db: ", err)
         } else {
             url := fmt.Sprintf("%[1]s:%#[2]s/getinfo", url, strconv.Itoa(port))
-            var response []byte = queryApi(url, "GET")
+            response := queryApi(url, "GET")
 
             if isValidJson(response) && len(response) > 0 {
                 stmt, err := db.Prepare("INSERT INTO node_data(time, node_id, data) VALUES(NOW(),$1,$2)")
@@ -140,15 +142,25 @@ func setPoolData() {
             log.Println("There was an error getting the pool values from the db: ", err)
         } else {
             url := fmt.Sprintf("%[1]sstats", api)
-            var response []byte = queryApi(url, "GET")
+            response := queryApi(url, "GET")
 
             if isValidJson(response) && len(response) > 0 {
+                finalJson := response
+                objectsToRemove := [3] string {"charts", "pool.blocks", "pool.payments"}
+
+                for _, val := range objectsToRemove {
+                    finalJson, err = sjson.DeleteBytes(finalJson, val)
+                    if err != nil {
+                        log.Println(fmt.Sprintf("There was a problem removing %d from the pool JSON:", val), err)
+                    }
+                }
+
                 stmt, err := db.Prepare("INSERT INTO pool_data(time, pool_id, data) VALUES (NOW(),$1,$2)")
                 if err != nil {
                     log.Println("There was an error preparing to insert the pool data: ", err)
                 }
 
-                _, err = stmt.Exec(id, string(response))
+                _, err = stmt.Exec(id, finalJson)
                 if err != nil {
                     log.Println("There was an error inserting the pool data: ", err)
                 }
@@ -177,14 +189,11 @@ func setNodes() {
             }
             stmt.Close()
         }
-
     }
-
-    return
 }
 
 func getNodeJson() Nodes {
-    var response []byte = queryApi(nodesJsonLink, "GET")
+    response := queryApi(nodesJsonLink, "GET")
 
     var nodes Nodes
     err := json.Unmarshal(response, &nodes)
@@ -218,12 +227,10 @@ func setPools() {
             stmt.Close()
         }
     }
-
-    return
 }
 
 func getPoolJson() Pools {
-    var response []byte = queryApi(poolsJsonLink, "GET")
+    response := queryApi(poolsJsonLink, "GET")
 
     var pools Pools
     err := json.Unmarshal(response, &pools)
@@ -246,7 +253,6 @@ func queryApi(url string, action string) []byte {
     response, err := request.Do(r)
 
     if err != nil {
-        // if error log, but return empty
         log.Println("There was an error querying the url: ", err)
         return []byte{}
     }

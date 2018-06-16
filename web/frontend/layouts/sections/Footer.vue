@@ -29,10 +29,7 @@
             <div class="control level-item">
                 <a href="https://github.com/andrewnk/turtle-explorer">
                     <div class="tags has-addons">
-                        <span class="tag is-dark">Andrew Kimball</span>
-                        <span class="tag is-info">
-                            <a href=""></a>
-                        </span>
+                        <span class="tag is-dark">Turtle Explorer</span>
                     </div>
                 </a>
             </div>

@@ -1,0 +1,32 @@
+{
+  "manifest": {
+    "name": "loader-fs-cache",
+    "version": "1.0.1",
+    "description": "A published package of https://github.com/babel/babel-loader/blob/master/src/fs-cache.js",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": {
+      "name": "Ade Viankakrisna Fadlil"
+    },
+    "license": "ISC",
+    "dependencies": {
+      "find-cache-dir": "^0.1.1",
+      "mkdirp": "0.5.1"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-loader-fs-cache-1.0.1-56e0bf08bd9708b26a765b68509840c8dec9fdbc/package.json",
+    "licenseText": "Copyright (c) 2014-2016 Ade Viankakrisna Fadlil <viankakrisna@gmail.com>\n\nMIT License\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\nNONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE\nLIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION\nOF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION\nWITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/loader-fs-cache/-/loader-fs-cache-1.0.1.tgz#56e0bf08bd9708b26a765b68509840c8dec9fdbc",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/loader-fs-cache/-/loader-fs-cache-1.0.1.tgz",
+    "hash": "56e0bf08bd9708b26a765b68509840c8dec9fdbc",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "56e0bf08bd9708b26a765b68509840c8dec9fdbc"
+}

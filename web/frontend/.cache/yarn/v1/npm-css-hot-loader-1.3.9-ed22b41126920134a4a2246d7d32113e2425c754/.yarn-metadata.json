@@ -1,0 +1,53 @@
+{
+  "manifest": {
+    "name": "css-hot-loader",
+    "version": "1.3.9",
+    "description": "css hot reload work with extract-text-webpack-plugin",
+    "main": "index.js",
+    "scripts": {
+      "pub": "npm version patch && npm publish && git push origin && git push origin --tags",
+      "cov": "jest --collectCoverageFrom='[\"*.js\"]' --coverage",
+      "ci": "npm run cov && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+      "test": "jest"
+    },
+    "files": [
+      "loader.js",
+      "hotModuleReplacement.js",
+      "index.js"
+    ],
+    "homepage": "http://git.shepherdwind.com/css-hot-loader/",
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/shepherdwind/css-hot-loader.git"
+    },
+    "author": {
+      "name": "shepherdwind"
+    },
+    "license": "ISC",
+    "dependencies": {
+      "loader-utils": "^1.1.0",
+      "lodash": "^4.17.5",
+      "normalize-url": "^1.9.1"
+    },
+    "devDependencies": {
+      "coveralls": "^2.13.1",
+      "jest": "^20.0.4",
+      "strict-uri-encode": "^2.0.0"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-css-hot-loader-1.3.9-ed22b41126920134a4a2246d7d32113e2425c754/package.json",
+    "readmeFilename": "README.md",
+    "readme": "### CSS Hot Loader\n\n[![build status][travis-image]][travis-url]\n[![Test coverage][coveralls-image]][coveralls-url]\n[![NPM version][npm-image]][npm-url]\n[![npm download][download-image]][download-url]\n\n[npm-image]: http://img.shields.io/npm/v/css-hot-loader.svg?style=flat-square\n[npm-url]: http://npmjs.org/package/css-hot-loader\n[download-image]: https://img.shields.io/npm/dm/css-hot-loader.svg?style=flat-square\n[download-url]: https://npmjs.org/package/css-hot-loader\n[travis-image]: https://img.shields.io/travis/shepherdwind/css-hot-loader.svg?style=flat-square\n[travis-url]: https://travis-ci.org/shepherdwind/css-hot-loader\n[coveralls-image]: https://img.shields.io/coveralls/shepherdwind/css-hot-loader.svg?style=flat-square\n[coveralls-url]: https://coveralls.io/r/shepherdwind/css-hot-loader?branch=master\n\n\nThis is a css hot loader, which support hot module replacement for an extracted css file.\n\n### Why we need css hot loader\n\nIn most cases, we can realize css hot reload by [style-loader](https://github.com/webpack/style-loader) . But style-loader need inject style tag into document, Before js ready, the web page will have no any style. That is not good experience.\n\nAlso, a lots of people thought about that, How can realize hot reload with\nextract-text-webpack-plugin. For example [#30](https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/30) , [#!89](https://github.com/webpack-contrib/extract-text-webpack-plugin/pull/89).\n\nSo I write this loader, which supprot hot module replacement for an extracted css file.\n\n### Install\n\nFirst install package from npm\n\n```sh\n$ npm install css-hot-loader --save-dev\n```\n\nThen config webpack.config.js\n\n```javascript\nmodule: {\n  rules: [\n    {\n      test: /\\.css$/,\n      use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({\n        fallback: 'style-loader',\n        use: 'css-loader'\n      })),\n    },\n  ]\n}\n```\n\n`css-hot-loader` should be the first loader before `extract-text-webpack-plugin`.\n\n### Attention\n\nThis plugin require the output css file name static. If output file name depend\non css content, for example `'bundle.[name].[contenthash].css'`, HMR reload will\nfail, more detail refer to [#21](https://github.com/shepherdwind/css-hot-loader/issues/21).\n\n### webpack 1.x\n\nConfig file example should like this\n\n```javascript\n  module: {\n    loaders: [{\n      test: /\\.less$/,\n      loaders: [\n        'css-hot-loader',\n        'extract-text-webpack-plugin',\n        'less',\n        ...\n       ],\n      include: path.join(__dirname, 'src')\n    }]\n  }\n```\n\n### options\n\n#### fileMap\n\nOption to define you css file reload rule. Since 1.1.0 .\n\nFor example `'css-hot-loader?fileMap='../css/{fileName}'` , which mean\n\n```\njs/foo.js => css/foo.css\n```\n\nDefault value is `{fileName}`.\n\nsee [#3](https://github.com/shepherdwind/css-hot-loader/issues/3).\n\n### How\n\n\nThe realization principle of this loader is very simple. There are some assumed condition:\n\n1. css required by js , so css also be a js file\n2. The name of css file, which need hot reload , is the same as js file excuted.\n\nThe secend assumption is often established. If you use extract-text-webpack-plugin , entry `foo.js` will extract css file `foo.css`. This principle will help us to locate the url of css file extracted.\n\nBecause every css file will be a js module , every css file change can affect a module change. CSS hot loader will accept this kind change, then find extracted css file by `document.currentScript`.\n\nSo when a css file changed, We just need find which css file link element, and reload css file.\n\n### License\n\n(The MIT License)\n",
+    "licenseText": "(The MIT License)\n\nCopyright (c) 2016-2017 Eward Song<eward.song at gmail.com>\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the 'Software'), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/css-hot-loader/-/css-hot-loader-1.3.9.tgz#ed22b41126920134a4a2246d7d32113e2425c754",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/css-hot-loader/-/css-hot-loader-1.3.9.tgz",
+    "hash": "ed22b41126920134a4a2246d7d32113e2425c754",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "ed22b41126920134a4a2246d7d32113e2425c754"
+}

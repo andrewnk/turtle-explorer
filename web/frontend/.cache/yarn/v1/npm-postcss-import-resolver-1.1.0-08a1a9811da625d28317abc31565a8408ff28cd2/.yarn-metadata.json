@@ -1,0 +1,44 @@
+{
+  "manifest": {
+    "name": "postcss-import-resolver",
+    "version": "1.1.0",
+    "description": "Customize postcss-import resolve with enhanced-resolve",
+    "main": "index.js",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/clarkdo/postcss-import-resolver.git"
+    },
+    "author": {
+      "name": "Clark Du"
+    },
+    "license": "MIT",
+    "scripts": {
+      "release": "standard-version"
+    },
+    "dependencies": {
+      "enhanced-resolve": "^3.4.1"
+    },
+    "devDependencies": {
+      "eslint": "^4.15.0",
+      "eslint-config-standard": "^11.0.0-beta.0",
+      "eslint-plugin-node": "^5.2.1",
+      "eslint-plugin-standard": "^3.0.1",
+      "standard-version": "^4.3.0"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-postcss-import-resolver-1.1.0-08a1a9811da625d28317abc31565a8408ff28cd2/package.json",
+    "readmeFilename": "readme.md",
+    "readme": "# postcss-import-resolver\n\n[![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)\n\n## Installation\n\n``` bash\n$ npm install --save postcss-import-resolver\n\n# or\n\n$ yarn add postcss-import-resolver\n```\n\n## Usage (Webpack)\n\n```js\nconst resolver = require('postcss-import-resolver')\nconst postcssLoader = {\n  loader: 'postcss-loader',\n  options: {\n    plugins: {\n      'postcss-import': {\n        resolve: resolver({\n          alias: {\n            '~': 'src/'\n          },\n          modules: ['node_modules']\n        })\n      }\n    }\n  }\n}\n```\n",
+    "licenseText": "MIT License\n\nCopyright (c) 2018 Clark Du <clark.duxin@gmail.com>\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/postcss-import-resolver/-/postcss-import-resolver-1.1.0.tgz#08a1a9811da625d28317abc31565a8408ff28cd2",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/postcss-import-resolver/-/postcss-import-resolver-1.1.0.tgz",
+    "hash": "08a1a9811da625d28317abc31565a8408ff28cd2",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "08a1a9811da625d28317abc31565a8408ff28cd2"
+}

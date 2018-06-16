@@ -1,0 +1,56 @@
+{
+  "manifest": {
+    "name": "postcss-color-hex-alpha",
+    "version": "3.0.0",
+    "description": "PostCSS plugin to transform W3C RGBA hexadecimal notations (#RRGGBBAA or #RGBA) to more compatible CSS (rgba())",
+    "keywords": [
+      "css",
+      "postcss",
+      "postcss-plugin",
+      "color",
+      "colour",
+      "hexa",
+      "alpha"
+    ],
+    "author": {
+      "name": "Maxime Thirouin"
+    },
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/postcss/postcss-color-hex-alpha.git"
+    },
+    "files": [
+      "index.js"
+    ],
+    "dependencies": {
+      "color": "^1.0.3",
+      "postcss": "^6.0.1",
+      "postcss-message-helpers": "^2.0.0"
+    },
+    "devDependencies": {
+      "eslint": "^3.19.0",
+      "tape": "^4.6.3"
+    },
+    "scripts": {
+      "lint": "eslint *.js index.js ./test/",
+      "test": "npm run lint && tape test",
+      "release": "npmpub"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-postcss-color-hex-alpha-3.0.0-1e53e6c8acb237955e8fd08b7ecdb1b8b8309f95/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# postcss-color-hex-alpha [![Build Status](https://travis-ci.org/postcss/postcss-color-hex-alpha.png)](https://travis-ci.org/postcss/postcss-color-hex-alpha)\n\n> [PostCSS](https://github.com/postcss/postcss) plugin to transform [W3C RGBA hexadecimal notations (#RRGGBBAA or #RGBA)](http://dev.w3.org/csswg/css-color/#hex-notation) to more compatible CSS (rgba()).\n\n## Installation\n\n```bash\n$ npm install postcss-color-hex-alpha\n```\n\n## Usage\n\n```js\n// dependencies\nvar fs = require(\"fs\")\nvar postcss = require(\"postcss\")\nvar colorHexAlpha = require(\"postcss-color-hex-alpha\")\n\n// css to be processed\nvar css = fs.readFileSync(\"input.css\", \"utf8\")\n\n// process css\nvar output = postcss()\n  .use(colorHexAlpha())\n  .process(css)\n  .css\n```\n\nUsing this `input.css`:\n\n```css\nbody {\n  background: #9d9c\n}\n\n```\n\nyou will get:\n\n```css\nbody {\n  background: rgba(153, 221, 153, 0.8)\n}\n```\n\nCheckout [tests](test) for more examples.\n\n---\n\n## Contributing\n\nWork on a branch, install dev-dependencies, respect coding style & run tests before submitting a bug fix or a feature.\n\n    $ git clone https://github.com/postcss/postcss-color-hex-alpha.git\n    $ git checkout -b patch-1\n    $ npm install\n    $ npm test\n\n## [Changelog](CHANGELOG.md)\n\n## [License](LICENSE)\n",
+    "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2014 Maxime Thirouin\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/postcss-color-hex-alpha/-/postcss-color-hex-alpha-3.0.0.tgz#1e53e6c8acb237955e8fd08b7ecdb1b8b8309f95",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/postcss-color-hex-alpha/-/postcss-color-hex-alpha-3.0.0.tgz",
+    "hash": "1e53e6c8acb237955e8fd08b7ecdb1b8b8309f95",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "1e53e6c8acb237955e8fd08b7ecdb1b8b8309f95"
+}

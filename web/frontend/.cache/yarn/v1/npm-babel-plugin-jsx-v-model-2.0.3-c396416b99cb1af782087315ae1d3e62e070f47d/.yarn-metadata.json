@@ -1,0 +1,55 @@
+{
+  "manifest": {
+    "name": "babel-plugin-jsx-v-model",
+    "version": "2.0.3",
+    "description": "JSX v-model transform",
+    "main": "index.js",
+    "scripts": {
+      "test": "ava",
+      "coverage": "nyc --reporter=lcov npm test"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/nickmessing/babel-plugin-jsx-v-model.git"
+    },
+    "keywords": [
+      "Vue",
+      "jsx",
+      "v-model"
+    ],
+    "author": {
+      "name": "Nicolai Moraru",
+      "email": "dot.nick.dot.messing@gmail.com"
+    },
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/nickmessing/babel-plugin-jsx-v-model/issues"
+    },
+    "homepage": "https://github.com/nickmessing/babel-plugin-jsx-v-model#readme",
+    "dependencies": {
+      "babel-plugin-syntax-jsx": "^6.18.0",
+      "html-tags": "^2.0.0",
+      "svg-tags": "^1.0.0"
+    },
+    "devDependencies": {
+      "ava": "^0.21.0",
+      "babel-core": "^6.25.0",
+      "nyc": "^11.0.3"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-babel-plugin-jsx-v-model-2.0.3-c396416b99cb1af782087315ae1d3e62e070f47d/package.json",
+    "readmeFilename": "README.md",
+    "readme": "[![Build Status](https://travis-ci.org/nickmessing/babel-plugin-jsx-v-model.svg?branch=master)](https://travis-ci.org/nickmessing/babel-plugin-jsx-v-model)\n\n## JSX v-model for Vue JSX\n\nThis babel plugin adds some syntactic sugar to JSX.\n\n### Usage:\n\n```bash\nnpm i babel-plugin-jsx-v-model -D\n```\n\nThen add `jsx-v-model` to your `.babelrc` file under `plugins`\n\nexample .babelrc:\n```json\n{\n  \"presets\": [\"es2015\"],\n  \"plugins\": [\"jsx-v-model\", \"transform-vue-jsx\"]\n}\n```\n\ncode:\n```js\nVue.component('hello-world', {\n  data: () => ({\n    text: 'Hello World!'\n  }),\n  render () {\n    return (\n      <div>\n        <input type=\"text\" v-model={this.text} />\n        {this.text}\n      </div>\n    )\n  }\n})\n```\n\nBehaviour is similar to vue template's [v-model](https://vuejs.org/v2/api/#v-model).\n",
+    "licenseText": "MIT License\n\nCopyright (c) 2017 Nick Messing\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/babel-plugin-jsx-v-model/-/babel-plugin-jsx-v-model-2.0.3.tgz#c396416b99cb1af782087315ae1d3e62e070f47d",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/babel-plugin-jsx-v-model/-/babel-plugin-jsx-v-model-2.0.3.tgz",
+    "hash": "c396416b99cb1af782087315ae1d3e62e070f47d",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "c396416b99cb1af782087315ae1d3e62e070f47d"
+}

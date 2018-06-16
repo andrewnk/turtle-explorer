@@ -1,0 +1,80 @@
+{
+  "manifest": {
+    "name": "postcss-nesting",
+    "version": "4.2.1",
+    "description": "Nest style and media rules inside each another, following the CSS Nesting Module Level 3 specification",
+    "author": {
+      "name": "Jonathan Neal",
+      "email": "jonathantneal@hotmail.com"
+    },
+    "license": "CC0-1.0",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/jonathantneal/postcss-nesting.git"
+    },
+    "homepage": "https://github.com/jonathantneal/postcss-nesting#readme",
+    "bugs": {
+      "url": "https://github.com/jonathantneal/postcss-nesting/issues"
+    },
+    "main": "index.js",
+    "files": [
+      "index.js",
+      "lib"
+    ],
+    "scripts": {
+      "clean": "git clean -X -d -f",
+      "prepublish": "npm test",
+      "test": "echo 'Running tests...'; npm run test:js && npm run test:tape",
+      "test:js": "eslint *.js --cache --ignore-pattern .gitignore",
+      "test:tape": "postcss-tape"
+    },
+    "engines": {
+      "node": ">=4.0.0"
+    },
+    "dependencies": {
+      "postcss": "^6.0.11"
+    },
+    "devDependencies": {
+      "eslint": "^4.7.1",
+      "eslint-config-dev": "^2.0.0",
+      "postcss-tape": "^2.1.0",
+      "pre-commit": "^1.2.2"
+    },
+    "eslintConfig": {
+      "extends": "dev"
+    },
+    "keywords": [
+      "postcss",
+      "css",
+      "postcss-plugin",
+      "atrules",
+      "child",
+      "children",
+      "cssnext",
+      "nested",
+      "nestings",
+      "rules",
+      "selectors",
+      "syntax",
+      "specifications",
+      "specs",
+      "w3c",
+      "csswg"
+    ],
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-postcss-nesting-4.2.1-0483bce338b3f0828ced90ff530b29b98b00300d/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# PostCSS Nesting [<img src=\"https://postcss.github.io/postcss/logo.svg\" alt=\"PostCSS Logo\" width=\"90\" height=\"90\" align=\"right\">][postcss]\n\n[![CSS Standard Status][css-img]][css-url]\n[![NPM Version][npm-img]][npm-url]\n[![Build Status][cli-img]][cli-url]\n[![Licensing][lic-img]][lic-url]\n[![Gitter Chat][git-img]][git-url]\n\n[PostCSS Nesting] lets you nest style rules inside each other, following the\n[CSS Nesting] specification.\n\n```css\na, b {\n  color: red;\n\n  & c, & d {\n    color: white;\n  }\n}\n\n/* after postcss-nesting */\n\na, b {\n  color: red;\n}\n\na c, a d, b c, b d {\n  color: white;\n}\n```\n\n## Usage\n\nAdd [PostCSS Nesting] to your build tool:\n\n```bash\nnpm install postcss-nesting --save-dev\n```\n\n#### Node\n\nUse [PostCSS Nesting] to process your CSS:\n\n```js\nrequire('postcss-nesting').process(YOUR_CSS, { /* options */ });\n```\n\n#### PostCSS\n\nAdd [PostCSS] to your build tool:\n\n```bash\nnpm install postcss --save-dev\n```\n\nUse [PostCSS Nesting] as a plugin:\n\n```js\npostcss([\n  require('postcss-nesting')({ /* options */ })\n]).process(YOUR_CSS, /* options */);\n```\n\n#### Gulp\n\nAdd [Gulp PostCSS] to your build tool:\n\n```bash\nnpm install gulp-postcss --save-dev\n```\n\nUse [PostCSS Nesting] in your Gulpfile:\n\n```js\nvar postcss = require('gulp-postcss');\n\ngulp.task('css', function () {\n  return gulp.src('./src/*.css').pipe(\n    postcss([\n      require('postcss-nesting')({ /* options */ })\n    ])\n  ).pipe(\n    gulp.dest('.')\n  );\n});\n```\n\n#### Grunt\n\nAdd [Grunt PostCSS] to your build tool:\n\n```bash\nnpm install grunt-postcss --save-dev\n```\n\nUse [PostCSS Nesting] in your Gruntfile:\n\n```js\ngrunt.loadNpmTasks('grunt-postcss');\n\ngrunt.initConfig({\n  postcss: {\n    options: {\n      use: [\n        require('postcss-nesting')({ /* options */ })\n      ]\n    },\n    dist: {\n      src: '*.css'\n    }\n  }\n});\n```\n\n[cli-url]: https://travis-ci.org/jonathantneal/postcss-nesting\n[cli-img]: https://img.shields.io/travis/jonathantneal/postcss-nesting.svg\n[css-img]: https://jonathantneal.github.io/css-db/badge/css-nesting.svg\n[css-url]: https://jonathantneal.github.io/css-db/#css-nesting\n[git-url]: https://gitter.im/postcss/postcss\n[git-img]: https://img.shields.io/badge/chat-gitter-blue.svg\n[lic-url]: LICENSE.md\n[lic-img]: https://img.shields.io/npm/l/postcss-nesting.svg\n[npm-url]: https://www.npmjs.com/package/postcss-nesting\n[npm-img]: https://img.shields.io/npm/v/postcss-nesting.svg\n\n[CSS Nesting]: http://tabatkins.github.io/specs/css-nesting/\n[Gulp PostCSS]: https://github.com/postcss/gulp-postcss\n[Grunt PostCSS]: https://github.com/nDmitry/grunt-postcss\n[PostCSS]: https://github.com/postcss/postcss\n[PostCSS Nesting]: https://github.com/jonathantneal/postcss-nesting\n",
+    "licenseText": "# CC0 1.0 Universal\n\n## Statement of Purpose\n\nThe laws of most jurisdictions throughout the world automatically confer\nexclusive Copyright and Related Rights (defined below) upon the creator and\nsubsequent owner(s) (each and all, an “owner”) of an original work of\nauthorship and/or a database (each, a “Work”).\n\nCertain owners wish to permanently relinquish those rights to a Work for the\npurpose of contributing to a commons of creative, cultural and scientific works\n(“Commons”) that the public can reliably and without fear of later claims of\ninfringement build upon, modify, incorporate in other works, reuse and\nredistribute as freely as possible in any form whatsoever and for any purposes,\nincluding without limitation commercial purposes. These owners may contribute\nto the Commons to promote the ideal of a free culture and the further\nproduction of creative, cultural and scientific works, or to gain reputation or\ngreater distribution for their Work in part through the use and efforts of\nothers.\n\nFor these and/or other purposes and motivations, and without any expectation of\nadditional consideration or compensation, the person associating CC0 with a\nWork (the “Affirmer”), to the extent that he or she is an owner of Copyright\nand Related Rights in the Work, voluntarily elects to apply CC0 to the Work and\npublicly distribute the Work under its terms, with knowledge of his or her\nCopyright and Related Rights in the Work and the meaning and intended legal\neffect of CC0 on those rights.\n\n1. Copyright and Related Rights. A Work made available under CC0 may be\n   protected by copyright and related or neighboring rights (“Copyright and\n   Related Rights”). Copyright and Related Rights include, but are not limited\n   to, the following:\n  1. the right to reproduce, adapt, distribute, perform, display,\n     communicate, and translate a Work;\n  2. moral rights retained by the original author(s) and/or performer(s);\n  3. publicity and privacy rights pertaining to a person’s image or likeness\n     depicted in a Work;\n  4. rights protecting against unfair competition in regards to a Work,\n     subject to the limitations in paragraph 4(i), below;\n  5. rights protecting the extraction, dissemination, use and reuse of data\n     in a Work;\n  6. database rights (such as those arising under Directive 96/9/EC of the\n     European Parliament and of the Council of 11 March 1996 on the legal\n     protection of databases, and under any national implementation thereof,\n     including any amended or successor version of such directive); and\n  7. other similar, equivalent or corresponding rights throughout the world\n     based on applicable law or treaty, and any national implementations\n     thereof.\n\n2. Waiver. To the greatest extent permitted by, but not in contravention of,\napplicable law, Affirmer hereby overtly, fully, permanently, irrevocably and\nunconditionally waives, abandons, and surrenders all of Affirmer’s Copyright\nand Related Rights and associated claims and causes of action, whether now\nknown or unknown (including existing as well as future claims and causes of\naction), in the Work (i) in all territories worldwide, (ii) for the maximum\nduration provided by applicable law or treaty (including future time\nextensions), (iii) in any current or future medium and for any number of\ncopies, and (iv) for any purpose whatsoever, including without limitation\ncommercial, advertising or promotional purposes (the “Waiver”). Affirmer makes\nthe Waiver for the benefit of each member of the public at large and to the\ndetriment of Affirmer’s heirs and successors, fully intending that such Waiver\nshall not be subject to revocation, rescission, cancellation, termination, or\nany other legal or equitable action to disrupt the quiet enjoyment of the Work\nby the public as contemplated by Affirmer’s express Statement of Purpose.\n\n3. Public License Fallback. Should any part of the Waiver for any reason be\njudged legally invalid or ineffective under applicable law, then the Waiver\nshall be preserved to the maximum extent permitted taking into account\nAffirmer’s express Statement of Purpose. In addition, to the extent the Waiver\nis so judged Affirmer hereby grants to each affected person a royalty-free, non\ntransferable, non sublicensable, non exclusive, irrevocable and unconditional\nlicense to exercise Affirmer’s Copyright and Related Rights in the Work (i) in\nall territories worldwide, (ii) for the maximum duration provided by applicable\nlaw or treaty (including future time extensions), (iii) in any current or\nfuture medium and for any number of copies, and (iv) for any purpose\nwhatsoever, including without limitation commercial, advertising or promotional\npurposes (the “License”). The License shall be deemed effective as of the date\nCC0 was applied by Affirmer to the Work. Should any part of the License for any\nreason be judged legally invalid or ineffective under applicable law, such\npartial invalidity or ineffectiveness shall not invalidate the remainder of the\nLicense, and in such case Affirmer hereby affirms that he or she will not (i)\nexercise any of his or her remaining Copyright and Related Rights in the Work\nor (ii) assert any associated claims and causes of action with respect to the\nWork, in either case contrary to Affirmer’s express Statement of Purpose.\n\n4. Limitations and Disclaimers.\n  1. No trademark or patent rights held by Affirmer are waived, abandoned,\n     surrendered, licensed or otherwise affected by this document.\n  2. Affirmer offers the Work as-is and makes no representations or\n     warranties of any kind concerning the Work, express, implied, statutory\n     or otherwise, including without limitation warranties of title,\n     merchantability, fitness for a particular purpose, non infringement, or\n     the absence of latent or other defects, accuracy, or the present or\n     absence of errors, whether or not discoverable, all to the greatest\n     extent permissible under applicable law.\n  3. Affirmer disclaims responsibility for clearing rights of other persons\n     that may apply to the Work or any use thereof, including without\n     limitation any person’s Copyright and Related Rights in the Work.\n     Further, Affirmer disclaims responsibility for obtaining any necessary\n     consents, permissions or other rights required for any use of the Work.\n  4. Affirmer understands and acknowledges that Creative Commons is not a\n     party to this document and has no duty or obligation with respect to\n     this CC0 or use of the Work.\n\nFor more information, please see\nhttp://creativecommons.org/publicdomain/zero/1.0/.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/postcss-nesting/-/postcss-nesting-4.2.1.tgz#0483bce338b3f0828ced90ff530b29b98b00300d",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/postcss-nesting/-/postcss-nesting-4.2.1.tgz",
+    "hash": "0483bce338b3f0828ced90ff530b29b98b00300d",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "0483bce338b3f0828ced90ff530b29b98b00300d"
+}

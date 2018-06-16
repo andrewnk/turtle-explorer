@@ -1,0 +1,99 @@
+{
+  "manifest": {
+    "name": "loglevelnext",
+    "version": "1.0.5",
+    "description": "A modern logging library for Node.js and modern browsers that provides log level mapping to the console",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/shellscape/loglevelnext.git"
+    },
+    "author": {
+      "name": "Andrew Powell",
+      "email": "andrew@shellscape.org"
+    },
+    "homepage": "https://github.com/shellscape/loglevelnext",
+    "main": "index.js",
+    "engines": {
+      "node": ">= 6"
+    },
+    "scripts": {
+      "build": "npm run build:dev && npm run build:prod",
+      "build:dev": "NODE_ENV=development webpack index.js",
+      "build:prod": "NODE_ENV=production webpack index.js",
+      "ci": "npm run cover -- --report lcovonly && npm run lint && npm run test",
+      "check-node": "check-node-version --node 9",
+      "cover": "istanbul cover node_modules/mocha/bin/_mocha",
+      "lint": "eslint index.js lib test",
+      "test": "npm run test:node && npm run test:browser",
+      "test:browser": "if npm run check-node --silent; then mocha-chrome test/tests/browser/entry.html; else npm run test:browser:skip; fi",
+      "test:browser:skip": "echo \"\\nSkipping Browser Test\\n\\n\\033[32mTests Completed Successfully\\033[0m\"",
+      "test:node": "mocha --full-trace --check-leaks"
+    },
+    "files": [
+      "dist/",
+      "factory/",
+      "lib/",
+      "index.js"
+    ],
+    "keywords": [
+      "browser",
+      "console",
+      "debug",
+      "error",
+      "level",
+      "levels",
+      "log",
+      "logger",
+      "logging",
+      "loglevel",
+      "persist",
+      "persistent",
+      "plugins",
+      "prefix",
+      "trace",
+      "warn"
+    ],
+    "dependencies": {
+      "es6-symbol": "^3.1.1",
+      "object.assign": "^4.1.0"
+    },
+    "devDependencies": {
+      "@babel/cli": "^7.0.0-beta.46",
+      "@babel/core": "^7.0.0-beta.46",
+      "@babel/polyfill": "^7.0.0-beta.46",
+      "@babel/preset-env": "^7.0.0-beta.46",
+      "@babel/register": "^7.0.0-beta.46",
+      "assert": "^1.4.1",
+      "babel-loader": "^8.0.0-beta.2",
+      "better-assert": "github:devinrhode2/better-assert-browser",
+      "chalk": "^2.3.0",
+      "check-node-version": "^3.1.1",
+      "codecov.io": "^0.1.6",
+      "eslint": "^4.13.1",
+      "eslint-config-webpack": "^1.2.5",
+      "eslint-plugin-import": "^2.8.0",
+      "istanbul": "^0.4.5",
+      "mocha": "^5.1.1",
+      "mocha-chrome": "^1.0.2",
+      "sinon": "^4.1.3",
+      "webpack": "^4.0.0-alpha.1",
+      "webpack-cli": "^2.0.2"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-loglevelnext-1.0.5-36fc4f5996d6640f539ff203ba819641680d75a2/package.json",
+    "readmeFilename": "README.md",
+    "readme": "\n<div align=\"center\">\n  <img width=\"150\" height=\"150\" src=\"http://shellscape.org/assets/images/external/loglevelnext-icon.svg\">\n</div>\n&nbsp;  \n\n[![npm][npm]][npm-url]\n[![node][node]][node-url]\n[![devdeps][devdeps]][devdeps-url]\n[![tests][tests]][tests-url]\n[![coverage][cover]][cover-url]\n\n# loglevelnext\n\n`loglevelnext` is a modern logging library for Node.js and modern browsers,\nwritten with modern patterns and practices which provides log level mapping of the\n`console` object.\n\n## Getting Started\n\nFirst thing's first, install the module:\n\n```console\nnpm install loglevelnext --save\n```\n\n## Usage\n\nUsers can choose to use `loglevelnext` in Node.js or in the client (browser).\n\n```js\n// Node.js\nconst log = require('loglevelnext');\n\nlog.info('bananas!');\n```\n\n```html\n<!-- browser -->\n<!doctype>\n<html>\n  <head>\n    <script src=\"/path/to/loglevelnext.js\"></script>\n  </head>\n  <body>\n    <script>\n      window.log.info('zomg');\n    </script>\n  </body>\n</html>\n\n```\n\n## Log Levels\n\nBy default `loglevelnext` ships supporting the following log level name-value\npairs:\n\n```js\n{\n  TRACE: 0,\n  DEBUG: 1,\n  INFO: 2,\n  WARN: 3,\n  ERROR: 4,\n  SILENT: 5\n}\n```\n\n## Default Logger\n\nWhen requiring `loglevelnext` in Node.js the default export will be an instance\nof [`LogLevel`](docs/LogLevel.md) wrapped with some extra sugar.\n\nWhen loading the `loglevelnext.js` script in the client (browser), the script\nwill assign `window.log` to an instance of [`LogLevel`](docs/LogLevel.md),\nwrapped with that same extra sugar.\n\n### Methods\n\nPlease see [`LogLevel`](docs/LogLevel.md) for documentation of all methods and\nproperties of every log instance, including the default instance.\n\n#### `trace`, `debug`, `info`, `warn`, `error`\n\nThese methods correspond to the available log levels and accept parameters\nidentical to their `console` counterparts. eg.\n\n```js\nconsole.info('...');\nconsole.info('...');\n// ... etc\n```\n\n#### `getLogger(options)`\n\nReturns a new `LogLevel` instance. The `options` parameter should be an `Object`\nmatching the options for the [`LogLevel`](docs/LogLevel.md) constructor.\n\n_Note: the logger returned is cached, and subsequent requests for a logger of\nthe same name will return the same logger instance. If you require multiple\nunique loggers of the same name, pass an `id` property with a unique identifier\nand `getLogger` will use that over the `name`._\n\n#### `noConflict()`\n\nWhen using `loglevelnext` in a browser environment, you may encounter a scenario\nin which `window.log` is already assigned when the script loads, resulting in\n`window.log` being reassigned to `loglevelnext`. This method will restore\n`window.log` to it's original value and return the default logger.\n\n### Properties\n\n#### `factories`\n\nType: `Array [ Class ]`\n\nGets an `Array` containing the factory classes available within `loglevelnext`\nto outside modules. Particularily useful when creating plugins. eg.\n\n```js\nconst log = require('loglevelnext');\nconst { MethodFactory } = log.factories;\nclass MyFactory extends MethodFactory { ... }\n```\n\n#### `loggers`\n\nType: `Array [ LogLevel ]`\n\nGets an `Array` containing references to the currently instantiated loggers.\n\n## Factories aka Plugins\n\nIf you're used to using plugins with `loglevel`, fear not. The same capabilities\nare available in `loglevelnext`, but in a much more straightforward and structured\nway. `loglevelnext` supports by way of \"Factories.\" A `Factory` is nothing more\nthan a class which defines several base methods that operate on the `console`\nand provide functionality to a `LogLevel` instance. All factories must inherit from the\n[`MethodFactory`][methodFactory] class, and may override any defined class functions.\n\nFor an example factory, please have a look at the [`PrefixFactory`][prefixFactory]\nwhich provides similar functionality as the [loglevel-prefix](loglevelpre) plugin,\nand is the factory which is used when a user passes the `prefix` option to a\n`LogLevel` instance.\n\n## Persisting the Level\n\nPersisting the level of a log between sessions in a browser isn't the job of a\nlogging library. Primarily because working with `localStorage` these days is a\nbreeze. If you need to store and retrieve a log level value between sessions,\nplease look into leveraging the excellent and very tiny [`store2`](https://github.com/nbubna/store)\nlibrary.\n\n## Browser Support\n\nAs mentioned, `loglevelnext` is a logging library for Node.js and _modern_\nbrowsers, which means the latest versions of the major browsers. Unfortunately\n\"oldIE\" versions aren't officially supported. The minimum Internet Exploder\nversion supported is IE10, though [Microsoft no longer supports it][oldie].\n\nIf you're in need of support for old or outdated browser versions, please use\nthe older [loglevel][loglevel], which supports browsers as old as IE6.\n\n_Note: This library's distribution file is compiled in a way that will\ntechnically work all the way back to IE8 - as that version and above support\n`localStorage`. However, IE8 and IE9 require that the developer tools be open\nprior to invoking this library._\n\n## Contributing\n\nWe welcome your contributions! Please have a read of [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to get involved.\n\n## Attribution\n\n_This project is a fork of the much-loved [loglevel](loglevel) module._\n\nBase Log SVG by [Freepik](http://www.freepik.com/) from [www.flaticon.com](http://www.flaticon.com).\n\n## License\n\n#### [MIT](./LICENSE)\n\n\n[npm]: https://img.shields.io/npm/v/loglevelnext.svg\n[npm-url]: https://npmjs.com/package/loglevelnext\n\n[node]: https://img.shields.io/node/v/loglevelnext.svg\n[node-url]: https://nodejs.org\n\n[deps]: https://david-dm.org/shellscape/loglevelnext.svg\n[deps-url]: https://david-dm.org/shellscape/loglevelnext\n\n[devdeps]: https://david-dm.org/shellscape/loglevelnext/dev-status.svg\n[devdeps-url]: https://david-dm.org/shellscape/loglevelnext\n\n[tests]: http://img.shields.io/travis/shellscape/loglevelnext.svg\n[tests-url]: https://travis-ci.org/shellscape/loglevelnext\n\n[cover]: https://codecov.io/gh/shellscape/loglevelnext/branch/master/graph/badge.svg\n[cover-url]: https://codecov.io/gh/shellscape/loglevelnext\n\n[loglevel]: https://githhub.com/pimterry/loglevel\n[loglevelpre]: https://github.com/kutuluk/loglevel-plugin-prefix\n[oldie]: https://www.microsoft.com/en-us/windowsforbusiness/end-of-ie-support\n[methodFactory]: lib/MethodFactory.js\n[prefixFactory]: factory/PrefixFactory.js\n",
+    "licenseText": "Copyright (c) 2017 Andrew Powell\nPortions Copyright (c) 2013 Tim Perry\n\nPermission is hereby granted, free of charge, to any person\nobtaining a copy of this software and associated documentation\nfiles (the \"Software\"), to deal in the Software without\nrestriction, including without limitation the rights to use,\ncopy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the\nSoftware is furnished to do so, subject to the following\nconditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES\nOF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\nNONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT\nHOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\nWHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR\nOTHER DEALINGS IN THE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/loglevelnext/-/loglevelnext-1.0.5.tgz#36fc4f5996d6640f539ff203ba819641680d75a2",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/loglevelnext/-/loglevelnext-1.0.5.tgz",
+    "hash": "36fc4f5996d6640f539ff203ba819641680d75a2",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "36fc4f5996d6640f539ff203ba819641680d75a2"
+}

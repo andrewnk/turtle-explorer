@@ -1,0 +1,54 @@
+{
+  "manifest": {
+    "name": "radix-router",
+    "version": "3.0.1",
+    "description": "Radix tree based router",
+    "main": "index.js",
+    "repository": {
+      "url": "https://github.com/charlieduong94/radix-router",
+      "type": "git"
+    },
+    "author": {
+      "name": "Charlie Duong",
+      "email": "charlieduong94@gmail.com"
+    },
+    "license": "MIT",
+    "scripts": {
+      "pretest": "npm run lint",
+      "test": "nyc mocha test",
+      "coverage": "nyc report --reporter=text-lcov | coveralls",
+      "lint": "eslint ."
+    },
+    "devDependencies": {
+      "benchmark": "^2.1.4",
+      "chai": "^4.0.1",
+      "coveralls": "^2.11.14",
+      "eslint": "^4.1.0",
+      "eslint-config-standard": "^10.2.1",
+      "eslint-plugin-import": "^2.7.0",
+      "eslint-plugin-node": "^5.2.0",
+      "eslint-plugin-promise": "^3.4.1",
+      "eslint-plugin-standard": "^3.0.1",
+      "git-hooks": "^1.1.6",
+      "istanbul": "^0.4.5",
+      "jscs": "^3.0.7",
+      "jshint": "^2.9.4",
+      "mocha": "^3.1.2",
+      "nyc": "^11.2.1"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-radix-router-3.0.1-5522c829f7100e60c58fd1acf8803e0b2b312d97/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# Radix Router\n\n[![Greenkeeper badge](https://badges.greenkeeper.io/charlieduong94/radix-router.svg)](https://greenkeeper.io/)\n\n[![Build Status](https://travis-ci.org/charlieduong94/radix-router.svg?branch=master)](https://travis-ci.org/charlieduong94/radix-router)\n[![Coverage Status](https://coveralls.io/repos/github/charlieduong94/radix-router/badge.svg?branch=master)](https://coveralls.io/github/charlieduong94/radix-router?branch=master)\n\nA fast, simple path router that is optimized for consistently fast lookups. This router\nhas support for placeholders and wildcards.\n\n### Installation\n```bash\nnpm install --save radix-router\n```\n\n### Usage\n\nA minimal example:\n\n```js\nconst RadixRouter = require('radix-router')\n\nconst router = new Router()\nrouter.insert({\n  path: '/api/people/:id',\n  data: { some: 'data' }\n})\n\nconst { data, params } = router.lookup('/api/people/123456')\n\nconst { id } = params\nconsole.log(id) // prints: '123456'\nconsole.log(data) // prints: { some: 'data' }\n```\n\n#### Creating a new Router\n\n`new RadixRouter(options)` - Creates a new instance of a router. The `options` object is optional.\n\nPossible parameters for the `options` object:\n\n- `routes` - The routes to insert into the router.\n- `strict` - Setting this option to `true` will force lookups to match exact paths\n(trailing slashes will not be ignored). Defaults to `false`.\n\n```js\nconst RadixRouter = require('radix-router')\n\nconst router = new RadixRouter({\n  strict: true,\n  routes: [\n    {\n      path: '/my/api/route/a', // \"path\" is a required field\n      // any other fields will also be stored by the router\n      extraRouteData: {},\n      description: 'this is a route'\n    },\n    {\n      path: '/my/api/route/b',\n      extraRouteData: {},\n      description: 'this is a different route',\n      routeBSpecificData: {}\n    }\n  ]\n})\n```\n\n#### Router methods\n\n##### `insert(routeData)`\n\nAdds the given data to the router. The object passed in must contain a `path` attribute that is a string.\nThe `path` will be used by the router to know where to place the route.\n\nExample input:\n```js\nrouter.insert({\n  path: '/api/route/c', // required\n  // any additional data goes here\n  extraData: 'anything can be added',\n  handler: function (req, res) {\n    // ...\n  }\n})\n```\n\n##### `lookup(path)`\n\nPerforms a lookup of the path. If there is a match, the data associated with the\nroute is returned, otherwise this will return `null`.\n\nUsage:\n\n```js\nconst routeThatExists = router.lookup('/api/route/c')\n```\n\nExample output:\n\n```js\n{\n  path: '/api/route/c',\n  extraData: 'anything can be added',\n  handler: function (req, res) {\n    // ...\n  }\n}\n```\n\n##### `remove(path)`\n\nRemoves the path from the router. Returns `true` if the route was found and removed.\n\nUsage:\n\n```\nconst routeRemoved = router.remove('/some/route')\n```\n\n##### `startsWith(path)`\n\nReturns a map of all routes starting with the given prefix and the data associated with them.\n\nUsage:\n\n```\nconst apiRoutes = router.startsWith('/api')\n```\n\nExample output:\n\n```js\n[\n  {\n    path:'/api/v1/route',\n    much: 'data'\n  },\n  {\n    path: '/api/v1/other-route/:id',\n    so: 'placeholder',\n    much: 'wow'\n  }\n]\n```\n\n### Wildcard and placeholder matching\n\nWildcards can be added by to the end of routes by adding `/**` to the end of your route.\n\nExample:\n\n```js\nrouter.insert(\n  path: '/api/v2/**',\n  such: 'wildcard'\n})\n```\n\nOutput of `router.lookup('/api/v2/some/random/route')`:\n```js\n{\n  path: '/api/v2/**',\n  sucn: 'wildcard'\n}\n```\n\nPlaceholders can be used in routes by starting a segment of the route with a colon `:`. Whatever\ncontent fills the position of the placeholder will be added to the lookup result\nunder the `params` attribute. The name given for the placeholder in the path is the key to\nretrieve the parameter from.\n\nExample:\n\n```js\nrouter.insert(\n  path: '/api/v2/:myPlaceholder/route'\n})\n\nrouter.insert(\n  path: '/api/v3/:organizations/directory/:groupId'\n})\n```\n\nOutput of `router.lookup('/api/v2/application/route')`:\n```js\n{\n  path: '/api/v2/:myPlaceholder/route',\n  params: {\n    myPlaceholder: 'application'\n  }\n}\n```\n\nOutput of `router.lookup('/api/v3/test-org/directory/test-group-id')`:\n```js\n{\n  path: '/api/v3/:organizations/directory/:groupId',\n  params: {\n    organizations: 'test-org',\n    groupId: 'test-group-id'\n  }\n}\n```\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/radix-router/-/radix-router-3.0.1.tgz#5522c829f7100e60c58fd1acf8803e0b2b312d97",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/radix-router/-/radix-router-3.0.1.tgz",
+    "hash": "5522c829f7100e60c58fd1acf8803e0b2b312d97",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "5522c829f7100e60c58fd1acf8803e0b2b312d97"
+}

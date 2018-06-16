@@ -1,0 +1,107 @@
+{
+  "manifest": {
+    "name": "vue-eslint-parser",
+    "version": "2.0.3",
+    "description": "The ESLint custom parser for `.vue` files.",
+    "engines": {
+      "node": ">=4"
+    },
+    "main": "index.js",
+    "files": [
+      "index.d.ts",
+      "index.js",
+      "index.js.map"
+    ],
+    "peerDependencies": {
+      "eslint": ">=3.9.0"
+    },
+    "dependencies": {
+      "debug": "^3.1.0",
+      "eslint-scope": "^3.7.1",
+      "eslint-visitor-keys": "^1.0.0",
+      "espree": "^3.5.2",
+      "esquery": "^1.0.0",
+      "lodash": "^4.17.4"
+    },
+    "devDependencies": {
+      "@types/debug": "0.0.30",
+      "@types/estree": "0.0.38",
+      "@types/lodash": "^4.14.91",
+      "@types/mocha": "^2.2.44",
+      "@types/node": "^6.0.85",
+      "babel-eslint": "^8.1.1",
+      "chokidar": "^1.7.0",
+      "codecov": "^3.0.0",
+      "cross-spawn": "^5.1.0",
+      "dts-bundle": "^0.7.3",
+      "eslint": "^4.14.0",
+      "eslint-config-mysticatea": "^12.0.0",
+      "fs-extra": "^5.0.0",
+      "mocha": "^4.0.1",
+      "npm-run-all": "^4.1.2",
+      "nyc": "^11.4.1",
+      "opener": "^1.4.3",
+      "rimraf": "^2.6.2",
+      "rollup": "^0.53.0",
+      "rollup-plugin-node-resolve": "^3.0.0",
+      "rollup-plugin-sourcemaps": "^0.4.2",
+      "rollup-watch": "^4.3.1",
+      "typescript": "~2.6.2",
+      "typescript-eslint-parser": "^11.0.0",
+      "wait-on": "^2.0.2",
+      "warun": "^1.0.0"
+    },
+    "scripts": {
+      "_mocha": "_mocha \"test/*.js\" --reporter dot --timeout 10000",
+      "prebuild": "npm run -s clean",
+      "build": "tsc && rollup -c -o index.js && dts-bundle --name vue-eslint-parser --main .temp/index.d.ts --out ../index.d.ts",
+      "clean": "rimraf .nyc_output .temp coverage index.*",
+      "codecov": "nyc report --reporter lcovonly && codecov",
+      "coverage": "nyc report --reporter lcov && opener ./coverage/lcov-report/index.html",
+      "lint": "eslint src test --ext .ts",
+      "setup": "git submodule update --init && cd test/fixtures/eslint && npm install",
+      "pretest": "run-s build lint",
+      "test": "nyc npm run _mocha",
+      "preupdate-fixtures": "npm run -s build",
+      "update-fixtures": "node test/tools/update-fixtures-ast.js",
+      "preversion": "npm test",
+      "version": "npm run -s build",
+      "postversion": "git push && git push --tags",
+      "prewatch": "npm run -s clean",
+      "watch": "run-p watch:*",
+      "watch:tsc": "tsc --watch",
+      "watch:rollup": "wait-on .temp/index.js && rollup -c -o index.js --watch",
+      "watch:test": "wait-on index.js && warun index.js \"test/*.js\" \"test/fixtures/ast/*/*.json\" \"test/fixtures/*\" --debounce 1000 --no-initial -- nyc -r lcov npm run -s _mocha",
+      "watch:update-ast": "wait-on index.js && warun index.js \"test/fixtures/ast/*/*.vue\" -- node test/tools/update-fixtures-ast.js",
+      "watch:coverage-report": "wait-on coverage/lcov-report/index.html && opener coverage/lcov-report/index.html"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/mysticatea/vue-eslint-parser.git"
+    },
+    "keywords": [],
+    "author": {
+      "name": "Toru Nagashima"
+    },
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/mysticatea/vue-eslint-parser/issues"
+    },
+    "homepage": "https://github.com/mysticatea/vue-eslint-parser#readme",
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-vue-eslint-parser-2.0.3-c268c96c6d94cfe3d938a5f7593959b0ca3360d1/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# vue-eslint-parser\n\n[![npm version](https://img.shields.io/npm/v/vue-eslint-parser.svg)](https://www.npmjs.com/package/vue-eslint-parser)\n[![Downloads/month](https://img.shields.io/npm/dm/vue-eslint-parser.svg)](http://www.npmtrends.com/vue-eslint-parser)\n[![Build Status](https://travis-ci.org/mysticatea/vue-eslint-parser.svg?branch=master)](https://travis-ci.org/mysticatea/vue-eslint-parser)\n[![Coverage Status](https://codecov.io/gh/mysticatea/vue-eslint-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/mysticatea/vue-eslint-parser)\n[![Dependency Status](https://david-dm.org/mysticatea/vue-eslint-parser.svg)](https://david-dm.org/mysticatea/vue-eslint-parser)\n\nThe ESLint custom parser for `.vue` files.\n\n## ⤴️ Motivation\n\nThis parser allows us to lint the `<template>` of `.vue` files. We can make mistakes easily on `<template>` if we use complex directives and expressions in the template. This parser and the rules of [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue) would catch some of the mistakes.\n\n## 💿 Installation\n\n```bash\n$ npm install --save-dev eslint vue-eslint-parser\n```\n\n- `vue-eslint-parser` requires ESLint 3.9.0 or later.\n\n## 📖 Usage\n\n1. Write `parser` option into your `.eslintrc.*` file.\n2. Use glob patterns or `--ext .vue` CLI option.\n\n```json\n{\n    \"extends\": \"eslint:recommended\",\n    \"parser\": \"vue-eslint-parser\"\n}\n```\n\n```console\n$ eslint \"src/**/*.{js,vue}\"\n# or\n$ eslint src --ext .vue\n```\n\n## 🔧 Options\n\n`parserOptions` has the same properties as what [espree](https://github.com/eslint/espree#usage), the default parser of ESLint, is supporting.\nFor example:\n\n```json\n{\n    \"parser\": \"vue-eslint-parser\",\n    \"parserOptions\": {\n        \"sourceType\": \"module\",\n        \"ecmaVersion\": 2017,\n        \"ecmaFeatures\": {\n            \"globalReturn\": false,\n            \"impliedStrict\": false,\n            \"jsx\": false,\n            \"experimentalObjectRestSpread\": false\n        }\n    }\n}\n```\n\nAlso, you can use `parser` property to specify a custom parser to parse `<script>` tags.\nOther properties than parser would be given to the specified parser.\nFor example:\n\n```json\n{\n    \"parser\": \"vue-eslint-parser\",\n    \"parserOptions\": {\n        \"parser\": \"babel-eslint\",\n        \"sourceType\": \"module\",\n        \"allowImportExportEverywhere\": false\n    }\n}\n```\n\n```json\n{\n    \"parser\": \"vue-eslint-parser\",\n    \"parserOptions\": {\n        \"parser\": \"typescript-eslint-parser\"\n    }\n}\n```\n\n- If you use with `babel-eslint`, it has additional requirements. Use `eslint@>=4.14.0` and `babel-eslint@>=8.1.1`.\n- If you use `typescript-eslint-parser`, the location of original nodes can be wrong. Waiting for `typescript-eslint-parser` to support [parseResult.visitorKeys](https://eslint.org/docs/developer-guide/working-with-plugins#working-with-custom-parsers).\n\n## 🎇 Usage for custom rules / plugins\n\n- This parser provides `parserServices` to traverse `<template>`.\n    - `defineTemplateBodyVisitor(templateVisitor, scriptVisitor)` ... returns ESLint visitor to traverse `<template>`.\n    - `getTemplateBodyTokenStore()` ... returns ESLint `TokenStore` to get the tokens of `<template>`.\n- [ast.md](./docs/ast.md) is `<template>` AST specification.\n- [mustache-interpolation-spacing.js](https://github.com/vuejs/eslint-plugin-vue/blob/b434ff99d37f35570fa351681e43ba2cf5746db3/lib/rules/mustache-interpolation-spacing.js) is an example.\n\n## ⚠️ Known Limitations\n\nSome rules make warnings due to the outside of `<script>` tags.\nPlease disable those rules for `.vue` files as necessary.\n\n- [eol-last](http://eslint.org/docs/rules/eol-last)\n- [linebreak-style](http://eslint.org/docs/rules/linebreak-style)\n- [max-len](http://eslint.org/docs/rules/max-len)\n- [max-lines](http://eslint.org/docs/rules/max-lines)\n- [no-trailing-spaces](http://eslint.org/docs/rules/no-trailing-spaces)\n- [unicode-bom](http://eslint.org/docs/rules/unicode-bom)\n- Other rules which are using the source code text instead of AST might be confused as well.\n\n## 📰 Changelog\n\n- [GitHub Releases](https://github.com/mysticatea/vue-eslint-parser/releases)\n\n## 🍻 Contributing\n\nWelcome contributing!\n\nPlease use GitHub's Issues/PRs.\n\nIf you want to write code, please execute `npm install && npm run setup` after you cloned this repository.\nThe `npm install` command installs dependencies.\nThe `npm run setup` command initializes ESLint as git submodules for tests.\n\n### Development Tools\n\n- `npm test` runs tests and measures coverage.\n- `npm run build` compiles TypeScript source code to `index.js`, `index.js.map`, and `index.d.ts`.\n- `npm run coverage` shows the coverage result of `npm test` command with the default browser.\n- `npm run clean` removes the temporary files which are created by `npm test` and `npm run build`.\n- `npm run lint` runs ESLint.\n- `npm run setup` setups submodules to develop.\n- `npm run update-fixtures` updates files in `test/fixtures/ast` directory based on `test/fixtures/ast/*/source.vue` files.\n- `npm run watch` runs `build`, `update-fixtures`, and tests with `--watch` option.\n",
+    "licenseText": "MIT License\n\nCopyright (c) 2016 Toru Nagashima\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-2.0.3.tgz",
+    "hash": "c268c96c6d94cfe3d938a5f7593959b0ca3360d1",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "c268c96c6d94cfe3d938a5f7593959b0ca3360d1"
+}

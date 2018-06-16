@@ -1,0 +1,110 @@
+{
+  "manifest": {
+    "name": "uglifyjs-webpack-plugin",
+    "version": "1.2.5",
+    "description": "UglifyJS plugin for webpack",
+    "author": {
+      "name": "webpack Contrib Team"
+    },
+    "license": "MIT",
+    "engines": {
+      "node": ">= 4.8 < 5.0.0 || >= 5.10"
+    },
+    "main": "dist/cjs.js",
+    "files": [
+      "dist"
+    ],
+    "scripts": {
+      "start": "npm run build -- -w",
+      "build": "cross-env NODE_ENV=production babel src -d dist --ignore 'src/**/*.test.js' --copy-files",
+      "test": "jest",
+      "test:watch": "jest --watch",
+      "test:coverage": "jest --collectCoverageFrom='src/**/*.js' --coverage",
+      "prebuild": "npm run clean",
+      "clean": "del-cli dist",
+      "lint": "eslint --cache src test",
+      "lint-staged": "lint-staged",
+      "prepare": "npm run build",
+      "release": "standard-version",
+      "security": "nsp check",
+      "ci:lint": "npm run lint && npm run security",
+      "ci:test": "npm run test -- --runInBand",
+      "ci:coverage": "npm run test:coverage -- --runInBand",
+      "appveyor:test": "npm run test",
+      "webpack-defaults": "webpack-defaults"
+    },
+    "dependencies": {
+      "cacache": "^10.0.4",
+      "find-cache-dir": "^1.0.0",
+      "serialize-javascript": "^1.4.0",
+      "schema-utils": "^0.4.5",
+      "source-map": "^0.6.1",
+      "uglify-es": "^3.3.4",
+      "webpack-sources": "^1.1.0",
+      "worker-farm": "^1.5.2"
+    },
+    "devDependencies": {
+      "babel-cli": "^6.26.0",
+      "babel-jest": "^22.4.3",
+      "babel-plugin-transform-object-rest-spread": "^6.26.0",
+      "babel-polyfill": "^6.26.0",
+      "babel-preset-env": "^1.6.1",
+      "cross-env": "^5.1.3",
+      "del-cli": "^1.1.0",
+      "eslint": "^4.14.0",
+      "eslint-config-webpack": "^1.2.5",
+      "eslint-plugin-import": "^2.8.0",
+      "jest": "^22.4.3",
+      "lint-staged": "^6.0.0",
+      "memory-fs": "^0.4.1",
+      "nsp": "^3.1.0",
+      "pre-commit": "^1.2.2",
+      "standard-version": "^4.3.0",
+      "webpack": "^3.10.0",
+      "webpack-defaults": "^1.6.0"
+    },
+    "peerDependencies": {
+      "webpack": "^2.0.0 || ^3.0.0 || ^4.0.0"
+    },
+    "keywords": [
+      "uglify",
+      "uglify-js",
+      "uglify-es",
+      "webpack",
+      "webpack-plugin"
+    ],
+    "bugs": {
+      "url": "https://github.com/webpack-contrib/uglifyjs-webpack-plugin/issues"
+    },
+    "homepage": "https://github.com/webpack-contrib/uglifyjs-webpack-plugin",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/webpack-contrib/uglifyjs-webpack-plugin.git"
+    },
+    "pre-commit": "lint-staged",
+    "lint-staged": {
+      "*.js": [
+        "eslint --fix",
+        "git add"
+      ]
+    },
+    "jest": {
+      "testEnvironment": "node"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-uglifyjs-webpack-plugin-1.2.5-2ef8387c8f1a903ec5e44fa36f9f3cbdcea67641/package.json",
+    "readmeFilename": "README.md",
+    "readme": "[![npm][npm]][npm-url]\n[![node][node]][node-url]\n[![deps][deps]][deps-url]\n[![test][test]][test-url]\n[![coverage][cover]][cover-url]\n[![chat][chat]][chat-url]\n\n\n<div align=\"center\">\n  <a href=\"https://github.com/webpack/webpack\">\n    <img width=\"200\" height=\"200\"\n      src=\"https://cdn.rawgit.com/webpack/media/e7485eb2/logo/icon.svg\">\n  </a>\n  <h1>UglifyJS Webpack Plugin</h1>\n\t<p>This plugin uses <a href=\"https://github.com/mishoo/UglifyJS2/tree/harmony\">UglifyJS v3 </a><a href=\"https://npmjs.com/package/uglify-es\">(`uglify-es`)</a> to minify your JavaScript</p>\n</div>\n\n> ℹ️  `webpack < v4.0.0` currently contains [`v0.4.6`](https://github.com/webpack-contrib/uglifyjs-webpack-plugin/tree/version-0.4) of this plugin under `webpack.optimize.UglifyJsPlugin` as an alias. For usage of the latest version (`v1.0.0`), please follow the instructions below. Aliasing `v1.0.0` as `webpack.optimize.UglifyJsPlugin` is scheduled for `webpack v4.0.0`\n\n<h2 align=\"center\">Install</h2>\n\n```bash\nnpm i -D uglifyjs-webpack-plugin\n```\n\n<h2 align=\"center\">Usage</h2>\n\n**webpack.config.js**\n```js\nconst UglifyJsPlugin = require('uglifyjs-webpack-plugin')\n\nmodule.exports = {\n  plugins: [\n    new UglifyJsPlugin()\n  ]\n}\n```\n\n<h2 align=\"center\">Options</h2>\n\n|Name|Type|Default|Description|\n|:--:|:--:|:-----:|:----------|\n|**`test`**|`{RegExp\\|Array<RegExp>}`| <code>/\\\\.js$/i</code>|Test to match files against|\n|**`include`**|`{RegExp\\|Array<RegExp>}`|`undefined`|Files to `include`|\n|**`exclude`**|`{RegExp\\|Array<RegExp>}`|`undefined`|Files to `exclude`|\n|**`cache`**|`{Boolean\\|String}`|`false`|Enable file caching|\n|**`parallel`**|`{Boolean\\|Number}`|`false`|Use multi-process parallel running to improve the build speed|\n|**`sourceMap`**|`{Boolean}`|`false`|Use source maps to map error message locations to modules (This slows down the compilation) ⚠️ **`cheap-source-map` options don't work with this plugin**|\n|**`uglifyOptions`**|`{Object}`|[`{...defaults}`](https://github.com/webpack-contrib/uglifyjs-webpack-plugin/tree/master#uglifyoptions)|`uglify` [Options](https://github.com/mishoo/UglifyJS2/tree/harmony#minify-options)|\n|**`extractComments`**|`{Boolean\\|RegExp\\|Function<(node, comment) -> {Boolean\\|Object}>}`|`false`|Whether comments shall be extracted to a separate file, (see [details](https://github.com/webpack/webpack/commit/71933e979e51c533b432658d5e37917f9e71595a) (`webpack >= 2.3.0`)|\n|**`warningsFilter`**|`{Function(source) -> {Boolean}}`|`() => true`|Allow to filter uglify warnings|\n\n### `test`\n\n**webpack.config.js**\n```js\n[\n  new UglifyJsPlugin({\n    test: /\\.js($|\\?)/i\n  })\n]\n```\n\n### `include`\n\n**webpack.config.js**\n```js\n[\n  new UglifyJsPlugin({\n    include: /\\/includes/\n  })\n]\n```\n\n### `exclude`\n\n**webpack.config.js**\n```js\n[\n  new UglifyJsPlugin({\n    exclude: /\\/excludes/\n  })\n]\n```\n\n### `cache`\n\n#### `{Boolean}`\n\n**webpack.config.js**\n```js\n[\n  new UglifyJsPlugin({\n    cache: true\n  })\n]\n```\n\nEnable file caching.\nDefault path to cache directory: `node_modules/.cache/uglifyjs-webpack-plugin`.\n\n#### `{String}`\n\n**webpack.config.js**\n```js\n[\n  new UglifyJsPlugin({\n    cache: 'path/to/cache'\n  })\n]\n```\n\nPath to cache directory.\n\n### `parallel`\n\n#### `{Boolean}`\n\n**webpack.config.js**\n```js\n[\n  new UglifyJsPlugin({\n    parallel: true\n  })\n]\n```\n\nEnable parallelization.\nDefault number of concurrent runs: `os.cpus().length - 1`.\n\n#### `{Number}`\n\n**webpack.config.js**\n```js\n[\n  new UglifyJsPlugin({\n    parallel: 4\n  })\n]\n```\n\nNumber of concurrent runs.\n\n> ℹ️  Parallelization can speedup your build significantly and is therefore **highly recommended**\n\n### `sourceMap`\n\n**webpack.config.js**\n```js\n[\n  new UglifyJsPlugin({\n    sourceMap: true\n  })\n]\n```\n\n> ⚠️ **`cheap-source-map` options don't work with this plugin**\n\n### [`uglifyOptions`](https://github.com/mishoo/UglifyJS2/tree/harmony#minify-options)\n\n|Name|Type|Default|Description|\n|:--:|:--:|:-----:|:----------|\n|**`ecma`**|`{Number}`|`undefined`|Supported ECMAScript Version (`5`, `6`, `7` or `8`). Affects `parse`, `compress` && `output` options|\n|**`warnings`**|`{Boolean}`|`false`|Display Warnings|\n|**[`parse`](https://github.com/mishoo/UglifyJS2/tree/harmony#parse-options)**|`{Object}`|`{}`|Additional Parse Options|\n|**[`compress`](https://github.com/mishoo/UglifyJS2/tree/harmony#compress-options)**|`{Boolean\\|Object}`|`true`|Additional Compress Options|\n|**[`mangle`](https://github.com/mishoo/UglifyJS2/tree/harmony#mangle-options)**|`{Boolean\\|Object}`|`true`|Enable Name Mangling (See [Mangle Properties](https://github.com/mishoo/UglifyJS2/tree/harmony#mangle-properties-options) for advanced setups, use with ⚠️)|\n|**[`output`](https://github.com/mishoo/UglifyJS2/tree/harmony#output-options)**|`{Object}`|`{}`|Additional Output Options (The defaults are optimized for best compression)|\n|**`toplevel`**|`{Boolean}`|`false`|Enable top level variable and function name mangling and to drop unused variables and functions|\n|**`nameCache`**|`{Object}`|`null`|Enable cache of mangled variable and property names across multiple invocations|\n|**`ie8`**|`{Boolean}`|`false`|Enable IE8 Support|\n|**`keep_classnames`**|`{Boolean}`|`undefined`|Enable prevent discarding or mangling of class names|\n|**`keep_fnames`**|`{Boolean}`|`false`| Enable prevent discarding or mangling of function names. Useful for code relying on `Function.prototype.name`. If the top level minify option `keep_classnames` is `undefined` it will be overriden with the value of the top level minify option `keep_fnames`|\n|**`safari10`**|`{Boolean}`|`false`|Enable work around Safari 10/11 bugs in loop scoping and `await`|\n\n**webpack.config.js**\n```js\n[\n  new UglifyJsPlugin({\n    uglifyOptions: {\n      ecma: 8,\n      warnings: false,\n      parse: {...options},\n      compress: {...options},\n      mangle: {\n        ...options,\n        properties: {\n          // mangle property options\n        }\n      },\n      output: {\n        comments: false,\n        beautify: false,\n        ...options\n      },\n      toplevel: false,\n      nameCache: null,\n      ie8: false,\n      keep_classnames: undefined,\n      keep_fnames: false,\n      safari10: false,\n    }\n  })\n]\n```\n\n### `extractComments`\n\n#### `{Boolean}`\n\nAll comments that normally would be preserved by the `comments` option will be moved to a separate file. If the original file is named `foo.js`, then the comments will be stored to `foo.js.LICENSE`.\n\n#### `{RegExp|String}` or  `{Function<(node, comment) -> {Boolean}>}`\n\nAll comments that match the given expression (resp. are evaluated to `true` by the function) will be extracted to the separate file. The `comments` option specifies whether the comment will be preserved, i.e. it is possible to preserve some comments (e.g. annotations) while extracting others or even preserving comments that have been extracted.\n\n#### `{Object}`\n\n|Name|Type|Default|Description|\n|:--:|:--:|:-----:|:----------|\n|**`condition`**|`{Regex\\|Function}`|``|Regular Expression or function (see previous point)|\n|**`filename`**|`{String\\|Function}`|`${file}.LICENSE`|The file where the extracted comments will be stored. Can be either a `{String}` or a `{Function<(string) -> {String}>}`, which will be given the original filename. Default is to append the suffix `.LICENSE` to the original filename|\n|**`banner`**|`{Boolean\\|String\\|Function}`|`/*! For license information please see ${filename}.js.LICENSE */`|The banner text that points to the extracted file and will be added on top of the original file. Can be `false` (no banner), a `{String}`, or a `{Function<(string) -> {String}` that will be called with the filename where extracted comments have been stored. Will be wrapped into comment|\n\n### `warningsFilter`\n\n**webpack.config.js**\n```js\n[\n  new UglifyJsPlugin({\n    warningsFilter: (src) => true\n  })\n]\n```\n\n<h2 align=\"center\">Maintainers</h2>\n\n<table>\n  <tbody>\n    <tr>\n      <td align=\"center\">\n        <a href=\"https://github.com/hulkish\">\n          <img width=\"150\" height=\"150\" src=\"https://github.com/hulkish.png?size=150\">\n          </br>\n          Steven Hargrove\n        </a>\n      </td>\n      <td align=\"center\">\n        <a href=\"https://github.com/bebraw\">\n          <img width=\"150\" height=\"150\" src=\"https://github.com/bebraw.png?v=3&s=150\">\n          </br>\n          Juho Vepsäläinen\n        </a>\n      </td>\n      <td align=\"center\">\n        <a href=\"https://github.com/d3viant0ne\">\n          <img width=\"150\" height=\"150\" src=\"https://github.com/d3viant0ne.png?v=3&s=150\">\n          </br>\n          Joshua Wiens\n        </a>\n      </td>\n      <td align=\"center\">\n        <a href=\"https://github.com/michael-ciniawsky\">\n          <img width=\"150\" height=\"150\" src=\"https://github.com/michael-ciniawsky.png?v=3&s=150\">\n          </br>\n          Michael Ciniawsky\n        </a>\n      </td>\n      <td align=\"center\">\n        <a href=\"https://github.com/evilebottnawi\">\n          <img width=\"150\" height=\"150\" src=\"https://github.com/evilebottnawi.png?v=3&s=150\">\n          </br>\n          Alexander Krasnoyarov\n        </a>\n      </td>\n    </tr>\n  <tbody>\n</table>\n\n\n[npm]: https://img.shields.io/npm/v/uglifyjs-webpack-plugin.svg\n[npm-url]: https://npmjs.com/package/uglifyjs-webpack-plugin\n\n[node]: https://img.shields.io/node/v/uglifyjs-webpack-plugin.svg\n[node-url]: https://nodejs.org\n\n[deps]: https://david-dm.org/webpack-contrib/uglifyjs-webpack-plugin.svg\n[deps-url]: https://david-dm.org/webpack-contrib/uglifyjs-webpack-plugin\n\n[test]: \thttps://img.shields.io/circleci/project/github/webpack-contrib/uglifyjs-webpack-plugin.svg\n[test-url]: https://circleci.com/gh/webpack-contrib/uglifyjs-webpack-plugin\n\n[cover]: https://codecov.io/gh/webpack-contrib/uglifyjs-webpack-plugin/branch/master/graph/badge.svg\n[cover-url]: https://codecov.io/gh/webpack-contrib/uglifyjs-webpack-plugin\n\n[chat]: https://img.shields.io/badge/gitter-webpack%2Fwebpack-brightgreen.svg\n[chat-url]: https://gitter.im/webpack/webpack\n",
+    "licenseText": "Copyright JS Foundation and other contributors\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n'Software'), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/uglifyjs-webpack-plugin/-/uglifyjs-webpack-plugin-1.2.5.tgz#2ef8387c8f1a903ec5e44fa36f9f3cbdcea67641",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/uglifyjs-webpack-plugin/-/uglifyjs-webpack-plugin-1.2.5.tgz",
+    "hash": "2ef8387c8f1a903ec5e44fa36f9f3cbdcea67641",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "2ef8387c8f1a903ec5e44fa36f9f3cbdcea67641"
+}

@@ -1,0 +1,177 @@
+{
+  "manifest": {
+    "name": "nuxt",
+    "version": "1.4.0",
+    "description": "A minimalistic framework for server-rendered Vue.js applications (inspired by Next.js)",
+    "contributors": [
+      {
+        "name": "Sebastien Chopin",
+        "url": "@Atinux"
+      },
+      {
+        "name": "Alexandre Chopin",
+        "url": "@alexchopin"
+      },
+      {
+        "name": "Pooya Parsa",
+        "url": "@pi0"
+      }
+    ],
+    "main": "./lib/index.js",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/nuxt/nuxt.js"
+    },
+    "files": [
+      "bin",
+      "lib"
+    ],
+    "keywords": [
+      "nuxt",
+      "nuxt.js",
+      "nuxtjs",
+      "vue",
+      "vue.js",
+      "vuejs",
+      "vue universal",
+      "vue ssr",
+      "vue isomorphic",
+      "vue versatile"
+    ],
+    "homepage": "https://github.com/nuxt/nuxt.js#readme",
+    "bin": {
+      "nuxt": "./bin/nuxt"
+    },
+    "nyc": {
+      "include": [
+        "lib"
+      ]
+    },
+    "scripts": {
+      "test": "npm run lint && nyc ava --verbose test/ -- && nyc report --reporter=html",
+      "test-appveyor": "npm run lint && nyc ava --serial test/ -- && nyc report --reporter=html",
+      "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+      "lint": "eslint --ext .js,.vue bin/* build/ lib/ test/ examples/",
+      "precommit": "npm run lint",
+      "postinstall": "opencollective postinstall || exit 0"
+    },
+    "engines": {
+      "node": ">=8.0.0",
+      "npm": ">=5.0.0"
+    },
+    "dependencies": {
+      "@nuxtjs/youch": "^4.2.3",
+      "ansi-html": "^0.0.7",
+      "autoprefixer": "^7.2.5",
+      "babel-core": "^6.26.0",
+      "babel-loader": "^7.1.2",
+      "babel-preset-vue-app": "^2.0.0",
+      "caniuse-lite": "^1.0.30000808",
+      "chalk": "^2.3.1",
+      "chokidar": "^2.0.1",
+      "clone": "^2.1.1",
+      "compression": "^1.7.1",
+      "connect": "^3.6.5",
+      "css-hot-loader": "^1.3.7",
+      "css-loader": "^0.28.9",
+      "debug": "^3.1.0",
+      "es6-promise": "^4.2.4",
+      "etag": "^1.8.1",
+      "extract-text-webpack-plugin": "^3.0.2",
+      "file-loader": "^1.1.6",
+      "fresh": "^0.5.2",
+      "friendly-errors-webpack-plugin": "^1.6.1",
+      "fs-extra": "^5.0.0",
+      "glob": "^7.1.2",
+      "hash-sum": "^1.0.2",
+      "html-minifier": "^3.5.9",
+      "html-webpack-plugin": "^2.30.1",
+      "launch-editor": "^2.2.1",
+      "launch-editor-middleware": "^2.2.1",
+      "lodash": "^4.17.5",
+      "lru-cache": "^4.1.1",
+      "memory-fs": "^0.4.1",
+      "minimist": "^1.2.0",
+      "opencollective": "^1.0.3",
+      "postcss": "^6.0.17",
+      "postcss-cssnext": "^3.1.0",
+      "postcss-import": "^11.1.0",
+      "postcss-import-resolver": "^1.1.0",
+      "postcss-loader": "^2.1.0",
+      "postcss-url": "^7.3.0",
+      "pretty-error": "^2.1.1",
+      "progress-bar-webpack-plugin": "^1.10.0",
+      "semver": "^5.5.0",
+      "serialize-javascript": "^1.4.0",
+      "serve-static": "^1.13.2",
+      "server-destroy": "^1.0.1",
+      "source-map": "^0.7.0",
+      "style-resources-loader": "^1.0.0",
+      "uglifyjs-webpack-plugin": "^1.1.8",
+      "upath": "^1.0.2",
+      "url-loader": "^0.6.2",
+      "vue": "^2.5.13",
+      "vue-loader": "13.7.0",
+      "vue-meta": "^1.4.3",
+      "vue-router": "^3.0.1",
+      "vue-server-renderer": "^2.5.13",
+      "vue-template-compiler": "^2.5.13",
+      "vuex": "^3.0.1",
+      "webpack": "^3.11.0",
+      "webpack-bundle-analyzer": "^2.10.0",
+      "webpack-dev-middleware": "^2.0.5",
+      "webpack-hot-middleware": "^2.21.0",
+      "webpack-node-externals": "^1.6.0"
+    },
+    "devDependencies": {
+      "ava": "^0.25.0",
+      "babel-eslint": "^8.2.1",
+      "babel-plugin-array-includes": "^2.0.3",
+      "babel-plugin-external-helpers": "^6.22.0",
+      "babel-plugin-istanbul": "^4.1.5",
+      "codecov": "^3.0.0",
+      "copy-webpack-plugin": "^4.4.1",
+      "cross-env": "^5.1.3",
+      "eslint": "^4.17.0",
+      "eslint-config-standard": "^11.0.0-beta.0",
+      "eslint-config-standard-jsx": "^4.0.2",
+      "eslint-plugin-html": "^4.0.2",
+      "eslint-plugin-import": "^2.8.0",
+      "eslint-plugin-node": "^6.0.0",
+      "eslint-plugin-promise": "^3.6.0",
+      "eslint-plugin-react": "^7.6.1",
+      "eslint-plugin-standard": "^3.0.1",
+      "express": "^4.16.2",
+      "finalhandler": "^1.1.0",
+      "jsdom": "^11.6.2",
+      "json-loader": "^0.5.7",
+      "nyc": "^11.4.1",
+      "puppeteer": "^1.0.0",
+      "request": "^2.83.0",
+      "request-promise-native": "^1.0.5",
+      "sinon": "^4.3.0",
+      "uglify-js": "^3.3.10"
+    },
+    "collective": {
+      "type": "opencollective",
+      "url": "https://opencollective.com/nuxtjs",
+      "logo": "https://opencollective.com/nuxtjs/logo.txt?reverse=true&variant=variant2"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-nuxt-1.4.0-66df9ede68daf2ef4cfbcc329da7dda0003e0420/package.json",
+    "readmeFilename": "README.md",
+    "readme": "<p align=\"center\"><img align=\"center\" src=\"http://imgur.com/V4LtoII.png\"/></p>\n<p align=\"center\">\n  <a href=\"https://circleci.com/gh/nuxt/nuxt.js\"><img src=\"https://img.shields.io/circleci/project/github/nuxt/nuxt.js.svg\" alt=\"Build Status\"></a>\n  <a href=\"https://travis-ci.org/nuxt/nuxt.js\"><img src=\"https://img.shields.io/travis/nuxt/nuxt.js/master.svg\" alt=\"Build Status\"></a>\n  <a href=\"https://ci.appveyor.com/project/nuxt/nuxt-js\"><img src=\"https://ci.appveyor.com/api/projects/status/9ttoamt2c2gnwkko?svg=true\" alt=\"Windows Build Status\"></a>\n  <a href=\"https://codecov.io/gh/nuxt/nuxt.js\"><img src=\"https://img.shields.io/codecov/c/github/nuxt/nuxt.js/master.svg\" alt=\"Coverage Status\"></a>\n  <a href=\"https://www.npmjs.com/package/nuxt\"><img src=\"https://img.shields.io/npm/dm/nuxt.svg\" alt=\"Downloads\"></a>\n  <a href=\"https://www.npmjs.com/package/nuxt\"><img src=\"https://img.shields.io/npm/v/nuxt.svg\" alt=\"Version\"></a>\n  <a href=\"https://www.npmjs.com/package/nuxt\"><img src=\"https://img.shields.io/npm/l/nuxt.svg\" alt=\"License\"></a>\n  <a href=\"https://gitter.im/nuxt/nuxt.js\"><img src=\"https://img.shields.io/badge/GITTER-join%20chat-green.svg\" alt=\"Gitter\"></a>\n </p>\n <p align=\"center\">\n  <a href=\"#backers\" alt=\"sponsors on Open Collective\"><img src=\"https://opencollective.com/nuxtjs/backers/badge.svg\" /></a>\n  <a href=\"#sponsors\" alt=\"Sponsors on Open Collective\"><img src=\"https://opencollective.com/nuxtjs/sponsors/badge.svg\" /></a>\n  <a href=\"https://opencollective.com/nuxtjs\"><img src=\"https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg\" alt=\"Support us\"></a>\n\n</p>\n\n> Vue.js Meta Framework to create complex, fast & universal web application *quickly*.\n\n## Links\n\n- 📘 Documentation: [https://nuxtjs.org](https://nuxtjs.org)\n- 🎬 Video: [1 minute demo](https://www.youtube.com/watch?v=kmf-p-pTi40)\n- 🐦 Twitter: [@nuxt_js](https://twitter.com/nuxt_js)\n- 👥 [Nuxt.js Community](https://github.com/nuxt-community)\n- 📦 [Nuxt.js Modules](https://github.com/nuxt-community/modules)\n- 👉 [Play with Nuxt.js online](https://glitch.com/edit/#!/nuxt-hello-world)\n\n## Features\n\n- Automatic transpilation and bundling (with webpack and babel)\n- Hot code reloading\n- Server-side rendering OR Single Page App OR Static Generated, you choose :fire:\n- Static file serving. `./static/` is mapped to `/`\n- Configurable with a `nuxt.config.js` file\n- Custom layouts with the `layouts/` directory\n- Middleware\n- Code splitting for every `pages/`\n\nLearn more at [nuxtjs.org](https://nuxtjs.org).\n\n## Sponsors\n\nBecome a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/nuxtjs#sponsor)]\n\n<p>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/0/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/0/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/1/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/1/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/2/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/2/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/3/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/3/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/4/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/4/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/5/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/5/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/6/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/6/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/7/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/7/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/8/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/8/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/9/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/9/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/10/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/10/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/11/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/11/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/12/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/12/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/13/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/13/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/14/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/14/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/15/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/15/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/16/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/16/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/17/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/17/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/18/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/18/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/19/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/19/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/20/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/20/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/21/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/21/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/22/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/22/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/23/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/23/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/24/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/24/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/25/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/25/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/26/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/26/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/27/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/27/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/28/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/28/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/sponsor/29/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/sponsor/29/avatar.svg\"></a>\n</p>\n\n## Backers\n\nSupport us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/nuxtjs#backer)]\n\n<p>\n<a href=\"https://opencollective.com/nuxtjs/backer/0/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/0/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/1/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/1/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/2/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/2/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/3/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/3/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/4/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/4/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/5/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/5/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/6/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/6/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/7/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/7/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/8/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/8/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/9/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/9/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/10/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/10/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/11/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/11/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/12/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/12/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/13/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/13/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/14/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/14/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/15/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/15/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/16/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/16/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/17/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/17/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/18/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/18/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/19/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/19/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/20/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/20/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/21/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/21/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/22/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/22/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/23/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/23/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/24/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/24/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/25/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/25/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/26/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/26/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/27/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/27/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/28/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/28/avatar.svg\"></a>\n<a href=\"https://opencollective.com/nuxtjs/backer/29/website\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://opencollective.com/nuxtjs/backer/29/avatar.svg\"></a>\n</p>\n\n## Getting started\n\n```\n$ npm install nuxt --save\n```\n\nAdd a script to your package.json like this:\n\n```json\n{\n  \"scripts\": {\n    \"start\": \"nuxt\"\n  }\n}\n```\n\nAfter that, the file-system is the main API. Every .vue file becomes a route that gets automatically processed and rendered.\n\nPopulate `./pages/index.vue` inside your project:\n\n```html\n<template>\n  <h1>Hello {{ name }}!</h1>\n</template>\n\n<script>\nexport default {\n  data: () => {\n    return { name: 'world' }\n  }\n}\n</script>\n```\n\nAnd then run:\n```bash\nnpm start\n```\n\nGo to [http://localhost:3000](http://localhost:3000)\n\n## Templates\n\n:point_right: We recommend to start directly with our cli [create-nuxt-app](https://github.com/nuxt-community/create-nuxt-app) for the latest updates.\n\nOr you can start by using one of our starter templates:\n- [starter](https://github.com/nuxt-community/starter-template): Basic Nuxt.js project template\n- [express](https://github.com/nuxt-community/express-template): Nuxt.js + Express\n- [koa](https://github.com/nuxt-community/koa-template): Nuxt.js + Koa\n- [adonuxt](https://github.com/nuxt-community/adonuxt-template): Nuxt.js + AdonisJS\n- [micro](https://github.com/nuxt-community/micro-template): Nuxt.js + Micro\n- [nuxtent](https://github.com/nuxt-community/nuxtent-template): Nuxt.js + Nuxtent module for content heavy sites\n\n## Using nuxt.js programmatically\n\n```js\nconst { Nuxt, Builder } = require('nuxt')\n\n// Import and set nuxt.js options\nlet config = require('./nuxt.config.js')\nconfig.dev = (process.env.NODE_ENV !== 'production')\n\nlet nuxt = new Nuxt(config)\n\n// Start build process (only in development)\nif (config.dev) {\n  new Builder(nuxt).build()\n}\n\n// You can use nuxt.render(req, res) or nuxt.renderRoute(route, context)\n```\n\nLearn more: https://nuxtjs.org/api/nuxt\n\n## Using nuxt.js as a middleware\n\nYou might want to use your own server with you configurations, your API and everything awesome your created with. That's why you can use nuxt.js as a middleware. It's recommended to use it at the end of your middleware since it will handle the rendering of your web application and won't call next().\n\n```js\napp.use(nuxt.render)\n```\n\nLearn more: https://nuxtjs.org/api/nuxt-render\n\n## Render a specific route\n\nThis is mostly used for `nuxt generate` and test purposes but you might find another utility!\n\n```js\nnuxt.renderRoute('/about', context)\n.then(function ({ html, error }) {\n  // You can check error to know if your app displayed the error page for this route\n  // Useful to set the correct status code if an error appended:\n  if (error) {\n    return res.status(error.statusCode || 500).send(html)\n  }\n  res.send(html)\n})\n.catch(function (error) {\n  // And error appended while rendering the route\n})\n```\n\nLearn more: https://nuxtjs.org/api/nuxt-render-route\n\n## Examples\n\nPlease take a look at https://nuxtjs.org/examples or directly in https://github.com/nuxt/nuxt.js/tree/dev/examples.\n\n## Production deployment\n\nTo deploy, instead of running nuxt, you probably want to build ahead of time. Therefore, building and starting are separate commands:\n\n```bash\nnuxt build\nnuxt start\n```\n\nFor example, to deploy with [`now`](https://zeit.co/now) a `package.json` like follows is recommended:\n```json\n{\n  \"name\": \"my-app\",\n  \"dependencies\": {\n    \"nuxt\": \"latest\"\n  },\n  \"scripts\": {\n    \"dev\": \"nuxt\",\n    \"build\": \"nuxt build\",\n    \"start\": \"nuxt start\"\n  }\n}\n```\nThen run `now` and enjoy!\n\nNote: we recommend putting `.nuxt` in `.npmignore` or `.gitignore`.\n\n## Core team\n\n| [Sebastien Chopin](https://github.com/Atinux) | [Alexandre Chopin](https://github.com/alexchopin) | [Pooya Parsa](https://github.com/pi0) | [Clark Du](https://github.com/clarkdo) |\n| --- | --- | --- | --- |\n| [![Atinux](https://avatars1.githubusercontent.com/u/904724?s=150&v=4)](https://github.com/Atinux) | [![alexchopin](https://avatars1.githubusercontent.com/u/4084277?s=150&v=4)](https://github.com/alexchopin) | [![pi0](https://avatars1.githubusercontent.com/u/5158436?s=150&v=4)](https://github.com/pi0) | [![clarkdo](https://avatars3.githubusercontent.com/u/4312154?s=150&v=4)](https://github.com/clarkdo) |\n\n## Contributors\n\nThank you to all our [contributors](https://github.com/nuxt/nuxt.js/graphs/contributors)!\n\n## Contributing\n\nPlease see our [CONTRIBUTING.md](./CONTRIBUTING.md)\n\n\n## Roadmap\n\nhttps://trello.com/b/lgy93IOl/nuxtjs-10\n",
+    "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2016-2017 Sebastien Chopin ([@Atinux](https://github.com/Atinux)) & Alexandre Chopin ([@alexchopin](https://github.com/alexchopin))\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/nuxt/-/nuxt-1.4.0.tgz#66df9ede68daf2ef4cfbcc329da7dda0003e0420",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/nuxt/-/nuxt-1.4.0.tgz",
+    "hash": "66df9ede68daf2ef4cfbcc329da7dda0003e0420",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "66df9ede68daf2ef4cfbcc329da7dda0003e0420"
+}

@@ -1,0 +1,66 @@
+{
+  "manifest": {
+    "name": "array-map",
+    "version": "0.0.0",
+    "description": "`[].map(f)` for older browsers",
+    "main": "index.js",
+    "devDependencies": {
+      "tape": "~2.3.2"
+    },
+    "scripts": {
+      "test": "tape test/*.js"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/substack/array-map.git"
+    },
+    "homepage": "https://github.com/substack/array-map",
+    "keywords": [
+      "array",
+      "map",
+      "browser",
+      "es5",
+      "shim",
+      "ie6",
+      "ie7",
+      "ie8"
+    ],
+    "author": {
+      "name": "James Halliday",
+      "email": "mail@substack.net",
+      "url": "http://substack.net"
+    },
+    "license": "MIT",
+    "testling": {
+      "files": "test/*.js",
+      "browsers": [
+        "ie/6..latest",
+        "firefox/3.5",
+        "firefox/latest",
+        "chrome/5",
+        "chrome/latest",
+        "opera/12..latest",
+        "opera/next",
+        "safari/5.1..latest",
+        "ipad/6.0..latest",
+        "iphone/6.0..latest",
+        "android-browser/4.2..latest"
+      ]
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-array-map-0.0.0-88a2bab73d1cf7bcd5c1b118a003f66f665fa662/package.json",
+    "readmeFilename": "readme.markdown",
+    "readme": "# array-map\n\n`[].map(f)` for older browsers\n\n[![testling badge](https://ci.testling.com/substack/array-map.png)](https://ci.testling.com/substack/array-map)\n\n[![build status](https://secure.travis-ci.org/substack/array-map.png)](http://travis-ci.org/substack/array-map)\n\n# example\n\n``` js\nvar map = require('array-map');\nvar letters = map([97,98,99], function (c) {\n    return String.fromCharCode(c);\n});\nconsole.log(letters.join(''));\n```\n\noutput:\n\n```\nabc\n```\n\n# methods\n\n``` js\nvar map = require('array-map')\n```\n\n## var ys = map(xs, f)\n\nCreate a new array `ys` by applying `f(xs[i], i, xs)` to each element in `xs` at\nindex `i`.\n\n# install\n\nWith [npm](https://npmjs.org) do:\n\n```\nnpm install array-map\n```\n\n# license\n\nMIT\n",
+    "licenseText": "This software is released under the MIT license:\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/array-map/-/array-map-0.0.0.tgz#88a2bab73d1cf7bcd5c1b118a003f66f665fa662",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/array-map/-/array-map-0.0.0.tgz",
+    "hash": "88a2bab73d1cf7bcd5c1b118a003f66f665fa662",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "88a2bab73d1cf7bcd5c1b118a003f66f665fa662"
+}

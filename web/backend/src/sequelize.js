@@ -1,4 +1,3 @@
-require('dotenv').config();
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
 const operatorsAliases = {
@@ -39,7 +38,7 @@ const operatorsAliases = {
 };
 
 module.exports = function (app) {
-  const connectionString = `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+  const connectionString = app.get('dbConnStr');
   const sequelize = new Sequelize(connectionString, {
     dialect: 'postgres',
     logging: false,

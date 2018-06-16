@@ -16,12 +16,15 @@ const services = require('./services');
 const appHooks = require('./app.hooks');
 const channels = require('./channels');
 
+const config = require('./config');
 const sequelize = require('./sequelize');
+const pgpubsub = require('./pgpubsub');
 
 const app = express(feathers());
 
 // Load app configuration
 app.configure(configuration());
+app.configure(config);
 // Enable CORS, security, compression, favicon and body parsing
 app.use(cors());
 app.use(helmet());
@@ -35,10 +38,23 @@ app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 app.use('/', express.static(app.get('public')));
 
 // Set up Plugins and providers
-
-app.configure(socketio());
+app.configure(socketio(io => {
+    const pubsubClient = app.get('pubsubClient');
+    io.on('connection', socket => {
+        pubsubClient.on('poolNetwork', channelPayload => {
+            socket.emit('notifyPoolNetwork', channelPayload)
+        });
+        pubsubClient.on('poolConfig', channelPayload => {
+            socket.emit('notifyPoolConfig', channelPayload)
+        });
+        pubsubClient.on('poolPool', channelPayload => {
+            socket.emit('notifyPoolPool', channelPayload)
+        });
+    })
+}));
 
 app.configure(sequelize);
+app.configure(pgpubsub);
 
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);

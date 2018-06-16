@@ -1,0 +1,85 @@
+{
+  "manifest": {
+    "name": "eslint-plugin-vue",
+    "version": "4.5.0",
+    "description": "Official ESLint plugin for Vue.js",
+    "main": "lib/index.js",
+    "scripts": {
+      "start": "npm run test:base -- --watch --growl",
+      "test:base": "mocha \"tests/lib/**/*.js\" --reporter dot",
+      "test": "nyc npm run test:base -- \"tests/integrations/*.js\" --timeout 60000",
+      "lint": "eslint . --rulesdir eslint-internal-rules",
+      "pretest": "npm run lint",
+      "preversion": "npm test && npm run update && git add .",
+      "version": "npm run lint -- --fix && git add .",
+      "update": "node ./tools/update.js"
+    },
+    "files": [
+      "lib"
+    ],
+    "homepage": "https://github.com/vuejs/eslint-plugin-vue#readme",
+    "keywords": [
+      "eslint",
+      "eslint-plugin",
+      "eslint-config",
+      "vue",
+      "vuejs",
+      "rules"
+    ],
+    "author": {
+      "name": "Toru Nagashima",
+      "url": "https://github.com/mysticatea"
+    },
+    "contributors": [
+      {
+        "name": "Michał Sajnóg",
+        "email": "msajnog93@gmail.com",
+        "url": "http://github.com/michalsnik"
+      }
+    ],
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/vuejs/eslint-plugin-vue.git"
+    },
+    "bugs": {
+      "url": "https://github.com/vuejs/eslint-plugin-vue/issues"
+    },
+    "engines": {
+      "node": ">=4"
+    },
+    "peerDependencies": {
+      "eslint": "^3.18.0 || ^4.0.0"
+    },
+    "dependencies": {
+      "vue-eslint-parser": "^2.0.3"
+    },
+    "devDependencies": {
+      "@types/node": "^4.2.16",
+      "babel-eslint": "^8.2.2",
+      "chai": "^4.1.0",
+      "eslint": "^4.14.0",
+      "eslint-plugin-eslint-plugin": "^0.8.0",
+      "eslint-plugin-html": "^4.0.1",
+      "eslint-plugin-vue-libs": "^2.0.0",
+      "lodash": "^4.17.4",
+      "mocha": "^3.2.0",
+      "nyc": "^11.1.0"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-eslint-plugin-vue-4.5.0-09d6597f4849e31a3846c2c395fccf17685b69c3/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# eslint-plugin-vue\n\n[![NPM version](https://img.shields.io/npm/v/eslint-plugin-vue.svg?style=flat)](https://npmjs.org/package/eslint-plugin-vue)\n[![NPM downloads](https://img.shields.io/npm/dm/eslint-plugin-vue.svg?style=flat)](https://npmjs.org/package/eslint-plugin-vue)\n[![CircleCI](https://circleci.com/gh/vuejs/eslint-plugin-vue.svg?style=svg)](https://circleci.com/gh/vuejs/eslint-plugin-vue)\n\n> Official ESLint plugin for Vue.js\n\n## :art: Playground on the Web\n\nYou can try this plugin on the Web.\n\n- https://mysticatea.github.io/vue-eslint-demo/\n\n## :grey_exclamation: Requirements\n\n- [ESLint](http://eslint.org/) `>=3.18.0`.\n  - `>=4.7.0` to use `eslint --fix`.\n  - `>=4.14.0` to use with `babel-eslint`.\n- Node.js `>=4.0.0`\n\n## :cd: Installation\n\n```bash\nnpm install --save-dev eslint eslint-plugin-vue\n```\n\n## :rocket: Usage\n\nCreate `.eslintrc.*` file to configure rules. See also: [http://eslint.org/docs/user-guide/configuring](http://eslint.org/docs/user-guide/configuring).\n\nExample **.eslintrc.js**:\n\n```js\nmodule.exports = {\n  extends: [\n    // add more generic rulesets here, such as:\n    // 'eslint:recommended',\n    'plugin:vue/essential'\n  ],\n  rules: {\n    // override/add rules settings here, such as:\n    // 'vue/no-unused-vars': 'error'\n  }\n}\n```\n\n### Attention\n\nAll component-related rules are being applied to code that passes any of the following checks:\n\n* `Vue.component()` expression\n* `Vue.extend()` expression\n* `Vue.mixin()` expression\n* `export default {}` in `.vue` or `.jsx` file\n\nIf you however want to take advantage of our rules in any of your custom objects that are Vue components, you might need to use special comment `// @vue/component` that marks object in the next line as a Vue component in any file, e.g.:\n\n```js\n// @vue/component\nconst CustomComponent = {\n  name: 'custom-component',\n  template: '<div></div>'\n}\n```\n```js\nVue.component('AsyncComponent', (resolve, reject) => {\n  setTimeout(() => {\n    // @vue/component\n    resolve({\n      name: 'async-component',\n      template: '<div></div>'\n    })\n  }, 500)\n})\n```\n\n### `eslint-disable` functionality in `<template>`\n\nYou can use `<!-- eslint-disable -->`-like HTML comments in `<template>` of `.vue` files. For example:\n\n```html\n<template>\n  <!-- eslint-disable-next-line vue/max-attributes-per-line -->\n  <div a=\"1\" b=\"2\" c=\"3\" d=\"4\">\n  </div>\n</template>\n```\n\nIf you want to disallow `eslint-disable` functionality, please disable [vue/comment-directive](./docs/rules/comment-directive.md) rule.\n\n## :gear: Configs\n\nThis plugin provides four predefined configs:\n- `plugin:vue/base` - Settings and rules to enable correct ESLint parsing\n- `plugin:vue/essential` - Above, plus rules to prevent errors or unintended behavior\n- `plugin:vue/strongly-recommended` - Above, plus rules to considerably improve code readability and/or dev experience\n- `plugin:vue/recommended` - Above, plus rules to enforce subjective community defaults to ensure consistency\n\n## :bulb: Rules\n\nRules are grouped by priority to help you understand their purpose. The `--fix` option on the command line automatically fixes problems reported by rules which have a wrench :wrench: below.\n\n<!--RULES_TABLE_START-->\n\n### Base Rules (Enabling Correct ESLint Parsing)\n\nEnforce all the rules in this category, as well as all higher priority rules, with:\n\n```json\n{\n  \"extends\": \"plugin:vue/base\"\n}\n```\n\n|    | Rule ID | Description |\n|:---|:--------|:------------|\n|  | [vue/comment-directive](./docs/rules/comment-directive.md) | support comment-directives in `<template>` |\n|  | [vue/jsx-uses-vars](./docs/rules/jsx-uses-vars.md) | prevent variables used in JSX to be marked as unused |\n\n### Priority A: Essential (Error Prevention)\n\nEnforce all the rules in this category, as well as all higher priority rules, with:\n\n```json\n{\n  \"extends\": \"plugin:vue/essential\"\n}\n```\n\n|    | Rule ID | Description |\n|:---|:--------|:------------|\n|  | [vue/no-async-in-computed-properties](./docs/rules/no-async-in-computed-properties.md) | disallow asynchronous actions in computed properties |\n|  | [vue/no-dupe-keys](./docs/rules/no-dupe-keys.md) | disallow duplication of field names |\n|  | [vue/no-duplicate-attributes](./docs/rules/no-duplicate-attributes.md) | disallow duplication of attributes |\n|  | [vue/no-parsing-error](./docs/rules/no-parsing-error.md) | disallow parsing errors in `<template>` |\n|  | [vue/no-reserved-keys](./docs/rules/no-reserved-keys.md) | disallow overwriting reserved keys |\n| :wrench: | [vue/no-shared-component-data](./docs/rules/no-shared-component-data.md) | enforce component's data property to be a function |\n|  | [vue/no-side-effects-in-computed-properties](./docs/rules/no-side-effects-in-computed-properties.md) | disallow side effects in computed properties |\n|  | [vue/no-template-key](./docs/rules/no-template-key.md) | disallow `key` attribute on `<template>` |\n|  | [vue/no-textarea-mustache](./docs/rules/no-textarea-mustache.md) | disallow mustaches in `<textarea>` |\n|  | [vue/no-unused-vars](./docs/rules/no-unused-vars.md) | disallow unused variable definitions of v-for directives or scope attributes |\n|  | [vue/require-component-is](./docs/rules/require-component-is.md) | require `v-bind:is` of `<component>` elements |\n|  | [vue/require-render-return](./docs/rules/require-render-return.md) | enforce render function to always return value |\n|  | [vue/require-v-for-key](./docs/rules/require-v-for-key.md) | require `v-bind:key` with `v-for` directives |\n|  | [vue/require-valid-default-prop](./docs/rules/require-valid-default-prop.md) | enforce props default values to be valid |\n|  | [vue/return-in-computed-property](./docs/rules/return-in-computed-property.md) | enforce that a return statement is present in computed property |\n|  | [vue/valid-template-root](./docs/rules/valid-template-root.md) | enforce valid template root |\n|  | [vue/valid-v-bind](./docs/rules/valid-v-bind.md) | enforce valid `v-bind` directives |\n|  | [vue/valid-v-cloak](./docs/rules/valid-v-cloak.md) | enforce valid `v-cloak` directives |\n|  | [vue/valid-v-else-if](./docs/rules/valid-v-else-if.md) | enforce valid `v-else-if` directives |\n|  | [vue/valid-v-else](./docs/rules/valid-v-else.md) | enforce valid `v-else` directives |\n|  | [vue/valid-v-for](./docs/rules/valid-v-for.md) | enforce valid `v-for` directives |\n|  | [vue/valid-v-html](./docs/rules/valid-v-html.md) | enforce valid `v-html` directives |\n|  | [vue/valid-v-if](./docs/rules/valid-v-if.md) | enforce valid `v-if` directives |\n|  | [vue/valid-v-model](./docs/rules/valid-v-model.md) | enforce valid `v-model` directives |\n|  | [vue/valid-v-on](./docs/rules/valid-v-on.md) | enforce valid `v-on` directives |\n|  | [vue/valid-v-once](./docs/rules/valid-v-once.md) | enforce valid `v-once` directives |\n|  | [vue/valid-v-pre](./docs/rules/valid-v-pre.md) | enforce valid `v-pre` directives |\n|  | [vue/valid-v-show](./docs/rules/valid-v-show.md) | enforce valid `v-show` directives |\n|  | [vue/valid-v-text](./docs/rules/valid-v-text.md) | enforce valid `v-text` directives |\n\n### Priority B: Strongly Recommended (Improving Readability)\n\nEnforce all the rules in this category, as well as all higher priority rules, with:\n\n```json\n{\n  \"extends\": \"plugin:vue/strongly-recommended\"\n}\n```\n\n|    | Rule ID | Description |\n|:---|:--------|:------------|\n| :wrench: | [vue/attribute-hyphenation](./docs/rules/attribute-hyphenation.md) | enforce attribute naming style in template |\n| :wrench: | [vue/html-end-tags](./docs/rules/html-end-tags.md) | enforce end tag style |\n| :wrench: | [vue/html-indent](./docs/rules/html-indent.md) | enforce consistent indentation in `<template>` |\n| :wrench: | [vue/html-self-closing](./docs/rules/html-self-closing.md) | enforce self-closing style |\n| :wrench: | [vue/max-attributes-per-line](./docs/rules/max-attributes-per-line.md) | enforce the maximum number of attributes per line |\n| :wrench: | [vue/mustache-interpolation-spacing](./docs/rules/mustache-interpolation-spacing.md) | enforce unified spacing in mustache interpolations |\n| :wrench: | [vue/name-property-casing](./docs/rules/name-property-casing.md) | enforce specific casing for the name property in Vue components |\n| :wrench: | [vue/no-multi-spaces](./docs/rules/no-multi-spaces.md) | disallow multiple spaces |\n|  | [vue/require-default-prop](./docs/rules/require-default-prop.md) | require default value for props |\n|  | [vue/require-prop-types](./docs/rules/require-prop-types.md) | require type definitions in props |\n| :wrench: | [vue/v-bind-style](./docs/rules/v-bind-style.md) | enforce `v-bind` directive style |\n| :wrench: | [vue/v-on-style](./docs/rules/v-on-style.md) | enforce `v-on` directive style |\n\n### Priority C: Recommended (Minimizing Arbitrary Choices and Cognitive Overhead)\n\nEnforce all the rules in this category, as well as all higher priority rules, with:\n\n```json\n{\n  \"extends\": \"plugin:vue/recommended\"\n}\n```\n\n|    | Rule ID | Description |\n|:---|:--------|:------------|\n| :wrench: | [vue/attributes-order](./docs/rules/attributes-order.md) | enforce order of attributes |\n| :wrench: | [vue/html-quotes](./docs/rules/html-quotes.md) | enforce quotes style of HTML attributes |\n|  | [vue/no-confusing-v-for-v-if](./docs/rules/no-confusing-v-for-v-if.md) | disallow confusing `v-for` and `v-if` on the same element |\n| :wrench: | [vue/order-in-components](./docs/rules/order-in-components.md) | enforce order of properties in components |\n|  | [vue/this-in-template](./docs/rules/this-in-template.md) | enforce usage of `this` in template |\n\n### Uncategorized\n\n|    | Rule ID | Description |\n|:---|:--------|:------------|\n| :wrench: | [vue/html-closing-bracket-newline](./docs/rules/html-closing-bracket-newline.md) | require or disallow a line break before tag's closing brackets |\n| :wrench: | [vue/html-closing-bracket-spacing](./docs/rules/html-closing-bracket-spacing.md) | require or disallow a space before tag's closing brackets |\n| :wrench: | [vue/prop-name-casing](./docs/rules/prop-name-casing.md) | enforce specific casing for the Prop name in Vue components |\n| :wrench: | [vue/script-indent](./docs/rules/script-indent.md) | enforce consistent indentation in `<script>` |\n\n<!--RULES_TABLE_END-->\n\n## :couple: FAQ\n\n### What is the \"Use the latest vue-eslint-parser\" error?\n\nThe most rules of `eslint-plugin-vue` require `vue-eslint-parser` to check `<template>` ASTs.\n\nMake sure you have one of the following settings in your **.eslintrc**:\n\n- `\"extends\": [\"plugin:vue/recommended\"]`\n- `\"extends\": [\"plugin:vue/base\"]`\n\nIf you already use other parser (e.g. `\"parser\": \"babel-eslint\"`), please move it into `parserOptions`, so it doesn't collide with the `vue-eslint-parser` used by this plugin's configuration:\n\n```diff\n- \"parser\": \"babel-eslint\",\n  \"parserOptions\": {\n+     \"parser\": \"babel-eslint\",\n      \"ecmaVersion\": 2017,\n      \"sourceType\": \"module\"\n  }\n```\n\nThe `vue-eslint-parser` uses the parser which is set by `parserOptions.parser` to parse scripts.\n\n### Why doesn't it work on .vue file?\n\n1. Make sure you don't have `eslint-plugin-html` in your config. The `eslint-plugin-html` extracts the content from `<script>` tags, but `eslint-vue-plugin` requires `<script>` tags and `<template>` tags in order to distinguish template and script in single file components.\n\n  ```diff\n    \"plugins\": [\n      \"vue\",\n  -   \"html\"\n    ]\n  ```\n\n2. Make sure your tool is set to lint `.vue` files.\n  - CLI targets only `.js` files by default. You have to specify additional extensions by `--ext` option or glob patterns. E.g. `eslint \"src/**/*.{js,vue}\"` or `eslint src --ext .vue`.\n  - VSCode targets only JavaScript or HTML files by default. You have to add `{\"autoFix\": true, \"language\": \"vue\"}` into `eslint.validate` entry.\n\n## :anchor: Semantic Versioning Policy\n\nThis plugin follows [semantic versioning](http://semver.org/) and [ESLint's Semantic Versioning Policy](https://github.com/eslint/eslint#semantic-versioning-policy).\n\n## :newspaper: Changelog\n\nWe're using [GitHub Releases](https://github.com/vuejs/eslint-plugin-vue/releases).\n\n## :beers: Contribution guide\n\nIn order to add a new rule, you should:\n- Create issue on GH with description of proposed rule\n- Generate a new rule using the [official yeoman generator](https://github.com/eslint/generator-eslint)\n- Run `npm start`\n- Write test scenarios & implement logic\n- Describe the rule in the generated `docs` file\n- Make sure all tests are passing\n- Run `npm run update` in order to update readme and recommended configuration\n- Create PR and link created issue in description\n\nWe're more than happy to see potential contributions, so don't hesitate. If you have any suggestions, ideas or problems feel free to add new [issue](https://github.com/vuejs/eslint-plugin-vue/issues), but first please make sure your question does not repeat previous ones.\n\n## :lock: License\n\nSee the [LICENSE](LICENSE) file for license rights and limitations (MIT).\n",
+    "licenseText": "MIT License\n\nCopyright (c) 2017 Toru Nagashima\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-4.5.0.tgz#09d6597f4849e31a3846c2c395fccf17685b69c3",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-4.5.0.tgz",
+    "hash": "09d6597f4849e31a3846c2c395fccf17685b69c3",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "09d6597f4849e31a3846c2c395fccf17685b69c3"
+}

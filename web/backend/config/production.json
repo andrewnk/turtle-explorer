@@ -1,4 +1,4 @@
 {
-  "host": "turtle-explorer-backend-app.feathersjs.com",
+  "host": "web-backend",
   "port": "PORT"
 }

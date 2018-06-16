@@ -1,0 +1,60 @@
+{
+  "manifest": {
+    "name": "postcss-selector-not",
+    "version": "3.0.1",
+    "description": "PostCSS plugin to transform :not() W3C CSS level 4 pseudo class to :not() CSS level 3 selectors",
+    "keywords": [
+      "postcss",
+      "postcss-plugin",
+      "selectors",
+      "selector",
+      "Not"
+    ],
+    "author": {
+      "name": "Maxime Thirouin"
+    },
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/postcss/postcss-selector-not.git"
+    },
+    "main": "dist/index.js",
+    "files": [
+      "dist"
+    ],
+    "dependencies": {
+      "balanced-match": "^0.4.2",
+      "postcss": "^6.0.1"
+    },
+    "devDependencies": {
+      "babel-cli": "^6.24.1",
+      "babel-plugin-add-module-exports": "^0.2.1",
+      "babel-preset-env": "^1.4.0",
+      "babel-register": "^6.24.1",
+      "eslint": "^3.19.0",
+      "tape": "^4.6.3"
+    },
+    "scripts": {
+      "lint": "eslint *.js ./src/ ./test/",
+      "tape": "tape -r babel-register test/*.js",
+      "test": "npm run lint && npm run babelify && npm run tape",
+      "babelify": "babel src --out-dir dist",
+      "prepublish": "npm run babelify"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-postcss-selector-not-3.0.1-2e4db2f0965336c01e7cec7db6c60dff767335d9/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# postcss-selector-not [![Build Status](https://travis-ci.org/postcss/postcss-selector-not.svg?branch=master)](https://travis-ci.org/postcss/postcss-selector-not)\n\n> PostCSS plugin to transform `:not()` W3C CSS leve 4 pseudo class to :not() CSS level 3 selectors\n\nhttp://dev.w3.org/csswg/selectors-4/#negation\n\n## Installation\n\n```console\n$ npm install postcss-selector-not\n```\n\n## Usage\n\n```js\nvar postcss = require(\"postcss\")\n\nvar output = postcss()\n  .use(require(\"postcss-selector-not\"))\n  .process(require(\"fs\").readFileSync(\"input.css\", \"utf8\"))\n  .css\n```\n\nUsing this `input.css`:\n\n```css\np:not(:first-child, .special) {\n  color: red;\n}\n```\n\nyou will get:\n\n```css\np:not(:first-child), p:not(.special) {\n  color: red;\n}\n```\n\n---\n\n## [Changelog](CHANGELOG.md)\n\n## [License](LICENSE)\n",
+    "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2017 Maxime Thirouin\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/postcss-selector-not/-/postcss-selector-not-3.0.1.tgz#2e4db2f0965336c01e7cec7db6c60dff767335d9",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/postcss-selector-not/-/postcss-selector-not-3.0.1.tgz",
+    "hash": "2e4db2f0965336c01e7cec7db6c60dff767335d9",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "2e4db2f0965336c01e7cec7db6c60dff767335d9"
+}

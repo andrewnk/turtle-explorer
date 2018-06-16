@@ -1,0 +1,33 @@
+{
+  "manifest": {
+    "name": "indexof",
+    "description": "Microsoft sucks",
+    "version": "0.0.1",
+    "keywords": [
+      "index",
+      "array",
+      "indexOf"
+    ],
+    "dependencies": {},
+    "component": {
+      "scripts": {
+        "indexof/index.js": "index.js"
+      }
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-indexof-0.0.1-82dc336d232b9062179d05ab3293a66059fd435d/package.json",
+    "readmeFilename": "Readme.md",
+    "readme": "\n# indexOf\n\n  Lame indexOf thing, thanks microsoft\n\n## Example\n\n```js\nvar index = require('indexof');\nindex(arr, obj);\n```\n\n## License\n\n  MIT",
+    "license": "MIT*"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/indexof/-/indexof-0.0.1.tgz#82dc336d232b9062179d05ab3293a66059fd435d",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/indexof/-/indexof-0.0.1.tgz",
+    "hash": "82dc336d232b9062179d05ab3293a66059fd435d",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "82dc336d232b9062179d05ab3293a66059fd435d"
+}

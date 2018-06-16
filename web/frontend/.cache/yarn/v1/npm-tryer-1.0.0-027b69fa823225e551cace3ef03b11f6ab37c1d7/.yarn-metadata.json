@@ -1,0 +1,77 @@
+{
+  "manifest": {
+    "name": "tryer",
+    "version": "1.0.0",
+    "description": "Because everyone loves a tryer! Conditional and repeated task invocation for node and browser.",
+    "homepage": "https://github.com/philbooth/tryer",
+    "bugs": {
+      "url": "https://github.com/philbooth/tryer/issues"
+    },
+    "license": "MIT",
+    "author": {
+      "name": "Phil Booth",
+      "email": "pmbooth@gmail.com",
+      "url": "https://philbooth.me/"
+    },
+    "main": "./src/tryer",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/philbooth/tryer.git"
+    },
+    "keywords": [
+      "repeat",
+      "retry",
+      "predicate",
+      "conditional",
+      "invocation",
+      "execution",
+      "loop",
+      "condition",
+      "termination",
+      "exponential",
+      "backoff"
+    ],
+    "devDependencies": {
+      "chai": "4.1.x",
+      "jshint": "2.9.x",
+      "mocha": "3.5.x",
+      "please-release-me": "1.0.x",
+      "spooks": "2.0.x",
+      "uglify-js": "3.0.x"
+    },
+    "scripts": {
+      "lint": "jshint src/tryer.js test/unit.js",
+      "test": "mocha --ui tdd --reporter spec --colors test/unit.js",
+      "minify": "uglifyjs ./src/tryer.js --compress --mangle --output ./lib/tryer.min.js"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-tryer-1.0.0-027b69fa823225e551cace3ef03b11f6ab37c1d7/package.json",
+    "contributors": [
+      {
+        "name": "Phil Booth",
+        "email": "pmbooth@gmail.com",
+        "url": "https://github.com/philbooth"
+      },
+      {
+        "name": "Andrew Lawson",
+        "url": "https://github.com/adlawson"
+      },
+      {
+        "name": "Tim O'Sulg",
+        "url": "https://github.com/timgluz"
+      }
+    ],
+    "readmeFilename": "README.md",
+    "readme": "# tryer\n\n[![Package status](https://img.shields.io/npm/v/tryer.svg?style=flat-square)](https://www.npmjs.com/package/tryer)\n[![Build status](https://img.shields.io/travis/philbooth/tryer.svg?style=flat-square)](https://travis-ci.org/philbooth/tryer)\n[![License](https://img.shields.io/github/license/philbooth/tryer.svg?style=flat-square)](https://opensource.org/licenses/MIT)\n\nBecause everyone loves a tryer!\nConditional\nand repeated\nfunction invocation\nfor node\nand browser.\n\n* [Say what?](#say-what)\n* [What size is it?](#what-size-is-it)\n* [How do I install it?](#how-do-i-install-it)\n* [How do I use it?](#how-do-i-use-it)\n  * [Loading the library](#loading-the-library)\n  * [Calling the exported function](#calling-the-exported-function)\n  * [Examples](#examples)\n* [How do I set up the dev environment?](#how-do-i-set-up-the-dev-environment)\n* [What license is it released under?](#what-license-is-it-released-under)\n\n## Say what?\n\nSometimes,\nyou want to defer\ncalling a function\nuntil a certain\npre-requisite condition is met.\nOther times,\nyou want to\ncall a function\nrepeatedly\nuntil some post-requisite condition\nis satisfied.\nOccasionally,\nyou might even want\nto do both\nfor the same function.\n\nTo save you writing\nexplicit conditions\nand loops\non each of those occasions,\n`tryer` implements\na predicate-based approach\nthat hides the cruft\nbehind a simple,\nfunctional interface.\n\nAdditionally,\nit allows you to easily specify\nretry intervals\nand limits,\nso that your code\ndoesn't hog the CPU.\nIt also supports\nexponential backoff\nof retry intervals,\nwhich can be useful\nwhen handling\nindefinite error states\nsuch as network failure.\n\n## What size is it?\n\n5.6 kb unminified with comments, 1.1 kb minified, 0.5 kb minified + gzipped.\n\n## How do I install it?\n\nVia npm:\n\n```\nnpm i tryer --save\n```\n\nOr if you just want the git repo:\n\n```\ngit clone git@github.com:philbooth/tryer.git\n```\n\n## How do I use it?\n\n### Loading the library\n\nIf you are running in\nNode.js\nor another CommonJS-style\nenvironment,\nyou can `require`\ntryer like so:\n\n```javascript\nconst tryer = require('tryer');\n```\n\nIt also the supports\nthe AMD-style format\npreferred by Require.js.\n\nIf you are\nincluding `tryer`\nwith an HTML `<script>` tag,\nor neither of the above environments\nare detected,\nit will be exported globally as `tryer`.\n\n### Calling the exported function\n\n`tryer` is a function\nthat can be invoked to\ncall other functions\nconditionally and repeatedly,\nwithout the need for\nexplicit `if` statements\nor loops in your own code.\n\n`tryer` takes one argument,\nan options object\nthat supports\nthe following properties:\n\n* `action`:\n  The function that you want to invoke.\n  If `action` returns a promise,\n  iterations will not end\n  until the promise is resolved or rejected.\n  Alternatively,\n  `action` may take a callback argument, `done`,\n  to signal that it is asynchronous.\n  In that case,\n  you are responsible\n  for calling `done`\n  when the action is finished.\n  If `action` is not set,\n  it defaults to an empty function.\n\n* `when`:\n  A predicate\n  that tests the pre-condition\n  for invoking `action`.\n  Until `when` returns true\n  (or a truthy value),\n  `action` will not be called.\n  Defaults to\n  a function that immediately returns `true`.\n\n* `until`:\n  A predicate\n  that tests the post-condition\n  for invoking `action`.\n  After `until` returns true\n  (or a truthy value),\n  `action` will no longer be called.\n  Defaults to\n  a function that immediately returns `true`.\n\n* `fail`:\n  The error handler.\n  A function\n  that will be called\n  if `limit` falsey values\n  are returned by `when` or `until`.\n  Defaults to an empty function.\n\n* `pass`:\n  Success handler.\n  A function\n  that will be called\n  after `until` has returned truthily.\n  Defaults to an empty function.\n\n* `limit`:\n  Failure limit,\n  representing the maximum number\n  of falsey returns from `when` or `until`\n  that will be permitted\n  before invocation is deemed to have failed.\n  A negative number\n  indicates that the attempt\n  should never fail,\n  instead continuing \n  for as long as `when` and `until`\n  have returned truthy values.\n  Defaults to `-1`.\n\n* `interval`:\n  The retry interval,\n  in milliseconds.\n  A negative number indicates\n  that each subsequent retry\n  should wait for twice the interval\n  from the preceding iteration\n  (i.e. exponential backoff).\n  The default value is `-1000`,\n  signifying that\n  the initial retry interval\n  should be one second\n  and that each subsequent attempt\n  should wait for double the length\n  of the previous interval.\n\n### Examples\n\n```javascript\n// Attempt to insert a database record, waiting until `db.isConnected`\n// before doing so. The retry interval is 1 second on each iteration\n// and the call will fail after 10 attempts.\ntryer({\n  action: () => db.insert(record),\n  when: () => db.isConnected,\n  interval: 1000,\n  limit: 10,\n  fail () {\n    log.error('No database connection, terminating.');\n    process.exit(1);\n  }\n});\n```\n\n```javascript\n// Attempt to send an email message, optionally retrying with\n// exponential backoff starting at 1 second. Continue to make\n// attempts indefinitely until the call succeeds.\nlet sent = false;\ntryer({\n  action (done) {\n    smtp.send(email, error => {\n      if (! error) {\n        sent = true;\n      }\n      done();\n    });\n  },\n  until: () => sent,\n  interval: -1000,\n  limit: -1\n});\n```\n\n```javascript\n// Poll a device at 30-second intervals, continuing indefinitely.\ntryer({\n  action: () => device.poll().then(response => handle(response)),\n  interval: 30000,\n  limit: -1\n});\n```\n\n## How do I set up the dev environment?\n\nThe dev environment relies on\n[Chai],\n[JSHint],\n[Mocha],\n[please-release-me],\n[spooks.js] and\n[UglifyJS].\nThe source code is in\n`src/tryer.js`\nand the unit tests are in\n`test/unit.js`.\n\nTo install the dependencies:\n\n```\nnpm i\n```\n\nTo run the tests:\n\n```\nnpm t\n```\n\nTo lint the code:\n\n```\nnpm run lint\n```\n\nTo regenerate the minified lib:\n\n```\nnpm run minify\n```\n\n## What license is it released under?\n\n[MIT](COPYING)\n\n[chai]: http://chaijs.com/\n[jshint]: http://jshint.com/\n[mocha]: http://mochajs.org/\n[please-release-me]: https://github.com/philbooth/please-release-me\n[spooks.js]: https://github.com/philbooth/spooks.js\n[uglifyjs]: http://lisperator.net/uglifyjs/\n[license]: COPYING\n\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/tryer/-/tryer-1.0.0.tgz#027b69fa823225e551cace3ef03b11f6ab37c1d7",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/tryer/-/tryer-1.0.0.tgz",
+    "hash": "027b69fa823225e551cace3ef03b11f6ab37c1d7",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "027b69fa823225e551cace3ef03b11f6ab37c1d7"
+}

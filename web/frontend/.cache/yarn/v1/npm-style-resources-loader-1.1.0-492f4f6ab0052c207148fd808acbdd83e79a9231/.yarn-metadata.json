@@ -1,0 +1,112 @@
+{
+  "manifest": {
+    "name": "style-resources-loader",
+    "version": "1.1.0",
+    "description": "CSS preprocessor resources loader for webpack",
+    "engines": {
+      "node": ">=7.6"
+    },
+    "main": "lib/index.js",
+    "files": [
+      "lib",
+      "src",
+      "index.d.ts"
+    ],
+    "scripts": {
+      "clean": "rimraf lib coverage",
+      "lint": "tslint -p .",
+      "test": "jest --colors",
+      "test:coverage": "npm test -- --coverage",
+      "posttest": "rimraf test/**/outputs",
+      "start": "tsc --outDir lib -w",
+      "build": "tsc --outDir lib -d",
+      "prepare": "npm run clean && npm run lint && npm run build && npm run test"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/yenshih/style-resources-loader.git"
+    },
+    "keywords": [
+      "webpack",
+      "loader",
+      "style",
+      "sass",
+      "scss",
+      "less",
+      "stylus",
+      "inject",
+      "resource",
+      "variable",
+      "mixin"
+    ],
+    "authors": [
+      "Shi Yan <yenshih95@gmail.com> (https://github.com/yenshih)"
+    ],
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/yenshih/style-resources-loader/issues"
+    },
+    "npmName": "style-resources-loader",
+    "jest": {
+      "transform": {
+        ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
+      },
+      "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+      "moduleFileExtensions": [
+        "ts",
+        "tsx",
+        "js"
+      ],
+      "coveragePathIgnorePatterns": [
+        "node_modules",
+        "test",
+        "src"
+      ]
+    },
+    "dependencies": {
+      "glob": "^7.1.2",
+      "loader-utils": "^1.1.0"
+    },
+    "devDependencies": {
+      "@types/glob": "^5.0.35",
+      "@types/jest": "^22.1.3",
+      "@types/loader-utils": "^1.1.2",
+      "@types/node": "^9.4.6",
+      "@types/webpack": "^3.8.8",
+      "@types/webpack-merge": "^4.1.2",
+      "coveralls": "^3.0.0",
+      "cross-env": "^5.1.3",
+      "jest": "^22.4.2",
+      "raw-loader": "^0.5.1",
+      "ts-jest": "^22.4.0",
+      "tslint": "^5.9.1",
+      "tslint-config-airbnb": "^5.7.0",
+      "typescript": "^2.7.2",
+      "webpack": "^3.11.0",
+      "webpack-merge": "^4.1.2"
+    },
+    "peerDependencies": {
+      "webpack": "^2.0.0 || >= 3.0.0-rc.0 || ^3.0.0"
+    },
+    "browserify": {
+      "transform": [
+        "loose-envify"
+      ]
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-style-resources-loader-1.1.0-492f4f6ab0052c207148fd808acbdd83e79a9231/package.json",
+    "readmeFilename": "README.md",
+    "readme": "[![npm][npm]][npm-url]\n[![node][node]][node-url]\n[![downloads][downloads]][downloads-url]\n[![build][build]][build-url]\n[![coverage][coverage]][coverage-url]\n\n<div align=\"center\">\n  <a href=\"https://github.com/webpack/webpack\">\n    <img\n        width=\"200\"\n        height=\"200\"\n        src=\"https://webpack.js.org/assets/icon-square-big.svg\"\n    >\n  </a>\n  <h1>Style Resources Loader</h1>\n  <p>CSS preprocessor resources loader for webpack.</p>\n</div>\n\n\n<h2 align=\"center\">Install</h2>\n\n```bash\nnpm i style-resources-loader -D\n```\n\n<h2 align=\"center\">Usage</h2>\n\nThis loader is a CSS preprocessor resources loader for webpack, which injects your style resources (e.g. `variables / mixins`) into multiple imported `sass / scss / less / stylus` modules.\n\nIt's mainly used to\n - share your `variables / mixins / functions` across all style files, so you don't need to `@import` them manually.\n - override `variables` in style files provided by other libraries (e.g. [ant-design](https://github.com/ant-design/ant-design)) and customize your own theme.\n\n<h2 align=\"center\">Examples</h2>\n\nPrepends `variables` and `mixins` to all `scss` files with default resources injector.\n\n**webpack.config.js**\n``` js\nmodule.exports = {\n    // ...\n    module: {\n        rules: [{\n            test: /\\.scss$/,\n            use: ['style-loader', 'css-loader', 'sass-loader', {\n                loader: 'style-resources-loader',\n                options: {\n                    patterns: [\n                        path.resolve(__dirname, 'path/to/scss/variables/*.scss'),\n                        path.resolve(__dirname, 'path/to/scss/mixins/*.scss'),\n                    ]\n                }\n            }]\n        }]\n    }\n}\n```\n\nAppends `variables` to all `less` files and override original `less variables`.\n\n**webpack.config.js**\n```js\nmodule.exports = {\n    // ...\n    module: {\n        rules: [{\n            test: /\\.less$/,\n            use: ['style-loader', 'css-loader', 'less-loader', {\n                loader: 'style-resources-loader',\n                options: {\n                    patterns: path.resolve(__dirname, 'path/to/less/variables/*.less'),\n                    injector: 'append'\n                }\n            }]\n        }]\n    }\n}\n```\n\nAppends `mixins` and prepends `variables` to all `stylus` files with customized resources injector.\n\n**webpack.config.js**\n``` js\nmodule.exports = {\n    // ...\n    module: {\n        rules: [{\n            test: /\\.styl$/,\n            use: ['style-loader', 'css-loader', 'stylus-loader', {\n                loader: 'style-resources-loader',\n                options: {\n                    patterns: [\n                        path.resolve(__dirname, 'path/to/stylus/variables/*.styl'),\n                        path.resolve(__dirname, 'path/to/stylus/mixins/*.styl')\n                    ],\n                    injector: (source, resources) => {\n                        const combineAll = (type) => resources\n                            .filter(({ file }) => file.includes(type))\n                            .map(({ content }) => content)\n                            .join('');\n                        return combineAll('mixins') + source + combineAll('variables');\n                    }\n                }\n            }]\n        }]\n    }\n}\n```\n\n<h2 align=\"center\">Options</h2>\n\n|Name|Type|Default|Description|\n|:--:|:--:|:-----:|:----------|\n|**[`patterns`](#patterns)**|`{String \\| String[]}`|`/`|Path to the resources you would like to inject|\n|**[`injector`](#injector)**|`{Function \\| 'prepend' \\| 'append'}`|`prepend`|Controls the resources injection precisely|\n|**[`globOptions`](#globoptions)**|`{Object}`|`{}`|An options that can be passed to `glob(...)`|\n|**[`resolveUrl`](#resolveurl)**|`{Boolean}`|`true`|Enable/Disable `@import` url to be resolved|\n\n### `patterns`\n\nA string or an array of string, represents the path to the resources you would like to inject.\n\nIt supports [globbing](https://github.com/isaacs/node-glob). You could include many files using a file mask.\n\nFor example, `path.resolve(__dirname, './styles/*/*.less')` would include all `less` files from `variables` and `mixins` directories and ignore `reset.less` in such following structure.\n\n```\n./styles\n  /variables\n    |-- fonts.less\n    |-- colors.less\n  /mixins\n    |-- size.less\n  |-- reset.less\n```\n\n### `injector`\n\nAn optional function which controls the resources injection precisely. It also supports `prepend` and `append` for convenience.\n\nIt defaults to `prepend` (equivalent to `(source, resources) => resources.map(({ content }) => content).join('') + source` internally), which means the loader prepends all resources to source file.\n\nAn injector function receives two parameters:\n\n|Name|Type|Default|Description|\n|:--:|:--:|:-----:|:----------|\n|**`source`**|`{String}`|`/`|Content of the source file|\n|**[`resources`](#resources)**|`{Object[]}`|`/`|Resource descriptors|\n\n#### `resources`\n\nAn array of resource, each contains `file` and `content` property:\n\n|Name|Type|Default|Description|\n|:--:|:--:|:-----:|:----------|\n|**`file`**|`{String}`|`/`|Absolute path to the resource|\n|**`content`**|`{String}`|`/`|Content of the resource file|\n\n### `globOptions`\n\nAn options that can be passed to `glob(...)`. See [node-glob options](https://github.com/isaacs/node-glob#options) for more details.\n\n### `resolveUrl`\n\nA boolean which defaults to `true`. It represents whether the relative path in `@import` or `@require` statements should be resolved.\n\nIf you were to use `@import` or `@require` statements in style resource file, you should make sure that the url is relative to that resource file, rather than the source file.\n\nYou could disable this feature by setting `resolveUrl` to `false`.\n\n<h2 align=\"center\">License</h2>\n\n[MIT](http://www.opensource.org/licenses/mit-license.php)\n\n[npm]: https://img.shields.io/npm/v/style-resources-loader.svg?style=flat-square\n[npm-url]: https://www.npmjs.com/package/style-resources-loader\n[node]: https://img.shields.io/node/v/style-resources-loader.svg\n[node-url]: https://nodejs.org\n[downloads]: https://img.shields.io/npm/dm/style-resources-loader.svg?style=flat-square\n[downloads-url]: https://www.npmjs.com/package/style-resources-loader\n[build]: https://img.shields.io/travis/yenshih/style-resources-loader/master.svg?style=flat-square\n[build-url]: https://travis-ci.org/yenshih/style-resources-loader\n[coverage]: https://img.shields.io/coveralls/yenshih/style-resources-loader/master.svg?style=flat\n[coverage-url]: https://coveralls.io/github/yenshih/style-resources-loader?branch=master\n",
+    "licenseText": "MIT License\n\nCopyright (c) 2018 Shi Yan\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/style-resources-loader/-/style-resources-loader-1.1.0.tgz#492f4f6ab0052c207148fd808acbdd83e79a9231",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/style-resources-loader/-/style-resources-loader-1.1.0.tgz",
+    "hash": "492f4f6ab0052c207148fd808acbdd83e79a9231",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "492f4f6ab0052c207148fd808acbdd83e79a9231"
+}

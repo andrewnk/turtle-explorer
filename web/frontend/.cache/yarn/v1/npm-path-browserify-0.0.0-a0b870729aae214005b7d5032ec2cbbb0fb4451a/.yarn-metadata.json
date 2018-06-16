@@ -1,0 +1,46 @@
+{
+  "manifest": {
+    "name": "path-browserify",
+    "version": "0.0.0",
+    "description": "the path module from node core for browsers",
+    "main": "index.js",
+    "dependencies": {},
+    "devDependencies": {
+      "tape": "~1.0.4"
+    },
+    "scripts": {
+      "test": "tape test/*.js"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/substack/path-browserify.git"
+    },
+    "homepage": "https://github.com/substack/path-browserify",
+    "keywords": [
+      "path",
+      "browser",
+      "browserify"
+    ],
+    "author": {
+      "name": "James Halliday",
+      "email": "mail@substack.net",
+      "url": "http://substack.net"
+    },
+    "license": "MIT",
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-path-browserify-0.0.0-a0b870729aae214005b7d5032ec2cbbb0fb4451a/package.json",
+    "readmeFilename": "readme.markdown",
+    "readme": "# path-browserify\n\nthe path module from node core for browsers\n",
+    "licenseText": "This software is released under the MIT license:\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/path-browserify/-/path-browserify-0.0.0.tgz#a0b870729aae214005b7d5032ec2cbbb0fb4451a",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/path-browserify/-/path-browserify-0.0.0.tgz",
+    "hash": "a0b870729aae214005b7d5032ec2cbbb0fb4451a",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "a0b870729aae214005b7d5032ec2cbbb0fb4451a"
+}

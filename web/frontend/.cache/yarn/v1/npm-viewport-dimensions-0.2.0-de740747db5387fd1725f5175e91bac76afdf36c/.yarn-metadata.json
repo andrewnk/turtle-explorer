@@ -1,0 +1,79 @@
+{
+  "manifest": {
+    "name": "viewport-dimensions",
+    "version": "0.2.0",
+    "description": "Simple utility for watching and retrieving browser viewport width, height, vmin and vmax",
+    "author": {
+      "name": "Alex Dunphy",
+      "email": "alexanderdunphy@gmail.com"
+    },
+    "main": "index.js",
+    "scripts": {
+      "test": "gulp dev",
+      "coveralls": "if [ ! -f ./test/coverage/lcov.info ]; then npm test; fi; cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git@github.com:alexdunphy/viewport.git"
+    },
+    "bugs": {
+      "url": "https://github.com/alexdunphy/viewport/issues"
+    },
+    "homepage": "https://github.com/alexdunphy/viewport",
+    "license": "MIT",
+    "devDependencies": {
+      "bower": "^1.5.2",
+      "chai": "^3.2.0",
+      "coveralls": "^2.11.4",
+      "gulp": "^3.9.0",
+      "gulp-eslint": "^1.0.0",
+      "gulp-header": "^1.7.1",
+      "gulp-notify": "^2.2.0",
+      "gulp-rename": "^1.2.2",
+      "gulp-uglify": "^1.4.0",
+      "gulp-util": "^3.0.6",
+      "karma": "^0.13.9",
+      "karma-coverage": "^0.5.1",
+      "karma-mocha": "^0.2.0",
+      "karma-mocha-reporter": "^1.1.1",
+      "karma-notify-reporter": "^0.1.1",
+      "karma-phantomjs-launcher": "^0.2.1",
+      "karma-sauce-launcher": "^0.2.14",
+      "karma-sinon-chai": "^1.0.0",
+      "lodash": "^3.10.1",
+      "mocha": "^2.3.0",
+      "phantomjs": "^1.9.18",
+      "run-sequence": "^1.1.2",
+      "webpack": "^1.12.0"
+    },
+    "keywords": [
+      "viewport",
+      "browser",
+      "window",
+      "document",
+      "width",
+      "height",
+      "innerWidth",
+      "innerHeight",
+      "clientWidth",
+      "clientHeight",
+      "dimensions",
+      "dimension"
+    ],
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-viewport-dimensions-0.2.0-de740747db5387fd1725f5175e91bac76afdf36c/package.json",
+    "readmeFilename": "README.md",
+    "readme": "[![Travis CI status](https://img.shields.io/travis/alexdunphy/viewport.svg)](https://travis-ci.org/alexdunphy/viewport)\n[![Coveralls status](https://img.shields.io/coveralls/alexdunphy/viewport.svg)](https://coveralls.io/r/alexdunphy/viewport)\n[![devDependencies status](https://img.shields.io/david/dev/alexdunphy/viewport.svg)](https://david-dm.org/alexdunphy/viewport#info=devDependencies)\n\n[![Sauce Labs status](https://saucelabs.com/browser-matrix/alexdunphy-viewport.svg)](https://saucelabs.com/u/alexdunphy-viewport)\n\n# Viewport\n\nSimple utility for watching and retrieving browser viewport width, height, vmin and vmax.\n\n`documentElement.clientWidth` is used (rather than `window.innerWidth`), so reported viewport dimensions will exclude scrollbar dimensions.\n\n## Install\n\n#### Bower\n\n`bower install -S viewport-dimensions`\n\n#### npm\n\n`npm i -S viewport-dimensions`\n\n(One object is exported:)\n\n```javascript\nvar viewport = require('viewport');\n```\n\n## API\n\n### #width()\nReturns _{number}_ - Browser viewport width.\n\n```javascript\nviewport.width(); // (e.g.) 1024\n```\n\n### #height()\nReturns _{number}_ - Browser viewport height.\n\n```javascript\nviewport.height(); // (e.g.) 768\n```\n\n### #max()\nReturns _{number}_ - Maximum browser dimension (width/height).\n\n```javascript\nviewport.max(); // (e.g.) 1024\n```\n\n### #min()\nReturns _{number}_ - Minimum browser dimension (width/height).\n\n```javascript\nviewport.height(); // (e.g.) 768\n```\n\n### #setDimensions()\nSet internal dimension references to current browser viewport width and height.\n\n```javascript\nviewport.setDimensions();\n```\n\n## Environment\n\nWon't generate errors if run server-side, but won't do anything too useful either.\n\n## Development\n\n1. Clone repo and `npm install`\n2. Make changes and ensure linting (`gulp lint`) & tests (`gulp test`) pass (combined task: `gulp dev`)\n3. Create distributable files (`gulp dist`) - combined dev + dist task: `gulp`\n\nUse `gulp watch` to run linter and tests on each file change (equivalent to manually running `gulp dev`).\n",
+    "licenseText": "(c) Alex Dunphy\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/viewport-dimensions/-/viewport-dimensions-0.2.0.tgz#de740747db5387fd1725f5175e91bac76afdf36c",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/viewport-dimensions/-/viewport-dimensions-0.2.0.tgz",
+    "hash": "de740747db5387fd1725f5175e91bac76afdf36c",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "de740747db5387fd1725f5175e91bac76afdf36c"
+}

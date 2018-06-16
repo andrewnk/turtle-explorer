@@ -1,0 +1,71 @@
+{
+  "manifest": {
+    "name": "opencollective",
+    "version": "1.0.3",
+    "description": "Official Command Line Interface for Open Collective",
+    "main": "index.js",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/opencollective/opencollective-cli.git"
+    },
+    "scripts": {
+      "test": "npm run clean && npm run build && mocha test --require babel-core/register",
+      "clean": "rm -rf dist && rm -rf test/*package*/node_modules && git checkout test/*package*/package.json || exit 0",
+      "build": "babel --copy-files -d dist/ src/",
+      "prepare": "npm run build"
+    },
+    "bin": {
+      "opencollective": "./dist/bin/opencollective.js",
+      "oc": "./dist/bin/opencollective.js"
+    },
+    "keywords": [
+      "opencollective",
+      "donate",
+      "donation",
+      "fundoss",
+      "npm"
+    ],
+    "author": {
+      "name": "Xavier Damman",
+      "email": "@xdamman"
+    },
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/opencollective/opencollective-cli/issues"
+    },
+    "homepage": "https://github.com/opencollective/opencollective-cli#readme",
+    "dependencies": {
+      "chalk": "1.1.3",
+      "inquirer": "3.0.6",
+      "minimist": "1.2.0",
+      "node-fetch": "1.6.3",
+      "babel-polyfill": "6.23.0",
+      "opn": "4.0.2"
+    },
+    "devDependencies": {
+      "babel-cli": "6.24.1",
+      "babel-core": "6.24.1",
+      "babel-preset-es2015": "6.24.1",
+      "babel-preset-stage-0": "6.24.1",
+      "babel-register": "6.14.0",
+      "chai": "3.5.0",
+      "cross-env": "4.0.0",
+      "mocha": "3.2.0"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-opencollective-1.0.3-aee6372bc28144583690c3ca8daecfc120dd0ef1/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# opencollective-cli\n![](https://ci.appveyor.com/api/projects/status/5mf75q34cpr74s53?svg=true)\n\nCommand Line Interface for Open Collective.\n\n## Install\n\n    $ npm install -g opencollective\n    \nThis will populate a `opencollective` (and its shortcut `oc`) as a command line.\n\nYou can also add this as a dependency in your `package.json` to automatically show the `postinstall` donate message:\n\n    $ npm install --save opencollective\n    \nThen run\n\n    $ opencollective setup\n\n\n## Commands\n\n    $ opencollective [collective] [info|stats]\n    \nShows the latest stats of the collective (number of contributors, number of backers, annual budget and current balance).\n\n![](https://cl.ly/1n2u281p2o1k/Screen%20Shot%202017-05-01%20at%204.41.58%20PM.png)\n\n    $ opencollective [collective] donate [amount] [frequency]\n\nOpens the donate page of your collective. E.g. $ opencollective webpack donate 5 monthly\n\n    $ opencollective postinstall [--plain]\n    \nReads the details of your collective in the `package.json` of the current directory and invite the user to donate after installing your package.\nAdd this command in the `postinstall` script of your `package.json`.\n\n![](https://cl.ly/0u2a0z0Y3X37/Screen%20Shot%202017-03-24%20at%202.37.46%20PM.png)\n\nIf you add the `--plain` option, it won't show any emoji and ascii art (better for old terminals).\n\n    $ opencollective setup\n\nInteractive setup to add your collective info into your `package.json` and add the backers/sponsors badge and avatars in your `README.md`.\n\n\n## Coming soon\n\n    $ opencollective login\n    \n    $ opencollective logout\n    \n    $ opencollective cc | billing\n    \n    $ opencollective cc ls\n    $ opencollective cc add\n    $ opencollective cc rm\n    \n    $ opencollective apply [github_repo_url]\n    \n    $ opencollective show <collective>\n    $ opencollective open <collective>\n    \n    $ opencollective ls // list the collectives you are contributing to.\n\n    \nStop your contribution to <collective>. Warning: may make someone sad somewhere on this planet.\n\n## Credits\n\nShamelessly inspired by the excellent [now-cli](https://github.com/zeit/now-cli)",
+    "licenseText": "MIT License\n\nCopyright (c) 2017 Open Collective\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/opencollective/-/opencollective-1.0.3.tgz#aee6372bc28144583690c3ca8daecfc120dd0ef1",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/opencollective/-/opencollective-1.0.3.tgz",
+    "hash": "aee6372bc28144583690c3ca8daecfc120dd0ef1",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "aee6372bc28144583690c3ca8daecfc120dd0ef1"
+}

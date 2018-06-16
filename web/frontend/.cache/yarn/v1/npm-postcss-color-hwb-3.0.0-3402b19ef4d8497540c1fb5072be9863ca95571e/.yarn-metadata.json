@@ -1,0 +1,58 @@
+{
+  "manifest": {
+    "name": "postcss-color-hwb",
+    "version": "3.0.0",
+    "description": "PostCSS plugin to transform W3C CSS hwb() color to more compatible CSS (rgb() (or rgba()))",
+    "keywords": [
+      "css",
+      "postcss",
+      "postcss-plugin",
+      "color",
+      "colour",
+      "rgb",
+      "hwb"
+    ],
+    "author": {
+      "name": "Maxime Thirouin"
+    },
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/postcss/postcss-color-hwb.git"
+    },
+    "files": [
+      "index.js"
+    ],
+    "dependencies": {
+      "color": "^1.0.3",
+      "postcss": "^6.0.1",
+      "postcss-message-helpers": "^2.0.0",
+      "reduce-function-call": "^1.0.2"
+    },
+    "devDependencies": {
+      "eslint": "^3.19.0",
+      "npmpub": "^3.1.0",
+      "tape": "^4.6.3"
+    },
+    "scripts": {
+      "lint": "eslint *.js index.js ./test/",
+      "test": "npm run lint && tape test",
+      "release": "npmpub"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-postcss-color-hwb-3.0.0-3402b19ef4d8497540c1fb5072be9863ca95571e/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# postcss-color-hwb [![Build Status](https://travis-ci.org/postcss/postcss-color-hwb.png)](https://travis-ci.org/postcss/postcss-color-hwb)\n\n> [PostCSS](https://github.com/postcss/postcss) plugin to transform [W3C CSS hwb() color](http://dev.w3.org/csswg/css-color/#the-hwb-notation) to more compatible CSS (rgb() (or rgba())).\n\n## Installation\n\n```bash\n$ npm install postcss-color-hwb\n```\n\n## Usage\n\n```js\n// dependencies\nvar fs = require(\"fs\")\nvar postcss = require(\"postcss\")\nvar colorHwb = require(\"postcss-color-hwb\")\n\n// css to be processed\nvar css = fs.readFileSync(\"input.css\", \"utf8\")\n\n// process css\nvar output = postcss()\n  .use(colorHwb())\n  .process(css)\n  .css\n```\n\nUsing this `input.css`:\n\n```css\nbody {\n  color: hwb(90, 0%, 0%, 0.5);\n}\n\n```\n\nyou will get:\n\n```css\nbody {\n  color: rgba(128, 255, 0, 0.5);\n}\n```\n\nCheckout [tests](test) for more examples.\n\n---\n\n## Contributing\n\nWork on a branch, install dev-dependencies, respect coding style & run tests before submitting a bug fix or a feature.\n\n    $ git clone https://github.com/postcss/postcss-color-hwb.git\n    $ git checkout -b patch-1\n    $ npm install\n    $ npm test\n\n## [Changelog](CHANGELOG.md)\n\n## [License](LICENSE)\n",
+    "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2014 Maxime Thirouin\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/postcss-color-hwb/-/postcss-color-hwb-3.0.0.tgz#3402b19ef4d8497540c1fb5072be9863ca95571e",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/postcss-color-hwb/-/postcss-color-hwb-3.0.0.tgz",
+    "hash": "3402b19ef4d8497540c1fb5072be9863ca95571e",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "3402b19ef4d8497540c1fb5072be9863ca95571e"
+}

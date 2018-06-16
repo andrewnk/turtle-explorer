@@ -1,0 +1,63 @@
+{
+  "manifest": {
+    "name": "babel-preset-vue",
+    "version": "2.0.2",
+    "description": "Babel preset for all Vue plugins.",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/egoist/babel-preset-vue.git"
+    },
+    "author": {
+      "name": "EGOIST",
+      "email": "0x142857@gmail.com",
+      "url": "github.com/egoist"
+    },
+    "engines": {
+      "node": ">=4"
+    },
+    "main": "dist/babel-preset-vue.cjs.js",
+    "unpkg": "dist/babel-preset-vue.min.js",
+    "cdn": "dist/babel-preset-vue.min.js",
+    "jsdelivr": "dist/babel-preset-vue.min.js",
+    "scripts": {
+      "test": "echo lol",
+      "prepublishOnly": "npm run build",
+      "build": "bili index.js --format umd,cjs,umd-min --module-name PresetVue"
+    },
+    "files": [
+      "dist"
+    ],
+    "keywords": [
+      "babel",
+      "vue",
+      "jsx",
+      "preset"
+    ],
+    "dependencies": {
+      "babel-helper-vue-jsx-merge-props": "^2.0.2",
+      "babel-plugin-jsx-event-modifiers": "^2.0.2",
+      "babel-plugin-jsx-v-model": "^2.0.1",
+      "babel-plugin-syntax-jsx": "^6.18.0",
+      "babel-plugin-transform-vue-jsx": "^3.5.0"
+    },
+    "devDependencies": {
+      "bili": "^3.0.0"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-babel-preset-vue-2.0.2-cfadf1bd736125397481b5f8525ced0049a0c71f/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# babel-preset-vue\n\nBabel preset for all Vue plugins.\n\n## Install\n\n```bash\nnpm install -D babel-preset-vue\n```\n\nCDN: [UNPKG](https://unpkg.com/babel-preset-vue/)\n\n## Usage\n\nIn your `.babelrc`:\n\n```json\n{\n  \"presets\": [\"vue\"]\n}\n```\n\nYou can toggle specific features, by default all features are enabled, e.g.:\n\n```json\n{\n  \"presets\": [\n    [\"vue\", {\n      \"eventModifiers\": false\n    }]\n  ]\n}\n```\n\n\n## JSX Features\n\n> Note that following features are not available for babel v7 currently, you may disable them if necessary.\n\n### Event modifiers\n\nOption name: `eventModifiers`\n\nUses [`babel-plugin-jsx-event-modifier`](https://github.com/nickmessing/babel-plugin-jsx-event-modifiers) for adding event modifiers support.\n\nExample:\n```js\nVue.component('hello-world', {\n  methods: {\n    method () {\n      console.log('clicked')\n    }\n  },\n  render () {\n    return (\n      <div>\n        <a href=\"/\" onClick:prevent={this.method} />\n      </div>\n    )\n  }\n})\n```\n\n### v-model\n\nOptions name: `vModel`\n\nUses [`babel-plugin-jsx-v-model`](https://github.com/nickmessing/babel-plugin-jsx-v-model) for adding `v-model` support.\n\nExample:\n\n```js\nVue.component('hello-world', {\n  data: () => ({\n    text: 'Hello World!'\n  }),\n  render () {\n    return (\n      <div>\n        <input type=\"text\" v-model={this.text} />\n        {this.text}\n      </div>\n    )\n  }\n})\n```\n\n## License\n\nMIT &copy; [EGOIST](https://github.com/egoist)\n",
+    "licenseText": "The MIT License (MIT)\n\nCopyright (c) EGOIST <0x142857@gmail.com> (github.com/egoist)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/babel-preset-vue/-/babel-preset-vue-2.0.2.tgz#cfadf1bd736125397481b5f8525ced0049a0c71f",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/babel-preset-vue/-/babel-preset-vue-2.0.2.tgz",
+    "hash": "cfadf1bd736125397481b5f8525ced0049a0c71f",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "cfadf1bd736125397481b5f8525ced0049a0c71f"
+}

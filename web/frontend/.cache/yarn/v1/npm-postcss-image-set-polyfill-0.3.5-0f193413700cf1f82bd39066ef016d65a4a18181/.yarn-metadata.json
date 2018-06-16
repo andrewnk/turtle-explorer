@@ -1,0 +1,55 @@
+{
+  "manifest": {
+    "name": "postcss-image-set-polyfill",
+    "version": "0.3.5",
+    "description": "PostCSS plugin for fallback image-set",
+    "keywords": [
+      "postcss",
+      "css",
+      "postcss-plugin",
+      "image-set",
+      "background",
+      "image"
+    ],
+    "author": {
+      "name": "SuperOl3g",
+      "email": "oleglykasov@gmail.com"
+    },
+    "license": "MIT",
+    "engines": {
+      "node": ">=4.0.0"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/SuperOl3g/postcss-image-set-polyfill.git"
+    },
+    "dependencies": {
+      "postcss": "^6.0.1",
+      "postcss-media-query-parser": "^0.2.3"
+    },
+    "devDependencies": {
+      "chai": "2.2.0",
+      "eslint": "3.15.0",
+      "mocha": "3.2.0"
+    },
+    "scripts": {
+      "test": "mocha",
+      "lint": "eslint *.js **/*.js || true"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-postcss-image-set-polyfill-0.3.5-0f193413700cf1f82bd39066ef016d65a4a18181/package.json",
+    "readmeFilename": "README.md",
+    "readme": "\n# postcss-image-set-polyfill [![Build Status](https://travis-ci.org/SuperOl3g/postcss-image-set-polyfill.svg)](https://travis-ci.org/SuperOl3g/postcss-image-set-polyfill) [![npm version](https://badge.fury.io/js/postcss-image-set-polyfill.svg)](https://badge.fury.io/js/postcss-image-set-polyfill)\n\n[PostCSS] plugin for [polyfilling](http://caniuse.com/#feat=css-image-set) [`image-set`](https://drafts.csswg.org/css-images-3/#image-set-notation) CSS function.\n\n[PostCSS]: https://github.com/postcss/postcss\n\n```css\n/* Input example */\n.foo {\n    background-image: image-set(url(img/test.png) 1x,\n                                url(img/test-2x.png) 2x,\n                                url(my-img-print.png) 600dpi);\n}\n```\n\n```css\n/* Output example */\n.foo {\n    background-image: url(img/test.png);\n}\n\n@media (min-resolution: 144dpi) {\n    .foo {\n        background-image: url(img/test-2x.png);\n    }\n}\n\n@media (min-resolution: 600dpi) {\n    .foo {\n        background-image: url(my-img-print.png);\n    }\n}\n```\n[→Try it online←](https://astexplorer.net/#/gist/86d1248cc4628f850454d3191c95efec/de5684b73276bf42df443e448b821d38f05414c4)\n\n\n❗️ Resolution media query is supported only by IE9+.\n\n## Installation\n\n`npm i postcss-image-set-polyfill -D`\n\n## Usage\n\n```js\nvar postcssImageSet = require('postcss-image-set-polyfill');\n\npostcss([postcssImageSet]).process(YOUR_CSS, /* options */);\n```\n\nSee [PostCSS] docs for examples for your environment.\n\n\n### ⚠️️ Warning\n\nIf you use [autoprefixer](https://github.com/postcss/autoprefixer), place this plugin before it to prevent styles duplication.\n\n",
+    "licenseText": "The MIT License (MIT)\n\nCopyright 2015 Alex <alex.zx0@gmail.com>\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/postcss-image-set-polyfill/-/postcss-image-set-polyfill-0.3.5.tgz#0f193413700cf1f82bd39066ef016d65a4a18181",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/postcss-image-set-polyfill/-/postcss-image-set-polyfill-0.3.5.tgz",
+    "hash": "0f193413700cf1f82bd39066ef016d65a4a18181",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "0f193413700cf1f82bd39066ef016d65a4a18181"
+}

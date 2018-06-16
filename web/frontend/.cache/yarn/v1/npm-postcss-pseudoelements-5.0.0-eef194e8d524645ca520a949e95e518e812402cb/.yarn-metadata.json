@@ -1,0 +1,52 @@
+{
+  "manifest": {
+    "name": "postcss-pseudoelements",
+    "version": "5.0.0",
+    "description": "PostCSS plugin to add single-colon CSS 2.1 syntax pseudo selectors (i.e. :before)",
+    "main": "index.js",
+    "scripts": {
+      "test": "mocha"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/axa-ch/postcss-pseudoelements"
+    },
+    "keywords": [
+      "postcss",
+      "postcss-plugin",
+      "pseudoelements",
+      "before",
+      "after"
+    ],
+    "author": {
+      "name": "Sven Tschui",
+      "email": "sven.tschui@axa.ch"
+    },
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/axa-ch/postcss-pseudoelements/issues"
+    },
+    "homepage": "https://github.com/axa-ch/postcss-pseudoelements",
+    "devDependencies": {
+      "mocha": "^2.0.1",
+      "should": "^5.0.0"
+    },
+    "dependencies": {
+      "postcss": "^6.0.0"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-postcss-pseudoelements-5.0.0-eef194e8d524645ca520a949e95e518e812402cb/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# postcss-pseudoelements\n\npostcss helper for pseudo element colons, it handles double -> single and single -> double.\n\n## Usage\n\n### Double to Single (default)\n```javascript\nvar pe = require('postcss-pseudoelements');\nvar postcss = require('postcss');\nvar options = {\n\tsingle: true, // default\n\tselectors: ['before','after','first-letter','first-line'], // default\n};\n\nvar processor = postcss(pe(options));\n\nconsole.log(processor.process('a:before {}').css) // outputs: a:before {}\nconsole.log(processor.process('a::before {}').css) // outputs: a:before {}\n```\n\n### Single to Double\n\n```javascript\nvar pe = require('postcss-pseudoelements');\nvar postcss = require('postcss');\nvar options = {\n\tsingle: false,\n\tselectors: ['before','after','first-letter','first-line'], // default\n};\n\nvar processor = postcss(pe(options));\n\nconsole.log(processor.process('a:before {}').css) // outputs: a::before {}\nconsole.log(processor.process('a::before {}').css) // outputs: a::before {}\n```\n\n## Options\n\n`single`: Boolean\n* `true` (default) if you want to move from double colon to colon for backwards compatibility\n* `false` if you need double colons\n\n`selectors`: `Array` of pseudo-element selectors to rewrite with single and double colons. Note that these values will be used in a regexp without escaping. Defaults to `['before','after','first-letter','first-line']`\n\nexample selectors:\n```\nvar options = {\n  selectors: [\n    'hover',\n    'focus',\n    'active',\n    'after',\n    'ms-expand',\n    'not',\n    'first-child',\n    'last-child'\n  ],\n};\n```\n\n### Defaults\n```javascript\nvar options = {\n  single: true,\n  [\n    'before',\n    'after',\n    'first-letter',\n    'first-line'\n  ]\n};\n```\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/postcss-pseudoelements/-/postcss-pseudoelements-5.0.0.tgz#eef194e8d524645ca520a949e95e518e812402cb",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/postcss-pseudoelements/-/postcss-pseudoelements-5.0.0.tgz",
+    "hash": "eef194e8d524645ca520a949e95e518e812402cb",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "eef194e8d524645ca520a949e95e518e812402cb"
+}

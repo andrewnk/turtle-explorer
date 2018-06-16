@@ -1,0 +1,59 @@
+{
+  "manifest": {
+    "name": "postcss-custom-media",
+    "version": "6.0.0",
+    "description": "PostCSS plugin to transform W3C CSS Custom Media Queries to more compatible CSS",
+    "keywords": [
+      "css",
+      "postcss",
+      "postcss-plugin",
+      "media queries",
+      "custom-media"
+    ],
+    "author": {
+      "name": "Maxime Thirouin"
+    },
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/postcss/postcss-custom-media.git"
+    },
+    "files": [
+      "index.js"
+    ],
+    "dependencies": {
+      "postcss": "^6.0.1"
+    },
+    "devDependencies": {
+      "eslint": "^3.19.0",
+      "eslint-config-i-am-meticulous": "^6.0.1",
+      "eslint-plugin-import": "^1.7.0",
+      "npmpub": "^3.1.0",
+      "tape": "^4.6.3"
+    },
+    "scripts": {
+      "lint": "eslint --fix .",
+      "tests": "tape test",
+      "test": "npm run lint && npm run tests",
+      "release": "npmpub"
+    },
+    "eslintConfig": {
+      "extends": "eslint-config-i-am-meticulous/es5"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-postcss-custom-media-6.0.0-be532784110ecb295044fb5395a18006eb21a737/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# postcss-custom-media [![Build Status](https://travis-ci.org/postcss/postcss-custom-media.png)](https://travis-ci.org/postcss/postcss-custom-media)\n\n> [PostCSS](https://github.com/postcss/postcss) plugin to transform [W3C CSS Custom Media Queries](https://www.w3.org/TR/2016/WD-mediaqueries-4-20160126/#custom-mq) syntax to more compatible CSS.\n\n## Installation\n\n```console\n$ npm install postcss-custom-media\n```\n\n## Usage\n\n```js\n// dependencies\nvar postcss = require(\"postcss\")\nvar customMedia = require(\"postcss-custom-media\")\n\n// css to be processed\nvar css = fs.readFileSync(\"input.css\", \"utf8\")\n\n// process css using postcss-custom-media\nvar out = postcss()\n  .use(customMedia())\n  .process(css)\n  .css\n```\n\nUsing this `input.css`:\n\n```css\n@custom-media --small-viewport (max-width: 30em);\n\n@media (--small-viewport) {\n  /* styles for small viewport */\n}\n```\n\nyou will get:\n\n```css\n@media (max-width: 30em) {\n  /* styles for small viewport */\n}\n```\n\nCheckout [tests](test) for more examples.\n\n### Options\n\n#### `extensions`\n\n(default: `{}`)\n\nAllows you to pass an object to define the `<media-query-list>` for each\n`<extension-name>`. These definitions will override any that exist in the CSS.\n\n```javascript\n{\n  '--phone': '(min-width: 544px)',\n  '--tablet': '(min-width: 768px)',\n  '--desktop': '(min-width: 992px)',\n  '--large-desktop': '(min-width: 1200px)',\n}\n```\n\n#### `preserve`\n\n(default: `false`)\n\nAllows you to preserve custom media query definitions in output.\n\n#### `appendExtensions`\n\n(default: `false`)\n\n**This option only works if `preserve` is truthy**.\nAllows you to append your extensions at end of your CSS.\n\n---\n\n## [Changelog](CHANGELOG.md)\n\n## [License](LICENSE)\n",
+    "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2017 Maxime Thirouin & Nicolas Gallagher\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/postcss-custom-media/-/postcss-custom-media-6.0.0.tgz#be532784110ecb295044fb5395a18006eb21a737",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/postcss-custom-media/-/postcss-custom-media-6.0.0.tgz",
+    "hash": "be532784110ecb295044fb5395a18006eb21a737",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "be532784110ecb295044fb5395a18006eb21a737"
+}

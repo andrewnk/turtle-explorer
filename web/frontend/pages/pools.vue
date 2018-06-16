@@ -26,8 +26,27 @@
                 <div class="column">Pool Table</div>
             </div>
             <div class="columns is-centered">
-                <div class="column">I'm a Pool Table</div>
+                <div class="column">
+                    <list :pools="pools"></list>
+                </div>
             </div>
         </section>
     </div>
 </template>
+
+<script>
+import List from '~/components/pools/List.vue'
+import { mapGetters } from 'vuex'
+
+export default {
+    components: { List },
+    computed: {
+        ...mapGetters('pool', { findPoolsInStore: 'find' }),
+
+        pools () {
+            return this.findPoolsInStore().data
+            // return this.findPoolsInStore({ query: {} }).data
+        }
+    }
+}
+</script>

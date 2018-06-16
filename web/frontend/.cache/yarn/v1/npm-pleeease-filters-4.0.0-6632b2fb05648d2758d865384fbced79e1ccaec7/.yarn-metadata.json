@@ -1,0 +1,47 @@
+{
+  "manifest": {
+    "name": "pleeease-filters",
+    "version": "4.0.0",
+    "description": "Convert CSS shorthand filters to SVG ones",
+    "author": {
+      "name": "Vincent De Oliveira"
+    },
+    "main": "./index",
+    "keywords": [
+      "postprocessor",
+      "css",
+      "postcss",
+      "pleeease",
+      "filters"
+    ],
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/iamvdo/pleeease-filters.git"
+    },
+    "scripts": {
+      "test": "jasmine-node spec"
+    },
+    "dependencies": {
+      "onecolor": "^3.0.4",
+      "postcss": "^6.0.1"
+    },
+    "devDependencies": {
+      "jasmine-node": "~1.14.3"
+    },
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-pleeease-filters-4.0.0-6632b2fb05648d2758d865384fbced79e1ccaec7/package.json",
+    "readmeFilename": "README.md",
+    "readme": "Pleeease: filters\n=================\n\nConvert CSS shorthand filters to SVG equivalent.\n\nUsed by [Pleeease](https://github.com/iamvdo/pleeease), a CSS post-processor.\n\nTry it by yourself in the [Pleeease playground](http://pleeease.io/playground.html?div%20%7B%0A%20%20filter:%20blur(4px)%0A%7D)\n\n##Example\n\nYou write `foo.css`:\n\n```css\n.blur {\n\tfilter: blur(4px);\n}\n```\n\nYou get `bar.css`:\n\n```css\n.blur {\n\tfilter: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\"><filter id=\"filter\"><feGaussianBlur stdDeviation=\"4\" /></filter></svg>#filter');\n\tfilter: blur(4px);\n}\n```\n\n##Filters\n\nIt converts all 10 CSS shorthand filters:\n\n* grayscale\n* sepia\n* saturate\n* hue-rotate\n* invert\n* opacity\n* brightness\n* contrast\n* blur\n* drop-shadow\n\nLearn [more about CSS filters](https://developer.mozilla.org/en-US/docs/Web/CSS/filter)\n\n##Prefixes\n\nThis tool doesn't add prefixes. If you want them, you should use [Autoprefixer](https://github.com/ai/autoprefixer). This is what [Pleeease](https://github.com/iamvdo/pleeease) does:\n\n```css\n.blur {\n\tfilter: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\"><filter id=\"filter\"><feGaussianBlur stdDeviation=\"4\" /></filter></svg>#filter');\n\t-webkit-filter: blur(4px);\n\t        filter: blur(4px);\n}\n```\n\n##Usage\n\n\t$ npm install pleeease-filters\n\n```javascript\nvar filters = require('pleeease-filters'),\n\tfs      = require('fs');\n\nvar css = fs.readFileSync('app.css', 'utf8');\n\n// define options here\nvar options = {};\n\nvar fixed = filters.process(css, options);\n\nfs.writeFile('app.min.css', fixed, function (err) {\n  if (err) {\n    throw err;\n  }\n  console.log('File saved!');\n});\n```\n##Options\n\nYou can also add IE filters with an option:\n\n```javascript\n// set options\nvar options = {\n\toldIE: true\n}\n```\n\nUsing the first example, you'll get:\n\n```css\n.blur {\n\tfilter: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\"><filter id=\"filter\"><feGaussianBlur stdDeviation=\"4\" /></filter></svg>#filter');\n\tfilter: blur(4px);\n\tfilter: progid:DXImageTransform.Microsoft.Blur(pixelradius=4);\n}\n```\n\n##Note\n\n**Be careful**, not all browsers support CSS or SVG filters on HTML content:\n\n* latest WebKit browsers support CSS shorthand\n* Firefox support SVG filters (and CSS shorthand since FF35)\n* IE9- support IE filters (limited and slightly degraded)\n\n**It means that IE10+, Opera Mini and Android browsers have no support at all on HTML, only in SVG.**\n\nMoreover, IE filters shouldn't be used.\n\nSee [caniuse](http://caniuse.com/#feat=svg-filters) for more info.\n\n##Licence\n\nMIT © 2014 [Vincent De Oliveira &middot; iamvdo](https://github.com/iamvdo)\n\nThis module is an adaptation of [CSS-Filters-Polyfill](https://github.com/Schepp/CSS-Filters-Polyfill). Copyright (c) 2012 - 2013 Christian Schepp Schaefer\n",
+    "license": "MIT*"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/pleeease-filters/-/pleeease-filters-4.0.0.tgz#6632b2fb05648d2758d865384fbced79e1ccaec7",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/pleeease-filters/-/pleeease-filters-4.0.0.tgz",
+    "hash": "6632b2fb05648d2758d865384fbced79e1ccaec7",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "6632b2fb05648d2758d865384fbced79e1ccaec7"
+}

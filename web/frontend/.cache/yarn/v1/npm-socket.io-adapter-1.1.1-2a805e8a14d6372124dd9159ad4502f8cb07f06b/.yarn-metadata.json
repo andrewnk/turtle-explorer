@@ -1,0 +1,27 @@
+{
+  "manifest": {
+    "name": "socket.io-adapter",
+    "version": "1.1.1",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/socketio/socket.io-adapter.git"
+    },
+    "description": "default socket.io in-memory adapter",
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-socket.io-adapter-1.1.1-2a805e8a14d6372124dd9159ad4502f8cb07f06b/package.json",
+    "readmeFilename": "Readme.md",
+    "readme": "\n# socket.io-adapter\n\nDefault socket.io in-memory adapter class.\n\n## How to use\n\nThis module is not intended for end-user usage, but can be used as an\ninterface to inherit from from other adapters you might want to build.\n\nAs an example of an adapter that builds on top of this, please take a look\nat [socket.io-redis](https://github.com/learnboost/socket.io-redis).\n\n## License\n\nMIT\n",
+    "licenseText": "(The MIT License)\n\nCopyright (c) 2014 Guillermo Rauch <guillermo@learnboost.com>\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the 'Software'), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/socket.io-adapter/-/socket.io-adapter-1.1.1.tgz#2a805e8a14d6372124dd9159ad4502f8cb07f06b",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/socket.io-adapter/-/socket.io-adapter-1.1.1.tgz",
+    "hash": "2a805e8a14d6372124dd9159ad4502f8cb07f06b",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "2a805e8a14d6372124dd9159ad4502f8cb07f06b"
+}

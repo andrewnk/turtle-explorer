@@ -1,0 +1,82 @@
+{
+  "manifest": {
+    "name": "units-css",
+    "version": "0.4.0",
+    "description": "Parse length and angle CSS values and convert between units",
+    "author": {
+      "name": "Alex Dunphy",
+      "email": "alexanderdunphy@gmail.com"
+    },
+    "main": "index.js",
+    "scripts": {
+      "test": "gulp dev",
+      "coveralls": "if [ ! -f ./test/coverage/lcov.info ]; then npm test; fi; cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git@github.com:alexdunphy/units.git"
+    },
+    "bugs": {
+      "url": "https://github.com/alexdunphy/units/issues"
+    },
+    "homepage": "https://github.com/alexdunphy/units",
+    "license": "MIT",
+    "devDependencies": {
+      "bower": "^1.5.2",
+      "chai": "^3.2.0",
+      "coveralls": "^2.11.4",
+      "gulp": "^3.9.0",
+      "gulp-eslint": "^1.0.0",
+      "gulp-header": "^1.7.1",
+      "gulp-notify": "^2.2.0",
+      "gulp-rename": "^1.2.2",
+      "gulp-uglify": "^1.4.0",
+      "gulp-util": "^3.0.6",
+      "karma": "^0.13.9",
+      "karma-coverage": "^0.5.1",
+      "karma-mocha": "^0.2.0",
+      "karma-mocha-reporter": "^1.1.1",
+      "karma-notify-reporter": "^0.1.1",
+      "karma-phantomjs-launcher": "^0.2.1",
+      "karma-sauce-launcher": "^0.2.14",
+      "karma-sinon-chai": "^1.0.0",
+      "lodash": "^3.10.1",
+      "mocha": "^2.3.0",
+      "phantomjs": "^1.9.18",
+      "run-sequence": "^1.1.2",
+      "webpack": "^1.12.0"
+    },
+    "dependencies": {
+      "isnumeric": "^0.2.0",
+      "viewport-dimensions": "^0.2.0"
+    },
+    "keywords": [
+      "unit",
+      "units",
+      "value",
+      "values",
+      "property",
+      "properties",
+      "rule",
+      "rules",
+      "css",
+      "parse",
+      "convert"
+    ],
+    "_registry": "npm",
+    "_loc": "/home/node/.cache/yarn/v1/npm-units-css-0.4.0-d6228653a51983d7c16ff28f8b9dc3b1ffed3a07/package.json",
+    "readmeFilename": "README.md",
+    "readme": "[![Travis CI status](https://img.shields.io/travis/alexdunphy/units.svg)](https://travis-ci.org/alexdunphy/units)\n[![Coveralls status](https://img.shields.io/coveralls/alexdunphy/units.svg)](https://coveralls.io/r/alexdunphy/units)\n[![dependencies status](https://img.shields.io/david/alexdunphy/units.svg)](https://david-dm.org/alexdunphy/units)\n[![devDependencies status](https://img.shields.io/david/dev/alexdunphy/units.svg)](https://david-dm.org/alexdunphy/units#info=devDependencies)\n\n[![Sauce Labs status](https://saucelabs.com/browser-matrix/units-css.svg)](https://saucelabs.com/u/units-css)\n\n# Units\n\nParse length and angle CSS values and convert between units.\n\n#### Supported units:\n\n**Length:** `%, ch, cm, em, ex, in, mm, pc, pt, px, rem, vh, vmax, vmin, vw`\n\n**Angle:** `deg, grad, rad, turn`\n\n## Install\n\n**Bower:** `bower install -S units-css`\n\n**npm:** `npm i -S units-css`\n\n(One object is exported:)\n\n```javascript\nvar units = require('units-css');\n```\n\n## API\n\n### #parse(value, property)\n\nExtract the numeric value and unit from a formatted CSS value:\n\n```javascript\nunits.parse('1px'); // {'value': 1, 'unit': 'px'}\n```\n\nOr, passing only a value or only a unit:\n\n```javascript\nunits.parse(1);    // {'value': 1, 'unit': ''}\nunits.parse('px'); // {'value': 0, 'unit': 'px'}\n```\n\nOptionally pass a CSS property name as the second argument to enable property-specific defaults:\n\n```javascript\n// Absent units\nunits.parse(1, 'width');   // {'value': 1, 'unit': 'px'}\nunits.parse(1, 'opacity'); // {'value': 1, 'unit': ''}\nunits.parse(1, 'rotate');  // {'value': 1, 'unit': 'deg'}\n\n// Absent values\nunits.parse('', 'width');   // {'value': 0, 'unit': 'px'}\nunits.parse('', 'opacity'); // {'value': 1, 'unit': ''}\n```\n\n##### Transforms\n`transform` should not be passed directly as the property name - instead specify a transform keyword (e.g. `rotate`).\n\n### #convert(to, value, element, property)\n\nConvert a formatted CSS value to a different unit ([see supported units](#supported-units)). For example:\n\n```javascript\nunits.convert('cm', '12px'); // 0.3175\n```\n\n##### Element\nConversions to/from `%, ch, em, ex` require an element be passed as the third argument. This should be the element to which the converted CSS value applies/will apply:\n\n```javascript\nunits.convert('em', '16px', document.getElementById('some-element')); // 1em\n```\n\n##### Property\nConversions to/from `%` require a CSS property name (e.g. _width_) be passed as the fourth argument. This should be the matching property name for the converted CSS value:\n\n```javascript\nunits.convert('%', '16px', document.getElementById('some-element'), 'translateX'); // 10%\n```\n\n##### Transforms\n`transform` should not be passed directly as the property name - instead specify a transform keyword (e.g. `rotate`).\n\n### #getDefaultValue(property)\n\nGet a default numeric value for a CSS property:\n\n```javascript\nunits.getDefaultValue('opacity');    // 1\nunits.getDefaultValue('scale');      // 1\nunits.getDefaultValue('scale3d');    // 1\nunits.getDefaultValue('scaleX');     // 1\nunits.getDefaultValue('scaleY');     // 1\nunits.getDefaultValue('scaleZ');     // 1\nunits.getDefaultValue('lineHeight'); // 1\n```\n\nAll other properties will return `0`, for example:\n\n```javascript\nunits.getDefaultValue('width'); // 0\n```\n\n### #getDefaultUnit(property)\n\nGet a default unit for a CSS property:\n\n```javascript\nunits.getDefaultUnit('opacity');    // ''\nunits.getDefaultUnit('rotate');     // 'deg'\nunits.getDefaultUnit('rotate3d');   // 'deg'\nunits.getDefaultUnit('rotateX');    // 'deg'\nunits.getDefaultUnit('rotateY');    // 'deg'\nunits.getDefaultUnit('rotateZ');    // 'deg'\nunits.getDefaultUnit('skew');       // 'deg'\nunits.getDefaultUnit('skewX');      // 'deg'\nunits.getDefaultUnit('skewY');      // 'deg'\nunits.getDefaultUnit('scale');      // ''\nunits.getDefaultUnit('scale3d');    // ''\nunits.getDefaultUnit('scaleX');     // ''\nunits.getDefaultUnit('scaleY');     // ''\nunits.getDefaultUnit('scaleZ');     // ''\nunits.getDefaultUnit('lineHeight'); // ''\n```\n\nAll other properties will return `'px'`, for example:\n\n```javascript\nunits.getDefaultUnit('width'); // 'px'\n```\n\n## Environment\n\nServer-side use is supported, though converting to/from the following units requires a browser environment: `%, ch, em, ex, rem, vh, vmax, vmin, vw`.\n\n## Development\n\n1. Clone repo and `npm install`\n2. Make changes and ensure linting (`gulp lint`) & tests (`gulp test`) pass (combined task: `gulp dev`)\n3. Create distributable files (`gulp dist`) - combined dev + dist task: `gulp`\n\nUse `gulp watch` to run linter and tests on each file change (equivalent to manually running `gulp dev`).\n",
+    "licenseText": "(c) Alex Dunphy\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n"
+  },
+  "artifacts": [],
+  "remote": {
+    "resolved": "https://registry.yarnpkg.com/units-css/-/units-css-0.4.0.tgz#d6228653a51983d7c16ff28f8b9dc3b1ffed3a07",
+    "type": "tarball",
+    "reference": "https://registry.yarnpkg.com/units-css/-/units-css-0.4.0.tgz",
+    "hash": "d6228653a51983d7c16ff28f8b9dc3b1ffed3a07",
+    "registry": "npm"
+  },
+  "registry": "npm",
+  "hash": "d6228653a51983d7c16ff28f8b9dc3b1ffed3a07"
+}
