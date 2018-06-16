@@ -115,3 +115,4 @@ data/
 .npm
 .yardoc/
 .ash_history
+.config

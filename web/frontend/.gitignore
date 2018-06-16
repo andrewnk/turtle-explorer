@@ -12,3 +12,5 @@ dist
 
 .npm
 .ash_history
+.cache
+.config
