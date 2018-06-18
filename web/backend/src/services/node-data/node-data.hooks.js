@@ -1,14 +1,15 @@
+const sequelize = require('sequelize');
 
 module.exports = {
   before: {
     all: [],
     find: [
       context => {
-        const nodeModel = context.app.services.node.Model
         context.params.sequelize = {
-           include: [{ model: nodeModel }]
+          logging: console.log,
+          attributes: [sequelize.literal('DISTINCT ON("node_id") "node_id", "data", "time"')],
         }
-
+  
         return Promise.resolve(context);
       }
     ],

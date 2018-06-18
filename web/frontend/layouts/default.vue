@@ -20,30 +20,10 @@ export default {
     Navigation,
     FooterSection
   },
-  methods: {
-        ...mapActions('node', { findNodes: 'find' }),
-        ...mapActions('node-data', { findNodeData: 'find' }),
-        ...mapActions('pool', { findPools: 'find' }),
-        ...mapActions('pool-data', { findPoolData: 'find' })
-    },
-    created() {
-        this.findNodes()
-        this.findNodeData({
-            query: {
-                $limit: 5
-            }
-        })
-
-        this.findPools()
-        this.findPoolData({
-            query: {
-                $limit: 5
-            }
-        })
-
-        socket.on('notifyPoolNetwork', data => { 
-          console.log(data)
-        })
-    }
+  created() {
+    socket.on('notifyPoolNetwork', data => { 
+      // console.log(data)
+    })
+  }
 }
 </script>

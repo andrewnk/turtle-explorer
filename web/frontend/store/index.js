@@ -12,8 +12,8 @@ Vue.use(FeathersVuex)
 const store = () => new Vuex.Store({
   plugins: [
     service('pool', {
-      modelName: 'pool',
       debug: true,
+      modelName: 'pool',
       idField: 'id',
       instanceDefaults: {
         id: null,
@@ -21,41 +21,40 @@ const store = () => new Vuex.Store({
         name: '',
         type: '',
         url: '',
-        PoolData: 'PoolDatum'
-      },
-      actions: {}
+      }
     }),
     service('pool-data', {
       debug: true,
       idField: 'time',
       instanceDefaults: {
-        data: '',
         pool_id: null,
         time: null,
-        pool: 'pool',
       }
     }),
     service('node', {
-      debug: true,
       idField: 'id',
       instanceDefaults: {
         id: null,
         name: '',
         port: '',
         url: '',
-        NodeData: 'NodeData'
       }
     }),
     service('node-data', {
-      debug: true,
-      modelName: 'NodeData',
       idField: 'time',
       instanceDefaults: {
         data: '',
         node_id: null,
       }
     }),
-  ]
+  ],
+  actions: {
+    nuxtServerInit ({ commit, dispatch }, { req }) {
+      return dispatch('pool/find').then(() => {
+        return dispatch('node/find')
+      })
+    }
+  }
 })
 
 export default store

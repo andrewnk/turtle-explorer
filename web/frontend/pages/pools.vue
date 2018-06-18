@@ -27,7 +27,7 @@
             </div>
             <div class="columns is-centered">
                 <div class="column">
-                    <list :pools="pools"></list>
+                    <list :pools="pools" :isLoading="pools.length > 0 ? false : true"></list>
                 </div>
             </div>
         </section>
@@ -41,11 +41,9 @@ import { mapGetters } from 'vuex'
 export default {
     components: { List },
     computed: {
-        ...mapGetters('pool', { findPoolsInStore: 'find' }),
-
+        ...mapGetters('pool', { getPools: 'list' }),
         pools () {
-            return this.findPoolsInStore().data
-            // return this.findPoolsInStore({ query: {} }).data
+            return this.getPools
         }
     }
 }

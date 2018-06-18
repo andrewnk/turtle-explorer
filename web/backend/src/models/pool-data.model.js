@@ -22,7 +22,7 @@ module.exports = function (app) {
     updatedAt: false,
     hooks: {
       beforeCount(options) {
-        options.raw = true;
+        options.raw = false;
       }
     }
   });

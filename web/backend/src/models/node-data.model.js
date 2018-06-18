@@ -22,14 +22,14 @@ module.exports = function (app) {
     updatedAt: false,
     hooks: {
       beforeCount(options) {
-        options.raw = true;
+        options.raw = false;
       }
     }
   });
 
   // eslint-disable-next-line no-unused-vars
   nodeData.associate = function (models) {
-    nodeData.belongsTo(models.node, {foreignKey: 'node_id', targetKey: 'id'})
+    nodeData.belongsTo(models.node, {foreignKey: 'node_id', sourceKey: 'id'})
   };
 
   return nodeData;

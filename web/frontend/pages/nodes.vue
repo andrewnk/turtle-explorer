@@ -23,7 +23,7 @@
             </div>
             <div class="columns is-centered">
                 <div class="column">
-                    <list :nodes="nodes"></list>
+                    <list :nodes="nodes" :isLoading="nodes.length > 0 ? false : true"></list>
                 </div>
             </div>
         </section>
@@ -37,11 +37,9 @@ import { mapGetters } from 'vuex'
 export default {
     components: { List },
     computed: {
-        ...mapGetters('node', { findNodesInStore: 'find' }),
-
+        ...mapGetters('node', { getNodes: 'list' }),
         nodes () {
-            return this.findNodesInStore().data
-            // return this.findNodesInStore({ query: {} }).data
+            return this.getNodes
         }
     }
 }
