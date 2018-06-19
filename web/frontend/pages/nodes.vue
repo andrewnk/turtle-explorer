@@ -23,7 +23,7 @@
             </div>
             <div class="columns is-centered">
                 <div class="column">
-                    <list :nodes="nodes" :isLoading="nodes.length > 0 ? false : true"></list>
+                    <list :nodes="nodes" :isLoading="nodes.length > 0"></list>
                 </div>
             </div>
         </section>
