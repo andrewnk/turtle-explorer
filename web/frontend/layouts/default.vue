@@ -12,7 +12,7 @@ import Particles from '~/components/Particles'
 import Navigation from '~/layouts/sections/Navigation'
 import FooterSection from '~/layouts/sections/Footer'
 import socket from '../socket'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -20,9 +20,15 @@ export default {
     Navigation,
     FooterSection
   },
-  created() {
-    socket.on('notifyPoolNetwork', data => { 
-      // console.log(data)
+  mounted() {
+    socket.on('notifyPoolNetwork', data => {
+      this.$store.state.pool.keyedById[data.poolId].data.network = data.poolNetwork
+    })
+    socket.on('notifyPoolConfig', data => {
+      this.$store.state.pool.keyedById[data.poolId].data.config = data.poolConfig
+    })
+    socket.on('notifyPoolPool', data => {
+      this.$store.state.pool.keyedById[data.poolId].data.pool = data.poolPool
     })
   }
 }

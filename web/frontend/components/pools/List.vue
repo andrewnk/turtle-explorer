@@ -43,12 +43,26 @@
       <template slot="detail" slot-scope="props">
         <div v-if="showCell(['data', 'config', 'ports'], props.row)">
           <div class="columns is-centered">
-            <div v-for="(config, index) in props.row.data.config.ports" :key="index">
-              <div class="column">
-                {{ config.desc }}
-                {{ config.port }}
-                {{ config.difficulty }}
-              </div>
+            <div class="column" v-for="(config, index) in props.row.data.config.ports" :key="index">
+              <h4>{{ config.desc }}</h4>
+              <p>Port: {{ config.port }}</p>
+              <p>Difficulty: {{ config.difficulty }}</p>
+              <p>
+                <select class="inline">
+                  <option>Xmr-Stak</option>
+                  <option>XMRig</option>
+                  <option>XMRig-AMD</option>
+                  <option>XMRig-NVIDIA</option>
+                  <option>XMRigCC</option>
+                  <option>CPUMiner</option>
+                  <option>Claymore CPU</option>
+                  <option>Claymore GPU</option>
+                  <option>YAM Miner</option>
+                  <option>ccminer</option>
+                  <option>xmrMiner</option>
+                </select>
+                <button class="inline">Generate Config</button>
+              </p>
             </div>
           </div>
         </div>
