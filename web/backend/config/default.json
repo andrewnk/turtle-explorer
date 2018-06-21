@@ -1,0 +1,9 @@
+{
+  "host": "web-backend",
+  "port": 3030,
+  "public": "../public/",
+  "paginate": {
+    "default": 0,
+    "max": 10
+  }
+}

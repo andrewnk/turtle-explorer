@@ -1,0 +1,28 @@
+// Import Bulma's core
+@import '~bulma/sass/utilities/initial-variables';
+@import '~bulma/sass/utilities/functions';
+
+// OVERRIDES GOES BETWEEN HERE...
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+$family-sans-serif: 'Roboto', sans-serif;
+
+// Bulma colors
+$primary: #00853D;
+$primary-invert: findColorInvert($primary);
+$colors: ('primary': ($primary, $primary-invert));
+
+$secondary: #212721;
+$secondary-invert: findColorInvert($secondary);
+$colors: ('secondary': ($secondary, $secondary-invert));
+
+$background: #303030;
+$background-invert: findColorInvert($background);
+$colors: ('background': ($background, $background-invert));
+
+// ... AND HERE
+
+// Import Bulma and Buefy styles
+@import '~bulma';
+@import '~buefy/src/scss/buefy';
