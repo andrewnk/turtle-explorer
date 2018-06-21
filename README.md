@@ -2,10 +2,10 @@
 
 This explorer is a reimagining of the original cryptonote explorer using updated tools, such as [Docker](https://www.docker.com/), [Node.js](https://nodejs.org), [Feathers.js](https://feathersjs.com/), [Vue.js](https://vuejs.org/), [Socket.IO](https://socket.io/), [Go](https://golang.org/), etc. It is still in the early stages and, therefore, has a long way to go...but slow and steady wins the race!
 
-[The containers](#containers)
-[Run the project](#running)
-[Run a development environment](#running-a-dev-environment)
-[Join in on the fun](#development)
+- [The containers](#containers)
+- [Run the project](#running)
+- [Run a development environment](#running-a-dev-environment)
+- [Join in on the fun](#development)
 
 ### Containers
 | Container | Tools | What it does |
@@ -20,7 +20,7 @@ Start the project by running the following command in the root dir:
 ```sh
 docker-compose build && docker-compose -f docker-compose.yml up -d
 ```
-Once all containers are up and running (docker ps -a) you can now see the frontend by visiting `localhost` or `127.0.0.1` in your browser. You can change the default passwords by modyfing ``docker-compose.yml``
+Once all containers are up and running (``docker ps -a``) you can now see the frontend by visiting `localhost` or `127.0.0.1` in your browser. You can change the default passwords by modyfing ``docker-compose.yml``
 
 ### Running a dev environment
 In order to run the development environment in docker you will need to setup/start the services manually. I start each container in its own shell to make it easier to move between containers.
