@@ -21,14 +21,24 @@ export default {
     FooterSection
   },
   mounted() {
+    socket.on('notifyNode', data => {
+      // this.$store.state.node.keyedById[data.node_id].data = data
+    })
+    socket.on('notifyNodeData', data => {
+      this.$store.state.node.keyedById[data.node_id].data = data
+    })
+    socket.on('notifyPool', data => {
+      console.log('pool', data)
+      // this.$store.state.node.keyedById[data.nodeId].data = data
+    })
     socket.on('notifyPoolNetwork', data => {
-      this.$store.state.pool.keyedById[data.poolId].data.network = data.poolNetwork
+      this.$store.state.pool.keyedById[data.pool_id].data.network = data.poolNetwork
     })
     socket.on('notifyPoolConfig', data => {
-      this.$store.state.pool.keyedById[data.poolId].data.config = data.poolConfig
+      this.$store.state.pool.keyedById[data.pool_id].data.config = data.poolConfig
     })
     socket.on('notifyPoolPool', data => {
-      this.$store.state.pool.keyedById[data.poolId].data.pool = data.poolPool
+      this.$store.state.pool.keyedById[data.pool_id].data.pool = data.poolPool
     })
   }
 }

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
@@ -18,12 +18,12 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
 
     CREATE FUNCTION notify_node() RETURNS trigger
       LANGUAGE plpgsql
-      AS $$
+      AS '
     BEGIN
-      PERFORM pg_notify('node', row_to_json(NEW)::text);
+      PERFORM pg_notify(''node'', row_to_json(NEW)::text);
       RETURN NULL;
     END;
-    $$;
+    ';
 
     CREATE TRIGGER updated_node_trigger AFTER INSERT ON node
     FOR EACH ROW EXECUTE PROCEDURE notify_node();
@@ -39,12 +39,12 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
 
     CREATE FUNCTION notify_node_data() RETURNS trigger
       LANGUAGE plpgsql
-      AS $$
+      AS '
     BEGIN
-      PERFORM pg_notify('nodeData', row_to_json(NEW)::text);
+      PERFORM pg_notify(''nodeData'', row_to_json(NEW)::text);
       RETURN NULL;
     END;
-    $$;
+    ';
 
     CREATE TRIGGER updated_nodedata_trigger AFTER INSERT ON node_data
     FOR EACH ROW EXECUTE PROCEDURE notify_node_data();
@@ -60,12 +60,12 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
 
     CREATE FUNCTION notify_pool() RETURNS trigger
       LANGUAGE plpgsql
-      AS $$
+      AS '
     BEGIN
-      PERFORM pg_notify('pool', row_to_json(NEW)::text);
+      PERFORM pg_notify(''pool'', row_to_json(NEW)::text);
       RETURN NULL;
     END;
-    $$;
+    ';
 
     CREATE TRIGGER updated_pool_trigger AFTER INSERT ON pool
     FOR EACH ROW EXECUTE PROCEDURE notify_pool();
@@ -81,14 +81,14 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
 
     CREATE FUNCTION notify_pool_data() RETURNS trigger
       LANGUAGE plpgsql
-      AS $$
+      AS '
     BEGIN
-      PERFORM pg_notify('poolConfig', json_build_object('poolConfig', NEW.data->'config', 'poolId', NEW.pool_id)::text);
-      PERFORM pg_notify('poolNetwork', json_build_object('poolNetwork', NEW.data->'network', 'poolId', NEW.pool_id)::text);
-      PERFORM pg_notify('poolPool', json_build_object('poolPool', NEW.data->'pool', 'poolId', NEW.pool_id)::text);
+      PERFORM pg_notify(''poolConfig'', json_build_object(''poolConfig'', NEW.data->''config'', ''pool_id'', NEW.pool_id)::text);
+      PERFORM pg_notify(''poolNetwork'', json_build_object(''poolNetwork'', NEW.data->''network'', ''pool_id'', NEW.pool_id)::text);
+      PERFORM pg_notify(''poolPool'', json_build_object(''poolPool'', NEW.data->''pool'', ''pool_id'', NEW.pool_id)::text);
       RETURN NULL;
     END;
-    $$;
+    ';
 
     CREATE TRIGGER updated_pooldata_trigger AFTER INSERT ON pool_data
     FOR EACH ROW EXECUTE PROCEDURE notify_pool_data();

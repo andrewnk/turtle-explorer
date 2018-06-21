@@ -27,7 +27,7 @@
             </div>
             <div class="columns is-centered">
                 <div class="column">
-                    <list :pools="pools" :isLoading="pools.length > 0"></list>
+                    <list :pools="pools" :isLoading="!pools.length > 0"></list>
                 </div>
             </div>
         </section>

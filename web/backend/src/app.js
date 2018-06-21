@@ -41,6 +41,9 @@ app.use('/', express.static(app.get('public')));
 app.configure(socketio(io => {
     const pubsubClient = app.get('pubsubClient');
     io.on('connection', socket => {
+        pubsubClient.on('pool', channelPayload => {
+            socket.emit('notifyPool', channelPayload)
+        });
         pubsubClient.on('poolNetwork', channelPayload => {
             socket.emit('notifyPoolNetwork', channelPayload)
         });
@@ -49,6 +52,12 @@ app.configure(socketio(io => {
         });
         pubsubClient.on('poolPool', channelPayload => {
             socket.emit('notifyPoolPool', channelPayload)
+        });
+        pubsubClient.on('node', channelPayload => {
+            socket.emit('notifyNode', channelPayload)
+        });
+        pubsubClient.on('nodeData', channelPayload => {
+            socket.emit('notifyNodeData', channelPayload)
         });
     })
 }));
