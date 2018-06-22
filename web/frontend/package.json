@@ -23,6 +23,7 @@
     "@feathersjs/socketio-client": "^1.1.0",
     "buefy": "^0.6.5",
     "feathers-vuex": "^1.4.3",
+    "moment": "^2.22.2",
     "node-sass": "^4.9.0",
     "nuxt": "^1.0.0",
     "particles.js": "^2.0.0",

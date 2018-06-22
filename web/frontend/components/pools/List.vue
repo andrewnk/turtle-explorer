@@ -37,7 +37,7 @@
           {{ showCell(['data', 'network', 'height'], props.row) ? props.row.data.network.height : '' }}
         </b-table-column>
         <b-table-column field="lastblockfound" label="Last Block Found" sortable>
-          {{ showCell(['data', 'pool', 'lastBlockFound'], props.row) ? getUTC(props.row.data.pool.lastBlockFound) : ''}}
+          {{ showCell(['data', 'pool', 'lastBlockFound'], props.row) ? getFromattedDate(parseInt(props.row.data.pool.lastBlockFound)) : ''}}
         </b-table-column>
       </template>
       <template slot="detail" slot-scope="props">
