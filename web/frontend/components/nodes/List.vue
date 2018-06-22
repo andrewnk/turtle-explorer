@@ -35,7 +35,7 @@
             {{ showCell(['data', 'last_known_block_index'], props.row) ? props.row.data.last_known_block_index : '' }}
         </b-table-column>
         <b-table-column field="time" label="Timestamp" sortable>
-            {{ showCell(['row', 'timestamp'], props) ? new Date(props.row.timestamp).toUTCString() : ''}}
+            {{ showCell(['row', 'timestamp'], props) ? getFromattedDate(props.row.timestamp) : ''}}
         </b-table-column>
         <b-table-column field="version" label="Version" sortable numeric>
             {{ showCell(['data', 'version'], props.row) ? props.row.data.version : '' }}

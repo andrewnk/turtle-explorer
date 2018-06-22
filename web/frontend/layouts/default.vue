@@ -2,7 +2,7 @@
   <div id="app">
     <!--<particles/>-->
     <navigation/>
-    <nuxt/>
+    <nuxt class="main"/>
     <footer-section/>
   </div>
 </template>
@@ -22,6 +22,7 @@ export default {
   },
   mounted() {
     socket.on('notifyNode', data => {
+      console.log('node', data)
       // this.$store.state.node.keyedById[data.node_id].data = data
     })
     socket.on('notifyNodeData', data => {

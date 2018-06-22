@@ -1,7 +1,9 @@
+import * as moment from 'moment';
+
 export default {
   methods: {
-    getUTC (epoch) {
-        return new Date(parseInt(epoch)).toUTCString()
+    getFromattedDate (epoch) {
+        return moment(epoch).format("YYYY-MM-DD HH:mm:ss")
     },
     twoDecimals (val) {
         return parseFloat(Math.round(val * 100) / 100).toFixed(2);

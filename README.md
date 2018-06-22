@@ -40,12 +40,14 @@ docker exec -it gather-turtles ash
 Get a shell in the backend web container and start
 ```sh
 docker exec -it web-backend ash
+npm install
 $ npm start
 ```
 
 Get a shell in the frontend web container and run the dev environment
 ```sh
 docker exec -it web-frontend ash
+npm install
 $ npm run dev
 ```
 
