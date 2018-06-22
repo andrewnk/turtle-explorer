@@ -17,7 +17,8 @@ module.exports = {
   ** Customize the progress bar color
   */
   plugins: [
-    '~/plugins/buefy.js'
+    '~/plugins/buefy.js',
+    { src: '~/plugins/vue-highcharts.js', ssr: false },
   ],
   loading: { color: '#3B8070' },
   css: [

@@ -41,14 +41,14 @@ Get a shell in the backend web container and start
 ```sh
 docker exec -it web-backend ash
 npm install
-$ npm start
+npm start
 ```
 
 Get a shell in the frontend web container and run the dev environment
 ```sh
 docker exec -it web-frontend ash
 npm install
-$ npm run dev
+npm run dev
 ```
 
 Once all containers are up and running (`docker ps -a`) you can now see the frontend by visiting `localhost` or `127.0.0.1` in your browser. The frontend code is set up with hot reloading, so you can view the changes in the browser whenever you save a file.
