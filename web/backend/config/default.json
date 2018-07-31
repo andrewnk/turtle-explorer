@@ -4,6 +4,7 @@
   "public": "../public/",
   "paginate": {
     "default": 0,
-    "max": 10
-  }
+    "max": 100
+  },
+  "postgres": "postgres://postgres:@localhost:5432/turtle_explorer_backend"
 }

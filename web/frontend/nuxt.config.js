@@ -1,7 +1,4 @@
 module.exports = {
-  /*
-  ** Headers of the page
-  */
   head: {
     title: 'turtle-explorer',
     meta: [
@@ -13,24 +10,17 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-  /*
-  ** Customize the progress bar color
-  */
   plugins: [
     '~/plugins/buefy.js',
     { src: '~/plugins/vue-highcharts.js', ssr: false },
+    { src: '~/plugins/daterange-picker.js', ssr: false },
+    { src: '~/plugins/vue-form-wizard.js', ssr: false },
   ],
   loading: { color: '#3B8070' },
   css: [
     { src: '~/assets/css/main.scss', lang: 'scss' },
   ],
-  /*
-  ** Build configuration
-  */
   build: {
-    /*
-    ** Run ESLint on save
-    */
     extend (config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({

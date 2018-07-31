@@ -54,7 +54,8 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
       name VARCHAR NOT NULL,
       url TEXT NOT NULL,
       api TEXT NOT NULL,
-      type VARCHAR NOT NULL
+      type VARCHAR NOT NULL,
+      mining_address VARCHAR NOT NULL
     );
     CREATE INDEX ON pool (name, id);
 
