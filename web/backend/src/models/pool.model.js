@@ -1,11 +1,13 @@
-// See http://docs.sequelizejs.com/en/latest/docs/models-definition/
-// for more of what you can do here.
 const Sequelize = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
   const pool = sequelizeClient.define('pool', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
     name: {
       type: DataTypes.STRING
     },
@@ -17,12 +19,16 @@ module.exports = function (app) {
     },
     type: {
       type: DataTypes.STRING
+    },
+    mining_address: {
+      type: DataTypes.STRING
     }
+
   }, {
     timestamps: false,
     hooks: {
       beforeCount(options) {
-        options.raw = false;
+        options.raw = true;
       }
     }
   });

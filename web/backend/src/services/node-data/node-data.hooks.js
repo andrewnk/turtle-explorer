@@ -4,14 +4,13 @@ module.exports = {
   before: {
     all: [],
     find: [
-      context => {
-        context.params.sequelize = {
-          logging: console.log,
-          attributes: [sequelize.literal('DISTINCT ON("node_id") "node_id", "data", "time"')],
-        }
+      // context => {
+      //   context.params.sequelize = {
+      //     attributes: [sequelize.literal('DISTINCT ON("node_id") "node_id", "data", "time"')],
+      //   }
   
-        return Promise.resolve(context);
-      }
+      //   return Promise.resolve(context);
+      // }
     ],
     get: []
   },

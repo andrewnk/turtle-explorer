@@ -1,5 +1,3 @@
-// See http://docs.sequelizejs.com/en/latest/docs/models-definition/
-// for more of what you can do here.
 const Sequelize = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
 
@@ -16,13 +14,19 @@ module.exports = function (app) {
     data: {
       type: DataTypes.JSONB
     }
-  }, {
+  },
+  {
     timestamps: true,
     createdAt: 'time',
     updatedAt: false,
     hooks: {
       beforeCount(options) {
-        options.raw = false;
+        options.raw = true;
+      },
+      beforeFind(params) {
+        if (params.where.hasOwnProperty('attribute')) {
+          delete params.where.attribute
+        }
       }
     }
   });

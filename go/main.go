@@ -42,6 +42,7 @@ type Pool struct {
     Url string `json:"url"`
     Api string `json:"api"`
     Type string `json:"type"`
+    MiningAddress string `json:"miningAddress"`
 }
 
 type Pools struct {
@@ -215,12 +216,12 @@ func setPools() {
         err := db.QueryRow("SELECT name FROM pool WHERE name = $1 LIMIT 1", pools.Pools[i].Name).Scan(&name)
 
         if err == sql.ErrNoRows {
-            stmt, err := db.Prepare("INSERT INTO pool(name, url, api, type) VALUES ($1, $2, $3, $4)")
+            stmt, err := db.Prepare("INSERT INTO pool(name, url, api, type, mining_address) VALUES ($1, $2, $3, $4, $5)")
             if err != nil {
                 log.Println("There was an error preparing to insert the pool: ", err)
             }
 
-            _, err = stmt.Exec(pools.Pools[i].Name, pools.Pools[i].Url, pools.Pools[i].Api, pools.Pools[i].Type)
+            _, err = stmt.Exec(pools.Pools[i].Name, pools.Pools[i].Url, pools.Pools[i].Api, pools.Pools[i].Type, pools.Pools[i].MiningAddress)
             if err != nil {
                 log.Println("There was an error inserting the pool into the database: ", err)
             }
@@ -260,6 +261,7 @@ func queryApi(url string, action string) []byte {
     defer response.Body.Close()
 
     responseData, err := ioutil.ReadAll(response.Body)
+
     if err != nil {
         log.Println("There was an error reading the response: ", err)
     }

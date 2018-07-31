@@ -13,7 +13,6 @@ const store = () => new Vuex.Store({
   plugins: [
     service('pool', {
       debug: true,
-      modelName: 'pool',
       idField: 'id',
       instanceDefaults: {
         id: null,
@@ -21,6 +20,7 @@ const store = () => new Vuex.Store({
         name: '',
         type: '',
         url: '',
+        mining_address: ''
       }
     }),
     service('pool-data', {
@@ -28,7 +28,16 @@ const store = () => new Vuex.Store({
       idField: 'time',
       instanceDefaults: {
         pool_id: null,
-        time: null,
+        time: '',
+        data: ''
+      }
+    }),
+    service('pool-history', {
+      debug: true,
+      idField: 'pool_id',
+      instanceDefaults: {
+        pool_id: null,
+        data: ''
       }
     }),
     service('node', {
@@ -37,22 +46,47 @@ const store = () => new Vuex.Store({
         id: null,
         name: '',
         port: '',
-        url: '',
+        url: ''
       }
     }),
     service('node-data', {
       idField: 'time',
       instanceDefaults: {
         data: '',
-        node_id: null,
+        time: '',
+        node_id: null
       }
     }),
   ],
   actions: {
-    nuxtServerInit ({ commit, dispatch }, { req }) {
-      return dispatch('pool/find').then(() => {
-        return dispatch('node/find')
-      })
+    async nuxtServerInit({ commit, dispatch }) {
+      const pools = await dispatch('pool/find')
+
+      const poolsData = await Promise.all(pools.map(async (pool) => {
+        const poolData = await dispatch('pool-data/find', {
+            query: {
+              pool_id: {
+                $eq: pool.id
+              },
+              $sort: {
+                time: -1
+              },
+              $limit: 1
+            }
+          })
+
+        if(typeof poolData[0] !== 'undefined') {
+          this.state.pool.keyedById[pool.id].data= poolData[0].data
+        }
+      }))
+
+      const nodes = await dispatch('node/find')
+
+      return [
+        pools,
+        poolsData,
+        nodes
+      ]
     }
   }
 })

@@ -1,12 +1,15 @@
 <template>
     <section>
-        <highcharts :options="options" ref="highcharts"></highcharts>
+        <highcharts
+            :options="options"
+            ref="highcharts"
+        />
     </section>
 </template>
 
 <script>
 export default {
-    name: 'Pie',
+    name: 'Miners',
     props: {
         pools: {
             type: Array,
@@ -14,10 +17,10 @@ export default {
             default: () => { return [] }
         }
     },
-    created () {
+    mounted () {
         this.options.series[0].data = this.series
     },
-    data: function () {
+    data () {
         return {
             options: {
                 chart: {
@@ -27,7 +30,10 @@ export default {
                     type: 'pie'
                 },
                 title: {
-                    text: 'Pool Hashrates'
+                    text: 'Current Pool Miners'
+                },
+                credits: {
+                    enabled: false
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -55,14 +61,19 @@ export default {
     },
     computed: {
         series () {
-            return this.pools.map(pool => {
-                if (!pool.data) { return }
-
+            return this.pools
+                .filter(pool => pool.data !== null)
+                .map(pool => {
                 return {
                     name: pool.name,
-                    y: pool.data.pool.hashrate
+                    y: pool.data.pool.miners
                 }
             })
+        }
+    },
+    watch: {
+        series() {
+            this.$refs.highcharts.chart.series[0].setData(this.series, true)
         }
     }
 }

@@ -4,17 +4,17 @@ module.exports = {
   before: {
     all: [],
     find: [
-      context => {
-        const nodeDataModel = context.app.services['node-data'].Model
-        context.params.sequelize = {
-          include: [{ model: nodeDataModel }],
-          attributes: [
-            sequelize.literal('DISTINCT ON("node_data"."node_id") "node_data"."node_id", "id", "url", "name", "port"')
-          ]
-        }
+      // context => {
+      //   const nodeDataModel = context.app.services['node-data'].Model
+      //   context.params.sequelize = {
+      //     include: [{ model: nodeDataModel }],
+      //     attributes: [
+      //       sequelize.literal('DISTINCT ON("node_data"."node_id") "node_data"."node_id", "id", "url", "name", "port"')
+      //     ]
+      //   }
   
-        return Promise.resolve(context)
-      }
+      //   return Promise.resolve(context)
+      // }
     ],
     get: []
   },

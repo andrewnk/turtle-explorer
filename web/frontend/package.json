@@ -30,6 +30,8 @@
     "particles.js": "^2.0.0",
     "sass-loader": "^7.0.1",
     "socket.io-client": "^2.1.1",
+    "v-calendar": "^0.9.7",
+    "vue-form-wizard": "^0.8.4",
     "vue-highcharts": "0.0.10"
   },
   "devDependencies": {
