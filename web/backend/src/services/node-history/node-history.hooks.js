@@ -8,25 +8,22 @@ module.exports = {
         let attribute = ''
         switch (context.params.query.attribute) {
           case 'difficulty':
-            attribute = "(data->'network'->>'difficulty')::float"
+            attribute = "(data->>'difficulty')::float"
             break;
           case 'hashrate':
-            attribute = "(data->'pool'->>'hashrate')::float"
+            attribute = "(data->>'hashrate')::float"
             break;
           case 'height':
-            attribute = "(data->'network'->>'height')::float"
+            attribute = "(data->>'height')::float"
             break;
-          case 'miners':
-            attribute = "(data->'pool'->>'miners')::float"
+          case 'incomingConnectionsCount':
+            attribute = "(data->>'incoming_connections_count')::float"
             break;
-          case 'totalBlocks':
-            attribute = "(data->'pool'->>'totalBlocks')::float"
+          case 'outgoingConnectionsCount':
+            attribute = "(data->>'outgoing_connections_count')::float"
             break;
-          case 'totalMinersPaid':
-            attribute = "(data->'pool'->>'totalMinersPaid')::float"
-            break;
-          case 'totalPayments':
-            attribute = "(data->'pool'->>'totalPayments')::float"
+          case 'lastKnownBlockIndex':
+            attribute = "(data->>'last_known_block_index')::float"
             break;
           default:
             return Promise.resolve(context)
@@ -43,11 +40,11 @@ module.exports = {
           attributes: [
             sequelize.literal("time_bucket('"+ timeBucket +"', time)::timestamp without time zone as \"timebucket\""),
             sequelize.literal("avg(" + attribute + ") as \"data\""),
-            'pool_id'
+            'node_id'
           ],
           group: [
             [sequelize.literal('"timebucket"')],
-            ['pool_id']
+            ['node_id']
           ],
           order: [
             [sequelize.literal('"timebucket" ASC')]
@@ -70,13 +67,13 @@ module.exports = {
       context => {
         if(context.result) {
           const results = context.result
-          const ids = [...new Set(results.map(value => value.pool_id))]
+          const ids = [...new Set(results.map(value => value.node_id))]
           let sortedResults = []
 
           ids.forEach(id => {
             sortedResults.push({
-              pool_id: id,
-              data: results.filter(val => val.pool_id === id).map(val => {
+              node_id: id,
+              data: results.filter(val => val.node_id === id).map(val => {
                 return [
                   val.timebucket,
                   val.data

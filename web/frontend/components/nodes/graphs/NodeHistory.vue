@@ -75,12 +75,12 @@ import { mapGetters } from 'vuex'
 export default {
     name: 'Historical',
     props: {
-        pools: {
+        nodes: {
             type: Array,
             required: true,
             default: () => []
         },
-        selectedPools: {
+        selectedNodes: {
             type: Array,
             required: true,
             default: () => []
@@ -93,18 +93,18 @@ export default {
                 start: '',
                 end: ''
             },
-            selectedAttribute: 4,
+            selectedAttribute: 1,
             selectedCompareAttribute: 0,
             chartParams: {
                 query: {
-                    pool_id: {
+                    node_id: {
                         $in: []
                     },
                     time: {
                         $gte: '',
                         $lte: ''
                     },
-                    attribute: 'miners'
+                    attribute: 'difficulty'
                 }
             },
             attributes: [
@@ -125,23 +125,18 @@ export default {
                 },
                 {
                     id: 4,
-                    label: 'Miners',
-                    name: 'miners'
+                    label: 'Incoming Connection',
+                    name: 'incomingConnectionsCount'
                 },
                 {
                     id: 5,
-                    label: 'Total Blocks',
-                    name: 'totalBlocks'
+                    label: 'Outgoing Connections',
+                    name: 'outgoingConnectionsCount'
                 },
                 {
                     id: 6,
-                    label: 'Total Miners Paid',
-                    name: 'totalMinersPaid'
-                },
-                {
-                    id: 7,
-                    label: 'Total Payments',
-                    name: 'totalPayments'
+                    label: 'Last Known Block Index',
+                    name: 'lastKnownBlockIndex'
                 }
             ],
             options : {
@@ -188,12 +183,12 @@ export default {
 
         this.chartParams.query.time.$gte = startDate
         this.chartParams.query.time.$lte = endDate
-        this.chartParams.query.pool_id.$in = this.selectedPools
+        this.chartParams.query.node_id.$in = this.selectedNodes
         this.chartParams.attribute = this.options.title.text = this.getAttributeLabel(this.selectedAttribute)
         this.updateChart('add', this.getAttributeLabel(this.selectedAttribute))
     },
     computed: {
-        ...mapGetters('pool-history', { getChartData: 'list' }),
+        ...mapGetters('node-history', { getChartData: 'list' }),
         inputState() {
             if (!this.selectedDates) {
                 return {
@@ -213,15 +208,15 @@ export default {
     methods: {
         updateChart (action, label) {
             this.$refs.historical.chart.showLoading()
-            this.$store.dispatch('pool-history/find', this.chartParams).then(() => {
+            this.$store.dispatch('node-history/find', this.chartParams).then(() => {
                 if(action === 'update') {
                     this.clearChart()
                 }
 
                 this.getChartData.forEach((result, index) => {
-                    const pool = this.pools.filter(pool => pool.id === result.pool_id)
+                    const node = this.nodes.filter(node => node.id === result.node_id)
                     this.options.series.push({
-                        name: pool[0].name + ' - ' + label,
+                        name: node[0].name + ' - ' + label,
                         data: result.data.map(val => {
                             const catTime = new Date(val[0])
                             return [
@@ -273,10 +268,10 @@ export default {
                 this.getAttributeLabel(newVal)
             this.updateChart('add', this.getAttributeLabel(this.selectedCompareAttribute))
         },
-        selectedPools: {
+        selectedNodes: {
             handler: function(newVal, oldVal) {
                 if(newVal === oldVal) return
-                this.chartParams.query.pool_id.$in = newVal
+                this.chartParams.query.node_id.$in = newVal
                 this.updateChart('update', this.getAttributeLabel(this.selectedAttribute))
             },
             deep: true
