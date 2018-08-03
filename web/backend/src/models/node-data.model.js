@@ -8,21 +8,27 @@ module.exports = function (app) {
       type: DataTypes.DATE,
       primaryKey: true
     },
-    pool_id: {
+    node_id: {
       type: DataTypes.INTEGER
     },
     data: {
       type: DataTypes.JSONB
     }
-  }, {
+  },
+  {
     timestamps: true,
     createdAt: 'time',
     updatedAt: false,
-    // hooks: {
-    //   beforeCount(options) {
-    //     options.raw = true;
-    //   }
-    // }
+    hooks: {
+      beforeCount(options) {
+        options.raw = true;
+      },
+      beforeFind(params) {
+        if (params.where.hasOwnProperty('attribute')) {
+          delete params.where.attribute
+        }
+      }
+    }
   });
 
   // eslint-disable-next-line no-unused-vars

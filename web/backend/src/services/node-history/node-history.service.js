@@ -1,7 +1,7 @@
-// Initializes the `pool-history` service on path `/pool-history`
+// Initializes the `node-history` service on path `/node-history`
 const createService = require('feathers-sequelize');
-const createModel = require('../../models/pool-data.model');
-const hooks = require('./pool-history.hooks');
+const createModel = require('../../models/node-data.model');
+const hooks = require('./node-history.hooks');
 
 module.exports = function (app) {
   const Model = createModel(app);
@@ -11,10 +11,10 @@ module.exports = function (app) {
   };
 
   // Initialize our service with any options it requires
-  app.use('/pool-history', createService(options));
+  app.use('/node-history', createService(options));
 
   // Get our initialized service so that we can register hooks and filters
-  const service = app.service('pool-history');
+  const service = app.service('node-history');
 
   service.hooks(hooks);
 };

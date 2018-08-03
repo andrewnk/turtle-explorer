@@ -209,11 +209,6 @@ export default {
         this.selectedPools.push(this.pools[0])
         this.$emit('updated-pool-selection', this.selectedPools.map(val => val.id))
     },
-    methods: {
-        onComplete () {
-
-        }
-    },
     watch: {
         selectedPools: {
             handler: function(newVal, oldVal) {

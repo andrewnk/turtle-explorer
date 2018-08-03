@@ -57,6 +57,14 @@ const store = () => new Vuex.Store({
         node_id: null
       }
     }),
+    service('node-history', {
+      debug: true,
+      idField: 'node_id',
+      instanceDefaults: {
+        node_id: null,
+        data: ''
+      }
+    }),
   ],
   actions: {
     async nuxtServerInit({ commit, dispatch }) {
@@ -76,16 +84,35 @@ const store = () => new Vuex.Store({
           })
 
         if(typeof poolData[0] !== 'undefined') {
-          this.state.pool.keyedById[pool.id].data= poolData[0].data
+          this.state.pool.keyedById[pool.id].data = poolData[0].data
         }
       }))
 
       const nodes = await dispatch('node/find')
 
+      const nodesData = await Promise.all(nodes.map(async (node) => {
+        const nodeData = await dispatch('node-data/find', {
+            query: {
+              node_id: {
+                $eq: node.id
+              },
+              $sort: {
+                time: -1
+              },
+              $limit: 1
+            }
+          })
+
+        if(typeof nodeData[0] !== 'undefined') {
+          this.state.node.keyedById[node.id].data = nodeData[0].data
+        }
+      }))
+
       return [
         pools,
         poolsData,
-        nodes
+        nodes,
+        nodesData
       ]
     }
   }
