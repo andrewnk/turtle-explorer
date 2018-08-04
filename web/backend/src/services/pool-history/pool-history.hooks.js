@@ -28,6 +28,9 @@ module.exports = {
           case 'totalPayments':
             attribute = "(data->'pool'->>'totalPayments')::float"
             break;
+          case 'timestamp':
+            attribute = "(data->'network'->>'timestamp')::float"
+            break;
           default:
             return Promise.resolve(context)
         }

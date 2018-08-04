@@ -142,6 +142,11 @@ export default {
                     id: 7,
                     label: 'Total Payments',
                     name: 'totalPayments'
+                },
+                {
+                    id: 8,
+                    label: 'Time',
+                    name: 'timestamp'
                 }
             ],
             options : {
@@ -151,6 +156,9 @@ export default {
                 },
                 credits: {
                     enabled: false
+                },
+                time: {
+                    useUTC: true
                 },
                 subtitle: {
                     text: '',
@@ -181,15 +189,16 @@ export default {
     },
     mounted () {
         const today = new Date()
-        const startDate = today.setHours(0,0,0,0)
-        const endDate = today.setHours(23,59,59,999)
+        const startDate = this.convertToUTCStart(today)
+        const endDate = this.convertToUTCEnd(today)
         this.selectedDates.start = new Date(startDate)
         this.selectedDates.end = new Date(endDate)
 
         this.chartParams.query.time.$gte = startDate
         this.chartParams.query.time.$lte = endDate
         this.chartParams.query.pool_id.$in = this.selectedPools
-        this.chartParams.attribute = this.options.title.text = this.getAttributeLabel(this.selectedAttribute)
+        this.chartParams.attribute = this.getAttributeName(this.selectedAttribute)
+        this.options.title.text = this.getAttributeLabel(this.selectedAttribute)
         this.updateChart('add', this.getAttributeLabel(this.selectedAttribute))
     },
     computed: {
@@ -250,8 +259,8 @@ export default {
         selectedDates: {
             handler: function(newVal, oldVal) {
                 if(newVal === null || (oldVal !== null && newVal.start === oldVal.start && newVal.end === oldVal.end)) return
-                this.chartParams.query.time.$gte = newVal.start
-                this.chartParams.query.time.$lte = newVal.end
+                this.chartParams.query.time.$gte = this.convertToUTCEnd(newVal.start)
+                this.chartParams.query.time.$lte = this.convertToUTCStart(newVal.start)
                 this.updateChart('update', this.getAttributeLabel(this.selectedAttribute))
             },
             deep: true

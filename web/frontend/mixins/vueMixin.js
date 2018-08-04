@@ -9,6 +9,12 @@ export default {
         twoDecimals (val) {
             return parseFloat(Math.round(val * 100) / 100).toFixed(2);
         },
+        convertToUTCStart (date) {
+            return Date.UTC(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate(),0,0,0,0)
+        },
+        convertToUTCEnd (date) {
+            return Date.UTC(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate(),23,59,59,999)
+        },
         humanReadableHashrate: (bytes, decimals) => {
             if (bytes === 0) return '0 H/sec'
             let k = 1024
