@@ -184,8 +184,8 @@ export default {
         this.selectedDates.start = new Date(startDate)
         this.selectedDates.end = new Date(endDate)
 
-        this.chartParams.query.time.$gte = new Date(startDate).toISOString()
-        this.chartParams.query.time.$lte = new Date(endDate).toISOString()
+        this.chartParams.query.time.$gte = startDate
+        this.chartParams.query.time.$lte = endDate
         this.chartParams.query.node_id.$in = this.selectedNodes
         this.chartParams.attribute = this.getAttributeName(this.selectedAttribute)
         this.options.title.text = this.getAttributeLabel(this.selectedAttribute)
@@ -249,8 +249,8 @@ export default {
         selectedDates: {
             handler: function(newVal, oldVal) {
                 if(newVal === null || (oldVal !== null && newVal.start === oldVal.start && newVal.end === oldVal.end)) return
-                this.chartParams.query.time.$gte = this.convertToUTCEnd(newVal.start)
-                this.chartParams.query.time.$lte = this.convertToUTCStart(newVal.start)
+                this.chartParams.query.time.$gte = this.convertToUTCStart(newVal.start)
+                this.chartParams.query.time.$lte = this.convertToUTCEnd(newVal.start)
                 this.updateChart('update', this.getAttributeLabel(this.selectedAttribute))
             },
             deep: true
