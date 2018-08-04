@@ -249,7 +249,7 @@ export default {
             handler: function(newVal, oldVal) {
                 if(newVal === null || (oldVal !== null && newVal.start === oldVal.start && newVal.end === oldVal.end)) return
                 this.chartParams.query.time.$gte = this.convertToUTCStart(newVal.start)
-                this.chartParams.query.time.$lte = this.convertToUTCEnd(newVal.start)
+                this.chartParams.query.time.$lte = this.convertToUTCEnd(newVal.end)
                 this.updateChart('update', this.getAttributeLabel(this.selectedAttribute))
             },
             deep: true
@@ -257,10 +257,9 @@ export default {
         selectedAttribute: function(newVal, oldVal) {
             if(newVal === oldVal) return
             this.chartParams.query.attribute = this.getAttributeName(newVal)
-            this.options.title.text = 
-                this.selectedCompareAttribute > 0 ? 
-                    this.getAttributeLabel(newVal) + ' compared to ' + this.getAttributeLabel(this.selectedCompareAttribute) :
-                    this.getAttributeLabel(newVal)
+            this.options.title.text = this.selectedCompareAttribute > 0 ? 
+                this.getAttributeLabel(newVal) + ' compared to ' + this.getAttributeLabel(this.selectedCompareAttribute) :
+                this.getAttributeLabel(newVal)
             this.updateChart('update', this.getAttributeLabel(this.selectedAttribute))
         },
         selectedCompareAttribute: function(newVal, oldVal) {

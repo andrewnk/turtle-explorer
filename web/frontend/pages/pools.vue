@@ -31,14 +31,12 @@
                 </no-ssr>
             </div>
             <div class="columns is-centered">
-                <no-ssr>
-                    <list
-                        :pools="pools"
-                        :isLoading="!pools.length > 0"
-                        @updated-pool-selection="updatePoolSelection($event)"
-                        class="column"
-                    />
-                </no-ssr>
+                <list
+                    :pools="pools"
+                    :isLoading="!pools.length > 0"
+                    @updated-pool-selection="updatePoolSelection($event)"
+                    class="column"
+                />
             </div>
         </section>
     </div>

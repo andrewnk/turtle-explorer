@@ -259,7 +259,7 @@ export default {
             handler: function(newVal, oldVal) {
                 if(newVal === null || (oldVal !== null && newVal.start === oldVal.start && newVal.end === oldVal.end)) return
                 this.chartParams.query.time.$gte = this.convertToUTCStart(newVal.start)
-                this.chartParams.query.time.$lte = this.convertToUTCEnd(newVal.start)
+                this.chartParams.query.time.$lte = this.convertToUTCEnd(newVal.end)
                 this.updateChart('update', this.getAttributeLabel(this.selectedAttribute))
             },
             deep: true
