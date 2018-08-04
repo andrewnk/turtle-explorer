@@ -60,7 +60,6 @@
         <div class="columns">
             <highstock
                 class="column"
-                style="height:800px"
                 :options="options"
                 ref="historical"
             />
