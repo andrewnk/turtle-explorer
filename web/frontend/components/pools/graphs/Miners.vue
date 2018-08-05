@@ -1,8 +1,8 @@
 <template>
     <section>
-        <highcharts
+        <vue-highcharts
             :options="options"
-            ref="highcharts"
+            ref="pieChart"
         />
     </section>
 </template>
@@ -18,7 +18,10 @@ export default {
         }
     },
     mounted () {
-        this.options.series[0].data = this.series
+        this.$refs.pieChart.showLoading()
+        this.options.series.data = this.series
+        this.$refs.pieChart.addSeries(this.options.series)
+        this.$refs.pieChart.hideLoading()
     },
     data () {
         return {
@@ -52,7 +55,7 @@ export default {
                     }
                 },
                 series: [{
-                    name: 'Pools',
+                    name: 'Miners',
                     colorByPoint: true,
                     data: []
                 }]
@@ -73,7 +76,7 @@ export default {
     },
     watch: {
         series() {
-            this.$refs.highcharts.chart.series[0].setData(this.series, true)
+            this.$refs.pieChart.getChart().series[0].setData(this.series, true)
         }
     }
 }

@@ -1,26 +1,24 @@
 <template>
-    <div class="columns is-centered">
-        <div class="column">
-            <p>
-                Total Miners: {{ totals.totalMiners }}
-            </p>
-            <p>
-                Avg Fee: {{ totals.avgFee }}
-            </p>
-            <p>
-                Total Payments: {{ totals.totalPayments }}
-            </p>
-            <p>
-                Total Hashrate: {{ humanReadableHashrate(totals.totalHashrate) }}
-            </p>
-            <p>
-                Total Miners Paid: {{ totals.totalMinersPaid }}
-            </p>
-            <p>
-                Total Blocks: {{ totals.totalBlocks }}
-            </p>
-        </div>
-    </div>
+    <section>
+        <p>
+            Total Miners: {{ totals.totalMiners }}
+        </p>
+        <p>
+            Avg Fee: {{ totals.avgFee }}
+        </p>
+        <p>
+            Total Payments: {{ totals.totalPayments }}
+        </p>
+        <p>
+            Total Hashrate: {{ humanReadableHashrate(totals.totalHashrate) }}
+        </p>
+        <p>
+            Total Miners Paid: {{ totals.totalMinersPaid }}
+        </p>
+        <p>
+            Total Blocks: {{ totals.totalBlocks }}
+        </p>
+    </section>
 </template>
 
 <script>

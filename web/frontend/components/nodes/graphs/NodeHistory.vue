@@ -33,6 +33,7 @@
                 mode='range'
                 v-model='selectedDates'
                 class="column is-3"
+                id="datepicker"
             >
                 <b-field
                     :type='inputState.type'
@@ -58,8 +59,9 @@
             </v-date-picker>
         </div>
         <div class="columns">
-            <highstock
+            <vue-highcharts
                 class="column"
+                :highcharts="highstock"
                 :options="options"
                 ref="historical"
             />
@@ -69,6 +71,7 @@
 
 <script>
 import vueMixin from '~/mixins/vueMixin.js'
+import Highstock from "highcharts/highstock"
 import { mapGetters } from 'vuex'
 
 export default {
@@ -88,6 +91,7 @@ export default {
     mixins: [vueMixin],
     data () {
         return {
+            highstock: Highstock,
             selectedDates: {
                 start: '',
                 end: ''
@@ -171,8 +175,7 @@ export default {
                     align: 'right',
                     verticalAlign: 'middle',
                     borderWidth: 0
-                },
-                series: []
+                }
             }
         }
     },
@@ -206,36 +209,35 @@ export default {
         },
         compareAgainstAttributes () {
             return this.attributes.filter(val => val.id !== this.selectedAttribute)
+        },
+        compareOptionText () {
+            return this.selectedCompareAttribute === 0 ? 'Compare Against' : 'Remove Compare'
         }
     },
     methods: {
         updateChart (action, label) {
-            this.$refs.historical.chart.showLoading()
-            this.$store.dispatch('node-history/find', this.chartParams).then(() => {
-                if(action === 'update') {
-                    this.clearChart()
-                }
+            this.$refs.historical.showLoading()
+            if(action === 'update') {
+                this.$store.commit('pool-history/clearAll')
+                this.$refs.historical.removeSeries()
+            }
 
+            this.$store.dispatch('node-history/find', this.chartParams).then(() => {
                 this.getChartData.forEach((result, index) => {
                     const node = this.nodes.filter(node => node.id === result.node_id)
-                    this.options.series.push({
+                    this.$refs.historical.addSeries({
                         name: node[0].name + ' - ' + label,
                         data: result.data.map(val => {
                             const catTime = new Date(val[0])
                             return [
                                 catTime.getTime(),
-                                Math.round(val[1])
+                                val[1]
                             ]
                         })
                     })
                 })
                 this.$refs.historical.chart.hideLoading()
             })
-        },
-        clearChart () {
-            for(var i = this.options.series.length - 1; i >= 0; i--) {
-                this.options.series.splice(i, 1)
-            }
         },
         getAttributeLabel (id) {
             return this.attributes.filter(val => val.id === id)[0].label
@@ -281,3 +283,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    #datepicker >>> .input {
+        padding-left: 1em;
+    }
+</style>

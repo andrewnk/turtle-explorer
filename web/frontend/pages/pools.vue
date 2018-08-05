@@ -5,19 +5,21 @@
                 <no-ssr>
                     <overview
                         :pools="pools"
-                        class="column"
+                        class="column is-4"
                     />
                 </no-ssr>
+            </div>
+            <div class="columns is-centered">
                 <no-ssr>
                     <hashrates
                         :pools="pools"
-                        class="column"
+                        class="column is-6"
                     />
                 </no-ssr>
                 <no-ssr>
                     <miners
                         :pools="pools"
-                        class="column"
+                        class="column is-6"
                     />
                 </no-ssr>
             </div>
