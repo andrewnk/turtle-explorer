@@ -25,6 +25,9 @@ module.exports = {
           case 'lastKnownBlockIndex':
             attribute = "(data->>'last_known_block_index')::float"
             break;
+          case 'startTime':
+            attribute = "(data->>'start_time')::float"
+            break;
           default:
             return Promise.resolve(context)
         }

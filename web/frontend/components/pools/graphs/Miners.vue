@@ -14,7 +14,7 @@ export default {
         pools: {
             type: Array,
             required: true,
-            default: () => { return [] }
+            default: () => []
         }
     },
     mounted () {

@@ -129,7 +129,7 @@
                         <div
                             :key="props.row.data.pool.lastBlockFound"
                         >
-                            {{ getFromattedDate(parseInt(props.row.data.pool.lastBlockFound)) }}
+                            {{ getFromattedDate(props.row.data.pool.lastBlockFound) }}
                         </div>
                     </transition>
                 </b-table-column>
@@ -192,7 +192,7 @@ export default {
         pools: {
             type: Array,
             required: true,
-            default: () => { return [] }
+            default: () => []
         },
         isLoading: {
             type: Boolean,

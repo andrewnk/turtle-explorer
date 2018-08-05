@@ -24,7 +24,6 @@
     "buefy": "^0.6.6",
     "feathers-vuex": "^1.4.8",
     "highcharts": "^6.1.1",
-    "moment": "^2.22.2",
     "node-sass": "^4.9.2",
     "nuxt": "^1.4.2",
     "particles.js": "^2.0.0",

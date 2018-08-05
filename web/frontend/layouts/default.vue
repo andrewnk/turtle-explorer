@@ -22,16 +22,22 @@ export default {
     },
     mounted() {
         socket.on('notifyNode', data => {
-            // console.log('node', data)
-            // this.$store.state.node.keyedById[data.node_id].data = data
+            if(this.$store.state.node.keyedById[data.node_id]) {
+                this.$store.state.node.keyedById[data.node_id] = data
+            } else {
+                this.$store.commit('node/addItem', data)
+            }
         })
         socket.on('notifyNodeData', data => {
-        // this.$store.state.node.keyedById[data.node_id].data = data
+            if(this.$store.state.node.keyedById[data.node_id].hasOwnProperty('data')) {
+                this.$store.state.node.keyedById[data.node_id].data = data.data
+            }
         })
         socket.on('notifyPool', data => {
-            // console.log('pool', data)
-            if(this.$store.state.pool.keyedById[data.pool_id].hasOwnProperty('data')) {
-                this.$store.state.pool.keyedById[data.pool_id].data = data
+            if(this.$store.state.pool.keyedById[data.pool_id]) {
+                this.$store.state.pool.keyedById[data.pool_id] = data
+            } else {
+                this.$store.commit('pool/addItem', data)
             }
         })
         socket.on('notifyPoolNetwork', data => {

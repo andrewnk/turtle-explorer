@@ -3,14 +3,6 @@
         <section class="section">
             <div class="columns is-centered">
                 <no-ssr>
-                    <overview
-                        :pools="pools"
-                        class="column is-4"
-                    />
-                </no-ssr>
-            </div>
-            <div class="columns is-centered">
-                <no-ssr>
                     <hashrates
                         :pools="pools"
                         class="column is-6"
@@ -49,11 +41,10 @@ import Hashrates from '~/components/pools/graphs/Hashrates.vue'
 import PoolHistory from '~/components/pools/graphs/PoolHistory.vue'
 import List from '~/components/pools/List.vue'
 import Miners from '~/components/pools/graphs/Miners.vue'
-import Overview from '~/components/pools/graphs/Overview.vue'
 import { mapGetters } from 'vuex'
 
 export default {
-    components: { List, Hashrates, Miners, PoolHistory, Overview },
+    components: { List, Hashrates, Miners, PoolHistory },
     data () {
         return {
             selectedPools: []

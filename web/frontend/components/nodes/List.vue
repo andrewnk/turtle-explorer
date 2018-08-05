@@ -19,7 +19,7 @@
                     {{ props.row.data.difficulty }}
                 </b-table-column>
                 <b-table-column field="hashrate" label="Hashrate" sortable numeric>
-                    {{ props.row.data.hashrate }}
+                    {{ humanReadableHashrate(props.row.data.hashrate) }}
                 </b-table-column>
                 <b-table-column field="txcount" label="Transaction Count" sortable numeric>
                     {{ props.row.data.tx_count }}
@@ -37,7 +37,7 @@
                     {{ props.row.data.last_known_block_index }}
                 </b-table-column>
                 <b-table-column field="time" label="Timestamp" sortable>
-                    {{ getFromattedDate(props.row.timestamp) }}
+                    {{ getFromattedDate(props.row.data.start_time * 1000) }}
                 </b-table-column>
                 <b-table-column field="version" label="Version" sortable numeric>
                     {{ props.row.data.version }}
@@ -60,7 +60,7 @@ export default {
         nodes: {
             type: Array,
             required: true,
-            default: () => { return [] }
+            default: () => []
         },
         isLoading: {
             type: Boolean,

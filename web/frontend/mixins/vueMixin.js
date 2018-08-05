@@ -1,13 +1,12 @@
-import * as moment from 'moment'
-
 export default {
     methods: {
-        getFromattedDate (utctz) {
-            //return moment().startOf('day').valueOf()
-            return moment.utc(utctz).toDate()
-        },
         twoDecimals (val) {
             return parseFloat(Math.round(val * 100) / 100).toFixed(2);
+        },
+        getFromattedDate (UTCString) {
+            if(typeof UTCString === 'undefined') return
+            const utc = new Date(parseInt(UTCString))
+            return utc.getUTCMonth() + '/' + utc.getUTCDate() + '/' + utc.getUTCFullYear() + ' ' + utc.getUTCHours() + ':' + utc.getUTCMinutes() + ':' + utc.getUTCSeconds() + ':' + utc.getUTCMilliseconds()
         },
         convertToUTCStart (date) {
             return Date.UTC(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate(),0,0,0,0)

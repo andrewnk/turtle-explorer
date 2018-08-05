@@ -140,6 +140,11 @@ export default {
                     id: 6,
                     label: 'Last Known Block Index',
                     name: 'lastKnownBlockIndex'
+                },
+                {
+                    id: 7,
+                    label: 'Time',
+                    name: 'startTime'
                 }
             ],
             options : {
