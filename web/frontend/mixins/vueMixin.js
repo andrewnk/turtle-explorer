@@ -6,7 +6,7 @@ export default {
         getFromattedDate (UTCString) {
             if(typeof UTCString === 'undefined') return
             const utc = new Date(parseInt(UTCString))
-            return utc.getUTCMonth() + '/' + utc.getUTCDate() + '/' + utc.getUTCFullYear() + ' ' + utc.getUTCHours() + ':' + utc.getUTCMinutes() + ':' + utc.getUTCSeconds() + ':' + utc.getUTCMilliseconds()
+            return utc.getUTCMonth() + '/' + utc.getUTCDate() + '/' + utc.getUTCFullYear() + ' ' + utc.getUTCHours() + ':' + utc.getUTCMinutes() + ':' + utc.getUTCSeconds()
         },
         convertToUTCStart (date) {
             return Date.UTC(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate(),0,0,0,0)

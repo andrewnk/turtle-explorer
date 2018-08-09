@@ -223,7 +223,7 @@ export default {
         updateChart (action, label) {
             this.$refs.historical.showLoading()
             if(action === 'update') {
-                this.$store.commit('pool-history/clearAll')
+                this.$store.commit('node-history/clearAll')
                 this.$refs.historical.removeSeries()
             }
 
@@ -241,6 +241,7 @@ export default {
                         })
                     })
                 })
+
                 this.$refs.historical.chart.hideLoading()
             })
         },

@@ -1,24 +1,24 @@
 <template>
     <div id="app">
-        <!--<particles/>-->
         <navigation/>
         <nuxt class="main"/>
+        <stats-bar/>
         <footer-section/>
     </div>
 </template>
 
 <script>
-import Particles from '~/components/Particles'
-import Navigation from '~/layouts/sections/Navigation'
 import FooterSection from '~/layouts/sections/Footer'
+import Navigation from '~/layouts/sections/Navigation'
+import StatsBar from '~/layouts/sections/StatsBar'
 import socket from '../socket'
 import { mapActions } from 'vuex'
 
 export default {
     components: {
-        Particles,
         Navigation,
-        FooterSection
+        FooterSection,
+        StatsBar
     },
     mounted() {
         socket.on('notifyNode', data => {
