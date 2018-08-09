@@ -57,7 +57,7 @@
                         <div
                             :key="props.row.data.pool.miners"
                         >
-                            {{ props.row.data.pool.miners }}
+                            {{ props.row.data.pool.miners.toLocaleString() }}
                         </div>
                     </transition>
                 </b-table-column>
@@ -66,7 +66,7 @@
                         <div
                             :key="props.row.data.config.minPaymentThreshold"
                         >
-                            {{ props.row.data.config.minPaymentThreshold / props.row.data.config.denominationUnit }}
+                            {{ (props.row.data.config.minPaymentThreshold / props.row.data.config.denominationUnit).toLocaleString() }}
                         </div>
                     </transition>
                 </b-table-column>
@@ -75,7 +75,7 @@
                         <div
                             :key="props.row.data.config.fee"
                         >
-                            {{ twoDecimals(props.row.data.config.fee) + '%' }}
+                            {{ twoDecimals(props.row.data.config.fee).toLocaleString() + '%' }}
                         </div>
                     </transition>
                 </b-table-column>
@@ -84,7 +84,7 @@
                         <div
                             :key="props.row.data.pool.totalPayments"
                         >
-                            {{ props.row.data.pool.totalPayments }}
+                            {{ props.row.data.pool.totalPayments.toLocaleString() }}
                         </div>
                     </transition>
                 </b-table-column>
@@ -93,7 +93,7 @@
                         <div
                             :key="props.row.data.pool.totalBlocks"
                         >
-                            {{ props.row.data.pool.totalMinersPaid }}
+                            {{ props.row.data.pool.totalMinersPaid.toLocaleString() }}
                         </div>
                     </transition>
                 </b-table-column>
@@ -102,7 +102,7 @@
                         <div
                             :key="props.row.data.pool.totalBlocks"
                         >
-                            {{ props.row.data.pool.totalBlocks }}
+                            {{ props.row.data.pool.totalBlocks.toLocaleString() }}
                         </div>
                     </transition>
                 </b-table-column>
@@ -120,16 +120,17 @@
                         <div
                             :key="props.row.data.network.height"
                         >
-                            {{ props.row.data.network.height }}
+                            {{ props.row.data.network.height.toLocaleString() }}
                         </div>
                     </transition>
                 </b-table-column>
                 <b-table-column field="data.pool.lastBlockFound" label="Last Block Found" sortable>
                     <transition name="slide-fade" mode="out-in">
                         <div
+                            class="has-text-right"
                             :key="props.row.data.pool.lastBlockFound"
                         >
-                            {{ getFromattedDate(parseInt(props.row.data.pool.lastBlockFound)) }}
+                            {{ getFromattedDate(props.row.data.pool.lastBlockFound) }}
                         </div>
                     </transition>
                 </b-table-column>
@@ -192,7 +193,7 @@ export default {
         pools: {
             type: Array,
             required: true,
-            default: () => { return [] }
+            default: () => []
         },
         isLoading: {
             type: Boolean,
@@ -208,6 +209,11 @@ export default {
     mounted () {
         this.selectedPools.push(this.pools[0])
         this.$emit('updated-pool-selection', this.selectedPools.map(val => val.id))
+    },
+    methods: {
+        onComplete () {
+            
+        }
     },
     watch: {
         selectedPools: {

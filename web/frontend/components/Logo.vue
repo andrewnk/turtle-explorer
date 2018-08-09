@@ -3,7 +3,7 @@
 </template>
 
 <style>
-.trtl-logo-container {
+/*.trtl-logo-container {
   display: inline-block;
   animation: turn 2s linear forwards 1s;
   transform: rotateX(180deg);
@@ -29,5 +29,5 @@
   100% {
     left: 70px;
   }
-}
+}*/
 </style>

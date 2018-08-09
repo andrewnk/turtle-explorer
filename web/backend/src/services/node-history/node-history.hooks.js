@@ -25,6 +25,9 @@ module.exports = {
           case 'lastKnownBlockIndex':
             attribute = "(data->>'last_known_block_index')::float"
             break;
+          case 'startTime':
+            attribute = "(data->>'start_time')::float"
+            break;
           default:
             return Promise.resolve(context)
         }
@@ -36,15 +39,15 @@ module.exports = {
         }
 
         context.params.sequelize = {
-          logging: console.log,
           attributes: [
             sequelize.literal("time_bucket('"+ timeBucket +"', time)::timestamp without time zone as \"timebucket\""),
-            sequelize.literal("avg(" + attribute + ") as \"data\""),
+            sequelize.literal(attribute + " as \"data\""),
             'node_id'
           ],
           group: [
             [sequelize.literal('"timebucket"')],
-            ['node_id']
+            ['node_id'],
+            ['data']
           ],
           order: [
             [sequelize.literal('"timebucket" ASC')]

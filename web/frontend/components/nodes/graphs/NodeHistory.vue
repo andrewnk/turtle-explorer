@@ -33,6 +33,7 @@
                 mode='range'
                 v-model='selectedDates'
                 class="column is-3"
+                id="datepicker"
             >
                 <b-field
                     :type='inputState.type'
@@ -58,9 +59,9 @@
             </v-date-picker>
         </div>
         <div class="columns">
-            <highstock
+            <vue-highcharts
                 class="column"
-                style="height:800px"
+                :highcharts="highstock"
                 :options="options"
                 ref="historical"
             />
@@ -70,6 +71,7 @@
 
 <script>
 import vueMixin from '~/mixins/vueMixin.js'
+import Highstock from "highcharts/highstock"
 import { mapGetters } from 'vuex'
 
 export default {
@@ -89,6 +91,7 @@ export default {
     mixins: [vueMixin],
     data () {
         return {
+            highstock: Highstock,
             selectedDates: {
                 start: '',
                 end: ''
@@ -137,12 +140,20 @@ export default {
                     id: 6,
                     label: 'Last Known Block Index',
                     name: 'lastKnownBlockIndex'
+                },
+                {
+                    id: 7,
+                    label: 'Time',
+                    name: 'startTime'
                 }
             ],
             options : {
                 title: {
                     text: '',
                     x: -20 //center
+                },
+                time: {
+                    useUTC: true
                 },
                 credits: {
                     enabled: false
@@ -169,22 +180,22 @@ export default {
                     align: 'right',
                     verticalAlign: 'middle',
                     borderWidth: 0
-                },
-                series: []
+                }
             }
         }
     },
     mounted () {
         const today = new Date()
-        const startDate = today.setHours(0,0,0,0)
-        const endDate = today.setHours(23,59,59,999)
+        const startDate = this.convertToUTCStart(today)
+        const endDate = this.convertToUTCEnd(today)
         this.selectedDates.start = new Date(startDate)
         this.selectedDates.end = new Date(endDate)
 
         this.chartParams.query.time.$gte = startDate
         this.chartParams.query.time.$lte = endDate
         this.chartParams.query.node_id.$in = this.selectedNodes
-        this.chartParams.attribute = this.options.title.text = this.getAttributeLabel(this.selectedAttribute)
+        this.chartParams.attribute = this.getAttributeName(this.selectedAttribute)
+        this.options.title.text = this.getAttributeLabel(this.selectedAttribute)
         this.updateChart('add', this.getAttributeLabel(this.selectedAttribute))
     },
     computed: {
@@ -203,36 +214,36 @@ export default {
         },
         compareAgainstAttributes () {
             return this.attributes.filter(val => val.id !== this.selectedAttribute)
+        },
+        compareOptionText () {
+            return this.selectedCompareAttribute === 0 ? 'Compare Against' : 'Remove Compare'
         }
     },
     methods: {
         updateChart (action, label) {
-            this.$refs.historical.chart.showLoading()
-            this.$store.dispatch('node-history/find', this.chartParams).then(() => {
-                if(action === 'update') {
-                    this.clearChart()
-                }
+            this.$refs.historical.showLoading()
+            if(action === 'update') {
+                this.$store.commit('node-history/clearAll')
+                this.$refs.historical.removeSeries()
+            }
 
+            this.$store.dispatch('node-history/find', this.chartParams).then(() => {
                 this.getChartData.forEach((result, index) => {
                     const node = this.nodes.filter(node => node.id === result.node_id)
-                    this.options.series.push({
+                    this.$refs.historical.addSeries({
                         name: node[0].name + ' - ' + label,
                         data: result.data.map(val => {
                             const catTime = new Date(val[0])
                             return [
                                 catTime.getTime(),
-                                Math.round(val[1])
+                                val[1]
                             ]
                         })
                     })
                 })
+
                 this.$refs.historical.chart.hideLoading()
             })
-        },
-        clearChart () {
-            for(var i = this.options.series.length - 1; i >= 0; i--) {
-                this.options.series.splice(i, 1)
-            }
         },
         getAttributeLabel (id) {
             return this.attributes.filter(val => val.id === id)[0].label
@@ -245,8 +256,8 @@ export default {
         selectedDates: {
             handler: function(newVal, oldVal) {
                 if(newVal === null || (oldVal !== null && newVal.start === oldVal.start && newVal.end === oldVal.end)) return
-                this.chartParams.query.time.$gte = newVal.start
-                this.chartParams.query.time.$lte = newVal.end
+                this.chartParams.query.time.$gte = this.convertToUTCStart(newVal.start)
+                this.chartParams.query.time.$lte = this.convertToUTCEnd(newVal.end)
                 this.updateChart('update', this.getAttributeLabel(this.selectedAttribute))
             },
             deep: true
@@ -254,10 +265,9 @@ export default {
         selectedAttribute: function(newVal, oldVal) {
             if(newVal === oldVal) return
             this.chartParams.query.attribute = this.getAttributeName(newVal)
-            this.options.title.text = 
-                this.selectedCompareAttribute > 0 ? 
-                    this.getAttributeLabel(newVal) + ' compared to ' + this.getAttributeLabel(this.selectedCompareAttribute) :
-                    this.getAttributeLabel(newVal)
+            this.options.title.text = this.selectedCompareAttribute > 0 ? 
+                this.getAttributeLabel(newVal) + ' compared to ' + this.getAttributeLabel(this.selectedCompareAttribute) :
+                this.getAttributeLabel(newVal)
             this.updateChart('update', this.getAttributeLabel(this.selectedAttribute))
         },
         selectedCompareAttribute: function(newVal, oldVal) {
@@ -279,3 +289,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    #datepicker >>> .input {
+        padding-left: 1em;
+    }
+</style>

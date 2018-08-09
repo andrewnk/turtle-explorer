@@ -19,26 +19,28 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@feathersjs/feathers": "^3.1.5",
+    "@feathersjs/feathers": "^3.1.7",
     "@feathersjs/socketio-client": "^1.1.0",
-    "buefy": "^0.6.5",
-    "feathers-vuex": "^1.4.3",
-    "highcharts": "^6.1.0",
-    "moment": "^2.22.2",
-    "node-sass": "^4.9.0",
-    "nuxt": "^1.0.0",
+    "buefy": "^0.6.6",
+    "feathers-vuex": "^1.4.8",
+    "highcharts": "^6.1.1",
+    "node-sass": "^4.9.2",
+    "nuxt": "^1.4.2",
     "particles.js": "^2.0.0",
-    "sass-loader": "^7.0.1",
+    "sass-loader": "^7.1.0",
     "socket.io-client": "^2.1.1",
     "v-calendar": "^0.9.7",
+    "vue": "^2.5.17",
+    "vue-draggable-resizable": "^1.7.1",
     "vue-form-wizard": "^0.8.4",
-    "vue-highcharts": "0.0.10"
+    "vue-server-renderer": "^2.5.17",
+    "vue2-highcharts": "^1.2.5"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
+    "babel-eslint": "^8.2.6",
     "eslint": "^4.15.0",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.7.1",
-    "eslint-plugin-vue": "^4.0.0"
+    "eslint-plugin-vue": "^4.7.1"
   }
 }

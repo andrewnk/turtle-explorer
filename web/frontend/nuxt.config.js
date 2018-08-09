@@ -12,7 +12,7 @@ module.exports = {
   },
   plugins: [
     '~/plugins/buefy.js',
-    { src: '~/plugins/vue-highcharts.js', ssr: false },
+    { src: '~/plugins/vue2-highcharts.js', ssr: false },
     { src: '~/plugins/daterange-picker.js', ssr: false },
     { src: '~/plugins/vue-form-wizard.js', ssr: false },
   ],

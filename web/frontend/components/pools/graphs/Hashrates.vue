@@ -1,8 +1,8 @@
 <template>
     <section>
-        <highcharts
+        <vue-highcharts
             :options="options"
-            ref="highcharts"
+            ref="pieChart"
         />
     </section>
 </template>
@@ -14,11 +14,14 @@ export default {
         pools: {
             type: Array,
             required: true,
-            default: () => { return [] }
+            default: () => []
         }
     },
     mounted () {
-        this.options.series[0].data = this.series
+        this.$refs.pieChart.showLoading()
+        this.options.series.data = this.series
+        this.$refs.pieChart.addSeries(this.options.series)
+        this.$refs.pieChart.hideLoading()
     },
     data () {
         return {
@@ -51,11 +54,11 @@ export default {
                         }
                     }
                 },
-                series: [{
-                    name: 'Pools',
+                series: {
+                    name: 'Hashrate',
                     colorByPoint: true,
                     data: []
-                }]
+                }
             }
         }
     },
@@ -64,16 +67,16 @@ export default {
             return this.pools
                 .filter(pool => pool.data !== null)
                 .map(pool => {
-                return {
-                    name: pool.name,
-                    y: pool.data.pool.hashrate
-                }
-            })
+                    return {
+                        name: pool.name,
+                        y: pool.data.pool.hashrate
+                    }
+                })
         }
     },
     watch: {
         series () {
-            this.$refs.highcharts.chart.series[0].setData(this.series, true)
+            this.$refs.pieChart.getChart().series[0].setData(this.series, true)
         }
     }
 }

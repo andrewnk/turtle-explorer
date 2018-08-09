@@ -28,6 +28,9 @@ module.exports = {
           case 'totalPayments':
             attribute = "(data->'pool'->>'totalPayments')::float"
             break;
+          case 'timestamp':
+            attribute = "(data->'network'->>'timestamp')::float"
+            break;
           default:
             return Promise.resolve(context)
         }
@@ -39,15 +42,15 @@ module.exports = {
         }
 
         context.params.sequelize = {
-          logging: console.log,
           attributes: [
             sequelize.literal("time_bucket('"+ timeBucket +"', time)::timestamp without time zone as \"timebucket\""),
-            sequelize.literal("avg(" + attribute + ") as \"data\""),
+            sequelize.literal(attribute + " as \"data\""),
             'pool_id'
           ],
           group: [
             [sequelize.literal('"timebucket"')],
-            ['pool_id']
+            ['pool_id'],
+            ['data']
           ],
           order: [
             [sequelize.literal('"timebucket" ASC')]
