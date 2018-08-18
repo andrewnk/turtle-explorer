@@ -308,7 +308,7 @@ export default {
             return this.attributes.filter(val => val.id !== this.selectedAttribute)
         },
         compareOptionText () {
-            return this.selectedCompareAttribute === 0 ? 'Compare Against' : 'Remove Compare'
+            return this.selectedCompareAttribute === '0' ? 'Compare Against' : 'Remove Compare'
         }
     },
     methods: {
@@ -364,6 +364,12 @@ export default {
         },
         selectedCompareAttribute: function(newVal, oldVal) {
             if(newVal === oldVal) return
+
+            //remove compare
+            if(newVal === '0') {
+                return this.updateChart('update', this.getAttributeLabel(this.selectedAttribute))
+            }
+
             this.chartParams.query.attribute = this.getAttributeName(newVal)
             this.options.title.text = newVal > 0 ? 
                 this.getAttributeLabel(this.selectedAttribute) + ' compared to ' + this.getAttributeLabel(newVal) :
