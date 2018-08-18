@@ -3,14 +3,18 @@
         <section class="section">
             <div class="columns is-centered">
                 <no-ssr>
-                    <hashrates
-                        :pools="pools"
+                    <pie
+                        :series="hashrates"
+                        titleText="Current Pool Hashrates"
+                        seriesName="Hashrate"
                         class="column is-6"
                     />
                 </no-ssr>
                 <no-ssr>
-                    <miners
-                        :pools="pools"
+                    <pie
+                        :series="miners"
+                        titleText="Total Pool Miners"
+                        seriesName="Miners"
                         class="column is-6"
                     />
                 </no-ssr>
@@ -37,14 +41,13 @@
 </template>
 
 <script>
-import Hashrates from '~/components/pools/graphs/Hashrates.vue'
-import PoolHistory from '~/components/pools/graphs/PoolHistory.vue'
 import List from '~/components/pools/List.vue'
-import Miners from '~/components/pools/graphs/Miners.vue'
+import Pie from '~/components/graphs/Pie.vue'
+import PoolHistory from '~/components/pools/graphs/PoolHistory.vue'
 import { mapGetters } from 'vuex'
 
 export default {
-    components: { List, Hashrates, Miners, PoolHistory },
+    components: { Pie, PoolHistory, List },
     data () {
         return {
             selectedPools: []
@@ -54,6 +57,26 @@ export default {
         ...mapGetters('pool', { getPools: 'list' }),
         pools () {
             return this.getPools.filter(value => value.hasOwnProperty('data'))
+        },
+        miners () {
+            return this.pools
+                .filter(pool => pool.data !== null && pool.data.pool !== null)
+                .map(pool => {
+                return {
+                    name: pool.name,
+                    y: pool.data.pool.miners
+                }
+            })
+        },
+        hashrates () {
+            return this.pools
+                .filter(pool => pool.data !== null && pool.data.pool !== null)
+                .map(pool => {
+                    return {
+                        name: pool.name,
+                        y: pool.data.pool.hashrate
+                    }
+                })
         }
     },
     methods: {

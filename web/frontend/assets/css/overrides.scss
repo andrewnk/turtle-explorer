@@ -15,7 +15,7 @@ $secondary: #212721;
 $secondary-invert: findColorInvert($secondary);
 $colors: ('secondary': ($secondary, $secondary-invert));
 
-$background: #303030;
+$background: #1f1f1f;
 $background-invert: findColorInvert($background);
 $colors: ('background': ($background, $background-invert));
 

@@ -148,6 +148,68 @@ export default {
                 }
             ],
             options : {
+                chart: {
+                    backgroundColor: '#303030',
+                    plotBorderColor: '#606063'
+                },
+                credits: {
+                    enabled: false
+                },
+                colors: [
+                    '#f5f1f2',
+                    '#b1e033',
+                    '#ce289f',
+                    '#6ca890',
+                    '#91fb27',
+                    '#ab0bd1',
+                    '#fd3453',
+                    '#22b29a',
+                    '#26bf2a',
+                    '#1a53bc',
+                    '#60b2b3',
+                    '#1aa0d8',
+                    '#158af7',
+                    '#f6b90a',
+                    '#54c088',
+                    '#2dd2d0',
+                    '#ba7afa',
+                    '#3afa02',
+                    '#45afd0',
+                    '#b8fe38',
+                    '#8213f2'
+                ],
+                labels: {
+                    style: {
+                        color: '#707073'
+                    }
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            color: '#B0B0B3'
+                        },
+                        marker: {
+                            lineColor: '#333'
+                        }
+                    }
+                },
+                rangeSelector: {
+                    enabled: false,
+                },
+                scrollbar: {
+                    barBackgroundColor: '#808083',
+                    barBorderColor: '#808083',
+                    buttonArrowColor: '#CCC',
+                    buttonBackgroundColor: '#606063',
+                    buttonBorderColor: '#606063',
+                    rifleColor: '#FFF',
+                    trackBackgroundColor: '#404043',
+                    trackBorderColor: '#404043'
+                },
+                subtitle: {
+                    text: '',
+                    x: -20
+                },
                 title: {
                     text: '',
                     x: -20 //center
@@ -155,31 +217,51 @@ export default {
                 time: {
                     useUTC: true
                 },
-                credits: {
-                    enabled: false
-                },
-                subtitle: {
-                    text: '',
-                    x: -20
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                    style: {
+                        color: '#F0F0F0'
+                    }
                 },
                 xAxis: {
+                    gridLineColor: '#707073',
+                    labels: {
+                        style: {
+                            color: '#E0E0E3'
+                        }
+                    },
+                    lineColor: '#707073',
+                    minorGridLineColor: '#505053',
+                    tickColor: '#707073',
+                    title: {
+                        style: {
+                            color: '#A0A0A3'
+
+                        }
+                    },
                     type: 'datetime'
                 },
                 yAxis: {
+                    gridLineColor: '#707073',
+                    labels: {
+                        style: {
+                            color: '#E0E0E3'
+                        }
+                    },
+                    lineColor: '#707073',
+                    minorGridLineColor: '#505053',
                     plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                    }]
-                },
-                rangeSelector: {
-                    enabled: false,
-                },
-                legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle',
-                    borderWidth: 0
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }],
+                    tickColor: '#707073',
+                    tickWidth: 1,
+                    title: {
+                        style: {
+                            color: '#A0A0A3'
+                        }
+                    }
                 }
             }
         }

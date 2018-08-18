@@ -137,11 +137,11 @@
             </template>
             <template slot="detail" slot-scope="props">
                 <div
-                    class="columns is-centered is-multiline"
+                    class="columns is-multiline"
                     v-if="showCell(['data', 'config', 'ports'], props.row)"
                 >
                     <div
-                        class="column is-flex"
+                        class="column is-3 is-flex"
                         v-for="(config, index) in props.row.data.config.ports"
                         :key="index"
                     >
@@ -228,3 +228,13 @@ export default {
 }
 </script>
 
+<style>
+.modal-close {
+    display: none;
+}
+
+.modal-background {
+    background: #3c3c3c;
+    opacity: 0.7;
+}
+</style>
