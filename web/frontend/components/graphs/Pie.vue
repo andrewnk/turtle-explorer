@@ -2,12 +2,17 @@
     <section>
         <vue-highcharts
             :options="options"
+            :highcharts="highcharts"
             ref="pieChart"
         />
     </section>
 </template>
 
 <script>
+import Highcharts from "highcharts/highcharts"
+import Exporting from 'highcharts/modules/exporting.js'
+import ExportData from 'highcharts/modules/export-data.js'
+
 export default {
     name: 'Pie',
     props: {
@@ -28,6 +33,8 @@ export default {
         }
     },
     mounted () {
+        Exporting(Highcharts)
+        ExportData(Highcharts)
         this.$refs.pieChart.showLoading()
         this.$refs.pieChart.getChart().setTitle({ text: this.titleText })
         this.$refs.pieChart.addSeries({ data: this.series, name: this.seriesName })
@@ -35,6 +42,7 @@ export default {
     },
     data () {
         return {
+            highcharts: Highcharts,
             options: {
                 chart: {
                     backgroundColor: '#3c3c3c',

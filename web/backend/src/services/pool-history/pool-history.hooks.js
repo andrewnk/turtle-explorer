@@ -35,10 +35,14 @@ module.exports = {
             return Promise.resolve(context)
         }
 
-        let timeBucket = "1 hour"
+        let timeBucket = "24 hours"
         const timeDiff = context.params.query.time.$lte - context.params.query.time.$gte
         if(new Date(timeDiff).getHours() <= 24) {
           timeBucket = "1 minute"
+        } else if(new Date(timeDiff).getHours() <= 48) {
+          timeBucket = "1 hour"
+        } else if(new Date(timeDiff).getHours() <= 72) {
+          timeBucket = "3 hours"
         }
 
         context.params.sequelize = {

@@ -31,6 +31,7 @@ type Node struct {
     Name string `json:"name"`
     Url string `json:"url"`
     Port int `json:"port"`
+    SSL bool `json:"ssl"`
 }
 
 type Nodes struct {
@@ -91,7 +92,7 @@ func initDb() {
 }
 
 func setNodeData() {
-    nodes, err := db.Query("SELECT id, url, port FROM node")
+    nodes, err := db.Query("SELECT id, url, port, ssl FROM node")
 
     if err != nil {
         log.Println("There was an error getting the nodes from the db: ", err)
@@ -102,12 +103,17 @@ func setNodeData() {
         var id int
         var url string
         var port int
-        err := nodes.Scan(&id, &url, &port)
+        var ssl bool
+        protocol := "http://"
+        err := nodes.Scan(&id, &url, &port, &ssl)
 
         if err != nil {
             log.Println("There was an error getting the nodes from the db: ", err)
         } else {
-            url := fmt.Sprintf("%[1]s:%#[2]s/getinfo", url, strconv.Itoa(port))
+            if ssl == true {
+                protocol = "https://"
+            }
+            url := fmt.Sprintf("%[1]s%#[2]s:%#[3]s/getinfo", protocol, url, strconv.Itoa(port))
             response := queryApi(url, "GET")
 
             if isValidJson(response) && len(response) > 0 {
@@ -179,12 +185,12 @@ func setNodes() {
         err := db.QueryRow("SELECT name FROM node WHERE name = $1 LIMIT 1", nodes.Nodes[i].Name).Scan(&name)
 
         if err == sql.ErrNoRows {
-            stmt, err := db.Prepare("INSERT INTO node(name, url, port) VALUES ($1, $2, $3)")
+            stmt, err := db.Prepare("INSERT INTO node(name, url, port, ssl) VALUES ($1, $2, $3, $4)")
             if err != nil {
                 log.Println("There was an error preparing to insert the node: ", err)
             }
 
-            _, err = stmt.Exec(nodes.Nodes[i].Name, nodes.Nodes[i].Url, nodes.Nodes[i].Port)
+            _, err = stmt.Exec(nodes.Nodes[i].Name, nodes.Nodes[i].Url, nodes.Nodes[i].Port, nodes.Nodes[i].SSL)
             if err != nil {
                 log.Println("There was an error inserting the node into the database: ", err)
             }

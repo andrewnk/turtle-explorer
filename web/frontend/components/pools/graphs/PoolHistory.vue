@@ -8,7 +8,7 @@
             >
                 <option disabled value="0">Please an attribute</option>
                 <option
-                    v-for="(attribute, index) in attributes"
+                    v-for="(attribute, index) in compareAttributes"
                     :value="attribute.id"
                     :key="index"
                 >
@@ -72,6 +72,9 @@
 <script>
 import vueMixin from '~/mixins/vueMixin.js'
 import Highstock from "highcharts/highstock"
+import DragPanes from 'highcharts/modules/drag-panes.js'
+import Exporting from 'highcharts/modules/exporting.js'
+import ExportData from 'highcharts/modules/export-data.js'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -229,6 +232,7 @@ export default {
                 },
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                    split: true,
                     style: {
                         color: '#F0F0F0'
                     }
@@ -253,6 +257,8 @@ export default {
                 },
                 yAxis: {
                     gridLineColor: '#707073',
+                    height: '100%',
+                    id: 'primary',
                     labels: {
                         style: {
                             color: '#E0E0E3'
@@ -260,23 +266,29 @@ export default {
                     },
                     lineColor: '#707073',
                     minorGridLineColor: '#505053',
+                    offset: 30,
                     plotLines: [{
                         value: 0,
                         width: 1,
                         color: '#808080'
                     }],
-                    tickColor: '#707073',
-                    tickWidth: 1,
+                    resize: {
+                        enabled: true
+                    },
                     title: {
                         style: {
                             color: '#A0A0A3'
-                        }
+                        },
+                        text: 'Miners'
                     }
                 }
             }
         }
     },
     mounted () {
+        DragPanes(Highstock)
+        Exporting(Highstock)
+        ExportData(Highstock)
         const today = new Date()
         const startDate = this.convertToUTCStart(today)
         const endDate = this.convertToUTCEnd(today)
@@ -287,8 +299,7 @@ export default {
         this.chartParams.query.time.$lte = endDate
         this.chartParams.query.pool_id.$in = this.selectedPools
         this.chartParams.attribute = this.getAttributeName(this.selectedAttribute)
-        this.options.title.text = this.getAttributeLabel(this.selectedAttribute)
-        this.updateChart('add', this.getAttributeLabel(this.selectedAttribute))
+        this.addSeries(this.getAttributeLabel(this.selectedAttribute), 'primary')
     },
     computed: {
         ...mapGetters('pool-history', { getChartData: 'list' }),
@@ -297,45 +308,85 @@ export default {
                 return {
                     type: 'is-danger',
                     message: 'Date required.',
-                };
+                }
             }
             return {
                 type: 'is-primary',
                 message: '',
-            };
+            }
         },
         compareAgainstAttributes () {
             return this.attributes.filter(val => val.id !== this.selectedAttribute)
         },
+        compareAttributes () {
+            return this.attributes.filter(val => val.id !== this.selectedCompareAttribute)
+        },
         compareOptionText () {
-            return this.selectedCompareAttribute === '0' ? 'Compare Against' : 'Remove Compare'
+            return this.selectedCompareAttribute === 0 ? 'Compare Against' : 'Remove Compare'
         }
     },
     methods: {
-        updateChart (action, label) {
-            this.$refs.historical.showLoading()
-            if(action === 'update') {
-                this.$store.commit('pool-history/clearAll')
-                this.$refs.historical.removeSeries()
-            }
+        addSecondaryYAxis () {
+            this.clearSecondaryAxis()
 
+            const newAxis = Object.assign({
+                height: '40%',
+                id: 'secondary',
+                labels: {
+                    style: {
+                        color: '#E0E0E3'
+                    }
+                },
+                lineColor: '#707073',
+                minorGridLineColor: '#505053',
+                offset: 30,
+                opposite: true,
+                title: {
+                    text: this.getAttributeLabel(this.selectedCompareAttribute),
+                },
+                top: '60%'
+            }, this.options.yAxis)
+            this.$refs.historical.chart.addAxis(newAxis)
+            this.resizePrimaryYAxis()
+        },
+        clearSecondaryAxis () {
+            if(typeof this.$refs.historical.chart.get('secondary') !== 'undefined') {
+                this.$refs.historical.chart.get('secondary').remove()
+                this.resizePrimaryYAxis()
+            }
+        },
+        resizePrimaryYAxis () {
+            this.$refs.historical.chart.get('primary').update({
+                height: parseInt(this.selectedCompareAttribute) === 0 ? '100%' : '60%',
+                resize: {
+                    enabled: typeof this.$refs.historical.chart.get('secondary') === 'undefined' ? false : true
+                }
+            })
+        },
+        addSeries (label, axisId) {
+            this.$refs.historical.showLoading()
             this.$store.dispatch('pool-history/find', this.chartParams).then(() => {
                 this.getChartData.forEach((result, index) => {
                     const pool = this.pools.filter(pool => pool.id === result.pool_id)
                     this.$refs.historical.addSeries({
-                        name: pool[0].name + ' - ' + label,
                         data: result.data.map(val => {
                             const catTime = new Date(val[0])
                             return [
                                 catTime.getTime(),
                                 val[1]
                             ]
-                        })
+                        }),
+                        name: pool[0].name + ' - ' + label,
+                        yAxis: axisId
                     })
                 })
 
                 this.$refs.historical.chart.hideLoading()
             })
+        },
+        clearData () {
+            this.$store.commit('pool-history/clearAll')
+            this.$refs.historical.removeSeries()
         },
         getAttributeLabel (id) {
             return this.attributes.filter(val => val.id === id)[0].label
@@ -348,39 +399,50 @@ export default {
         selectedDates: {
             handler: function(newVal, oldVal) {
                 if(newVal === null || (oldVal !== null && newVal.start === oldVal.start && newVal.end === oldVal.end)) return
+
                 this.chartParams.query.time.$gte = this.convertToUTCStart(newVal.start)
                 this.chartParams.query.time.$lte = this.convertToUTCEnd(newVal.end)
-                this.updateChart('update', this.getAttributeLabel(this.selectedAttribute))
+
+                this.clearData()
+                this.addSeries(this.getAttributeLabel(this.selectedAttribute), 'primary')
+                if(parseInt(this.selectedCompareAttribute) !== 0) {
+                    this.addSecondaryYAxis()
+                    this.addSeries(this.getAttributeLabel(this.selectedCompareAttribute), 'secondary')
+                }
             },
             deep: true
         },
         selectedAttribute: function(newVal, oldVal) {
             if(newVal === oldVal) return
+
+            this.selectedCompareAttribute = 0
             this.chartParams.query.attribute = this.getAttributeName(newVal)
-            this.options.title.text = this.selectedCompareAttribute > 0 ? 
-                this.getAttributeLabel(newVal) + ' compared to ' + this.getAttributeLabel(this.selectedCompareAttribute) :
-                this.getAttributeLabel(newVal)
-            this.updateChart('update', this.getAttributeLabel(this.selectedAttribute))
+            this.clearData()
+            this.clearSecondaryAxis()
+            this.addSeries(this.getAttributeLabel(this.selectedAttribute), 'primary')
         },
         selectedCompareAttribute: function(newVal, oldVal) {
             if(newVal === oldVal) return
 
             //remove compare
-            if(newVal === '0') {
-                return this.updateChart('update', this.getAttributeLabel(this.selectedAttribute))
+            if(parseInt(newVal) === 0) {
+                this.chartParams.query.attribute = this.getAttributeName(this.selectedAttribute)
+                this.clearData()
+                this.clearSecondaryAxis()
+                return this.addSeries(this.getAttributeLabel(this.selectedAttribute), 'primary')
             }
 
             this.chartParams.query.attribute = this.getAttributeName(newVal)
-            this.options.title.text = newVal > 0 ? 
-                this.getAttributeLabel(this.selectedAttribute) + ' compared to ' + this.getAttributeLabel(newVal) :
-                this.getAttributeLabel(newVal)
-            this.updateChart('add', this.getAttributeLabel(this.selectedCompareAttribute))
+            this.addSecondaryYAxis()
+            this.addSeries(this.getAttributeLabel(this.selectedCompareAttribute), 'secondary')
         },
         selectedPools: {
             handler: function(newVal, oldVal) {
                 if(newVal === oldVal) return
+
                 this.chartParams.query.pool_id.$in = newVal
-                this.updateChart('update', this.getAttributeLabel(this.selectedAttribute))
+                this.clearData()
+                this.addSeries(this.getAttributeLabel(this.selectedAttribute), 'primary')
             },
             deep: true
         }
