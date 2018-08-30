@@ -342,7 +342,10 @@ export default {
                 offset: 30,
                 opposite: true,
                 title: {
-                    text: this.getAttributeLabel(this.selectedCompareAttribute),
+                    style: {
+                        color: '#A0A0A3'
+                    },
+                    text: this.getAttributeLabel(this.selectedCompareAttribute)
                 },
                 top: '60%'
             }, this.options.yAxis)
@@ -366,6 +369,7 @@ export default {
         addSeries (label, axisId) {
             this.$refs.historical.showLoading()
             this.$store.dispatch('pool-history/find', this.chartParams).then(() => {
+                this.$refs.historical.chart.get(axisId).setTitle({text: label})
                 this.getChartData.forEach((result, index) => {
                     const pool = this.pools.filter(pool => pool.id === result.pool_id)
                     this.$refs.historical.addSeries({
