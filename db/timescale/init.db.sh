@@ -12,7 +12,8 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
       id SERIAL CONSTRAINT node_pk PRIMARY KEY,
       name VARCHAR NOT NULL,
       url TEXT NOT NULL,
-      port INTEGER NOT NULL
+      port INTEGER NOT NULL,
+      ssl BOOLEAN NOT NULL
     );
     CREATE INDEX ON node (name, id);
 

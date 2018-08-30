@@ -11,14 +11,15 @@ module.exports = {
     ]
   },
   plugins: [
-    '~/plugins/buefy.js',
+    { src: '~/plugins/buefy.js', ssr: true },
     { src: '~/plugins/vue2-highcharts.js', ssr: false },
     { src: '~/plugins/daterange-picker.js', ssr: false },
-    { src: '~/plugins/vue-form-wizard.js', ssr: false },
+    { src: '~/plugins/vue-form-wizard.js', ssr: false }
   ],
   loading: { color: '#3B8070' },
   css: [
     { src: '~/assets/css/main.scss', lang: 'scss' },
+    { src: 'material-design-icons-iconfont/dist/material-design-icons.scss', lang: 'scss' }
   ],
   build: {
     extend (config, { isDev, isClient }) {

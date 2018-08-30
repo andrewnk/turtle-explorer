@@ -22,7 +22,7 @@ services:
   timescale:
     build:
       context: .
-      dockerfile: Dockerfile-db
+      dockerfile: Dockerfile-timescale-db
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -31,9 +31,58 @@ services:
       - WEB_PASSWORD=98765
     container_name: timescale
     volumes:
-      - timescale:/var/lib/postgresql/data
+      #- timescale:/var/lib/postgresql/data
+      - /home/andrewnk/timescaleBackup:/var/lib/postgresql/data
+      #- /home/andrewnk/timescaleBackup:/backups
     networks:
       - backend
+
+  # turtlecoind:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile-turtlecoind
+  #   restart: always
+  #   environment:
+  #     - TURTLECOIN_PROGRAM=TurtleCoind
+  #     - TURTLECOINSERVICE_PASSWORD=98765
+  #     - WEB_PASSWORD=98765
+  #   container_name: turtlecoind
+  #   networks:
+  #     - backend
+
+  # turtlecoin-cache-db:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile-turtlecoin-cache-db
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=123456
+  #     - TURTLECOINSERVICE_PASSWORD=98765
+  #     - WEB_PASSWORD=98765
+  #   container_name: turtlecoin-cache-db
+  #   volumes:
+  #     - turtlecoin-cache-db:/var/lib/postgresql/data
+  #   networks:
+  #     - backend
+
+  # turtlecoin-cache-service:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile-turtlecoin-service
+  #   restart: always
+  #   environment:
+  #     - DB_USER=turtlecoinservice
+  #     - DB_PASSWORD=98765
+  #     - DB_PORT=5432
+  #     - DB_HOST=turtlecoin-cache-db
+  #     - DB_NAME=turtlecoincache
+  #     - TURTLECOIN_PORT=11898
+  #     - TURTLECOIN_HOST=turtlecoind
+  #   container_name: turtlecoin-cache-service
+  #   depends_on: turtlecoin-cache-db
+  #   networks:
+  #     - backend
 
   web-backend:
     build:
@@ -50,6 +99,7 @@ services:
     depends_on:
       - timescale
       - gather-turtles
+      # - turtlecoin-cache-db
     networks:
       - backend
       - frontend
@@ -65,6 +115,7 @@ services:
     depends_on:
       - timescale
       - gather-turtles
+      # - turtlecoin-cache-db
       - web-backend
     ports:
       - 80:3000
@@ -82,5 +133,5 @@ networks:
     ipam:
       driver: default
 
-volumes:
-  timescale:
+# volumes:
+#   timescale:
