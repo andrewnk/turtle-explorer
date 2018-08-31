@@ -14,3 +14,4 @@ dist
 .ash_history
 .cache
 .config
+.pm2
