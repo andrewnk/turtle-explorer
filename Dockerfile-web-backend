@@ -28,10 +28,11 @@ RUN apk add --no-cache postgresql-client && \
     DB_HOST='${DB_HOST}$'\n\
     DB_PORT='${DB_PORT}$'' >> .env && \
     chmod +x /home/node/wait-for-postgres.sh && \
-    npm install
+    npm install && \
+    npm install pm2 -g
 
 EXPOSE 3030
 
 USER node
 
-CMD ./wait-for-postgres.sh ${DB_HOST} ${DB_PORT} ${DB_USER} ${DB_PASSWORD} ${DB_NAME} npm start
+CMD ./wait-for-postgres.sh ${DB_HOST} ${DB_PORT} ${DB_USER} ${DB_PASSWORD} ${DB_NAME} pm2-runtime start ecosystem.config.js
