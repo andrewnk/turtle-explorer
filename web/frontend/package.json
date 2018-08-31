@@ -27,7 +27,6 @@
     "material-design-icons-iconfont": "^3.0.3",
     "node-sass": "^4.9.2",
     "nuxt": "^1.4.2",
-    "particles.js": "^2.0.0",
     "sass-loader": "^7.1.0",
     "socket.io-client": "^2.1.1",
     "v-calendar": "^0.9.7",

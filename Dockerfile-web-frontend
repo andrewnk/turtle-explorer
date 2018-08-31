@@ -4,8 +4,8 @@ WORKDIR /home/node
 
 COPY ./web/frontend .
 
-RUN npm install && npm run build
+RUN npm install && npm install pm2 -g && npm run build
 
 USER node
 
-CMD ["npm", "start"]
+CMD ["pm2-runtime", "start", "ecosystem.config.js"]
