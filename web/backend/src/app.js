@@ -74,7 +74,7 @@ app.configure(services);
 app.configure(channels);
 
 app.configure(redisClient)
-app.use('/cache', routes(app))
+// app.use('/cache', routes(app))
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());

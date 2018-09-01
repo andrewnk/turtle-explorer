@@ -1,7 +1,3 @@
-# daemon runs in the background
-# run something like tail /var/log/turtlecoind/current to see the status
-# be sure to run with volumes, ie:
-# docker run -v $(pwd)/turtlecoind:/var/lib/turtlecoind -v $(pwd)/wallet:/home/turtlecoin --rm -ti turtlecoin:0.2.2
 ARG base_image_version=0.10.0
 FROM phusion/baseimage:$base_image_version
 
@@ -18,12 +14,12 @@ RUN apt-get update && \
     apt-get install -y \
       build-essential \
       python-dev \
-      gcc-4.9 \
-      g++-4.9 \
-      git cmake \
-      libboost1.58-all-dev \
-      librocksdb-dev \
-      libreadline-dev && \
+      gcc \
+      g++ \
+      git \
+      cmake \
+      wget \
+      libboost1.58-all-dev && \
     mkdir -p /src/turtlecoin
 
 WORKDIR /src/turtlecoin
@@ -42,8 +38,14 @@ RUN mkdir -p /usr/local/bin && \
 
 WORKDIR /
 
+RUN useradd -r -s /usr/sbin/nologin -m -d /var/lib/turtlecoind turtlecoind && \
+    useradd -s /bin/bash -m -d /home/turtlecoin turtlecoin && \
+    mkdir /home/turtlecoin/.TurtleCoin && \
+    wget https://github.com/turtlecoin/checkpoints/raw/master/checkpoints.csv -P /home/turtlecoin/.TurtleCoin && \
+    chown -R turtlecoin:turtlecoin /home/turtlecoin
+
 RUN rm -rf /src/turtlecoin && \
-    apt-get remove -y build-essential python-dev gcc-4.9 g++-4.9 git cmake libboost1.58-all-dev librocksdb-dev && \
+    apt-get remove -y build-essential python-dev gcc g++ git cmake libboost1.58-all-dev wget && \
     apt-get autoremove -y && \
     apt-get install -y  \
       libboost-system1.58.0 \
@@ -55,3 +57,9 @@ RUN rm -rf /src/turtlecoin && \
       libboost-serialization1.58.0 \
       libboost-program-options1.58.0 \
       libicu55
+
+USER turtlecoin
+
+EXPOSE 11897 11898
+
+CMD ["TurtleCoind", "--load-checkpoints", "/home/turtlecoin/.TurtleCoin/checkpoints.csv", "--enable_blockexplorer", "--rpc-bind-ip=0.0.0.0", "--rpc-bind-port=11898", "--enable-cors=*"]

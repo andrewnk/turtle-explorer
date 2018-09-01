@@ -37,18 +37,16 @@ services:
     networks:
       - backend
 
-  # turtlecoind:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile-turtlecoind
-  #   restart: always
-  #   environment:
-  #     - TURTLECOIN_PROGRAM=TurtleCoind
-  #     - TURTLECOINSERVICE_PASSWORD=98765
-  #     - WEB_PASSWORD=98765
-  #   container_name: turtlecoind
-  #   networks:
-  #     - backend
+  turtlecoind:
+    build:
+      context: .
+      dockerfile: Dockerfile-turtlecoind
+    restart: always
+    environment:
+      - TURTLECOIN_PROGRAM=TurtleCoind
+    container_name: turtlecoind
+    networks:
+      - backend
 
   # turtlecoin-cache-db:
   #   build:
@@ -61,6 +59,8 @@ services:
   #     - TURTLECOINSERVICE_PASSWORD=98765
   #     - WEB_PASSWORD=98765
   #   container_name: turtlecoin-cache-db
+  #   depends_on:
+  #     - turtlecoind
   #   volumes:
   #     - turtlecoin-cache-db:/var/lib/postgresql/data
   #   networks:
