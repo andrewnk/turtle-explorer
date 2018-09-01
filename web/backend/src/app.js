@@ -9,7 +9,8 @@ const feathers = require('@feathersjs/feathers');
 const configuration = require('@feathersjs/configuration');
 const express = require('@feathersjs/express');
 const socketio = require('@feathersjs/socketio');
-
+const routes = require('feathers-hooks-rediscache').cacheRoutes;
+const redisClient = require('feathers-hooks-rediscache').redisClient;
 
 const middleware = require('./middleware');
 const services = require('./services');
@@ -71,6 +72,9 @@ app.configure(middleware);
 app.configure(services);
 // Set up event channels (see channels.js)
 app.configure(channels);
+
+app.configure(redisClient)
+app.use('/cache', routes(app))
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());

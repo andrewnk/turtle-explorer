@@ -6,5 +6,15 @@
     "default": 0,
     "max": 100
   },
-  "postgres": "postgres://postgres:@localhost:5432/turtle_explorer_backend"
+  "postgres": "postgres://postgres:@localhost:5432/turtle_explorer_backend",
+  "redis": {
+    "host": "web-cache",
+    "port": 6379
+  },
+  "redisCache" : {
+    "defaultDuration": 3600,
+    "parseNestedRoutes": true,
+    "removePathFromCacheKey": true,
+    "env": "NODE_ENV"
+  }
 }
