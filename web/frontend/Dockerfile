@@ -2,7 +2,7 @@ FROM node:alpine
 
 WORKDIR /home/node
 
-COPY ./web/frontend .
+COPY . .
 
 RUN npm install && npm install pm2 -g && npm run build
 

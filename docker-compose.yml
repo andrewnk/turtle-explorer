@@ -1,121 +1,119 @@
 version: "3"
 
 services:
-  gather-turtles:
+  db-nodes-and-pools:
     build:
-      context: .
-      dockerfile: Dockerfile-go
-    container_name: gather-turtles
-    restart: always
-    networks:
-      - backend
-    depends_on:
-      - timescale
-    environment:
-      - DB_USER=go
-      - DB_NAME=trtl
-      - DB_PASSWORD=98765
-      - DB_HOST=timescale
-      - DB_PORT=5432
-      - DB_SSLMODE=disable
-
-  timescale:
-    build:
-      context: .
-      dockerfile: Dockerfile-timescale-db
+      context: ./db/nodes-and-pools
     restart: always
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123456
       - GO_PASSWORD=98765
       - WEB_PASSWORD=98765
-    container_name: timescale
+    container_name: db-nodes-and-pools
     volumes:
-      #- timescale:/var/lib/postgresql/data
+      #- db-nodes-and-pools:/var/lib/postgresql/data
       - /home/andrewnk/timescaleBackup:/var/lib/postgresql/data
-      #- /home/andrewnk/timescaleBackup:/backups
     networks:
-      - backend
+      - nodes-and-pools-backend
 
-  turtlecoind:
+  db-daemon-cache:
     build:
-      context: .
-      dockerfile: Dockerfile-turtlecoind
+      context: ./db/daemon-cache
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - TURTLECOINSERVICE_PASSWORD=98765
+      - WEB_PASSWORD=98765
+    container_name: db-daemon-cache
+    depends_on:
+      - daemon
+    volumes:
+      #- db-daemon-cache:/var/lib/postgresql/data
+      - /home/andrewnk/turtlecoinCacheDb:/var/lib/postgresql/data
+    networks:
+      - daemon-backend
+
+  daemon:
+    build:
+      context: ./daemon
     restart: always
     environment:
       - TURTLECOIN_PROGRAM=TurtleCoind
-    container_name: turtlecoind
+    container_name: daemon
+    volumes:
+      - /home/andrewnk/turtlecoinDocker:/home/turtlecoin/.TurtleCoin
     networks:
-      - backend
+      - daemon-backend
 
-  # turtlecoin-cache-db:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile-turtlecoin-cache-db
-  #   restart: always
-  #   environment:
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=123456
-  #     - TURTLECOINSERVICE_PASSWORD=98765
-  #     - WEB_PASSWORD=98765
-  #   container_name: turtlecoin-cache-db
-  #   depends_on:
-  #     - turtlecoind
-  #   volumes:
-  #     - turtlecoin-cache-db:/var/lib/postgresql/data
-  #   networks:
-  #     - backend
+  service-nodes-and-pools:
+    build:
+      context: ./service/nodes-and-pools
+    container_name: service-nodes-and-pools
+    restart: always
+    networks:
+      - nodes-and-pools-backend
+    depends_on:
+      - db-nodes-and-pools
+    environment:
+      - DB_USER=go
+      - DB_NAME=trtl
+      - DB_PASSWORD=98765
+      - DB_HOST=db-nodes-and-pools
+      - DB_PORT=5432
+      - DB_SSLMODE=disable
 
-  # turtlecoin-cache-service:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile-turtlecoin-service
-  #   restart: always
-  #   environment:
-  #     - DB_USER=turtlecoinservice
-  #     - DB_PASSWORD=98765
-  #     - DB_PORT=5432
-  #     - DB_HOST=turtlecoin-cache-db
-  #     - DB_NAME=turtlecoincache
-  #     - TURTLECOIN_PORT=11898
-  #     - TURTLECOIN_HOST=turtlecoind
-  #   container_name: turtlecoin-cache-service
-  #   depends_on: turtlecoin-cache-db
-  #   networks:
-  #     - backend
+  service-daemon-cache:
+    build:
+      context: ./service/daemon-cache
+    restart: always
+    environment:
+      - DB_USER=turtlecoinservice
+      - DB_PASSWORD=98765
+      - DB_PORT=5432
+      - DB_HOST=db-daemon-cache
+      - DB_NAME=turtlecoincache
+      - TURTLECOIN_PORT=11898
+      - TURTLECOIN_HOST=daemon
+    container_name: service-daemon-cache
+    depends_on: 
+      - db-daemon-cache
+    networks:
+      - daemon-backend
 
   web-backend:
     build:
-      context: .
-      dockerfile: Dockerfile-web-backend
+      context: ./web/backend
     restart: always
     container_name: web-backend
     environment:
       - DB_USER=web
       - DB_PASSWORD=98765
       - DB_PORT=5432
-      - DB_HOST=timescale
+      - DB_HOST=db-nodes-and-pools
       - DB_NAME=trtl
     depends_on:
-      - timescale
-      - gather-turtles
-      # - turtlecoin-cache-db
+      - db-nodes-and-pools
+      - service-nodes-and-pools
+      # - db-daemon-cache
     networks:
-      - backend
-      - frontend
+      - nodes-and-pools-backend
+      - daemon-backend
+      - web-backend
+      - web-frontend
 
   web-frontend:
     build:
-      context: .
-      dockerfile: Dockerfile-web-frontend
+      context: ./web/frontend
     restart: always
     container_name: web-frontend
     networks:
-      - frontend
+      - web-frontend
     depends_on:
-      - timescale
-      - gather-turtles
-      # - turtlecoin-cache-db
+      - db-nodes-and-pools
+      - service-nodes-and-pools
+      # - db-daemon-cache
       - web-backend
     ports:
       - 80:3000
@@ -127,20 +125,32 @@ services:
       - web-backend
     restart: always
     networks:
-      - backend
+      - web-backend
 
 networks:
-  backend:
+  nodes-and-pools-backend:
     driver: bridge
     ipam:
       driver: default
       config:
       - subnet: 172.20.0.0/16
 
-  frontend:
+  daemon-backend:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.21.0.0/16
+
+  web-frontend:
+    driver: bridge
+    ipam:
+      driver: default
+
+  web-backend:
     driver: bridge
     ipam:
       driver: default
 
 # volumes:
-#   timescale:
+#   db-nodes-and-pools:

@@ -7,5 +7,5 @@ ENV WEB_PASSWORD=${WEB_PASSWORD}
 
 RUN mkdir -p /tmp/conf
 
-COPY ./db/daemon/conf /tmp/conf
-COPY ./db/daemon/init.db.sh /docker-entrypoint-initdb.d
+COPY ./conf /tmp/conf
+COPY ./init.db.sh /docker-entrypoint-initdb.d

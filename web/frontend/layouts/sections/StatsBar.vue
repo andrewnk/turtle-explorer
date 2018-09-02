@@ -1,6 +1,6 @@
 <template>
     <section>
-        <b-collapse :open="true" class="columns is-centered is-fixed-bottom">
+        <b-collapse :open="true" class="is-centered">
             <table class="table">
                 <thead>
                     <tr>

@@ -9,7 +9,7 @@ ENV DB_NAME=${DB_NAME}
 ARG DB_PASSWORD=98765
 ENV DB_PASSWORD=${DB_PASSWORD}
 
-ARG DB_HOST=timescale
+ARG DB_HOST=db-nodes-and-pools
 ENV DB_HOST=${DB_HOST}
 
 ARG DB_PORT=5432
@@ -17,7 +17,7 @@ ENV DB_PORT=${DB_PORT}
 
 WORKDIR /home/node
 
-COPY ./web/backend .
+COPY . .
 COPY ./wait-for-postgres.sh .
 
 #create .env file
