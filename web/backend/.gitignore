@@ -116,3 +116,4 @@ data/
 .yardoc/
 .ash_history
 .config
+.pm2

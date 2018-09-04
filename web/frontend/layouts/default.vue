@@ -2,7 +2,6 @@
     <div id="app">
         <navigation/>
         <nuxt class="main"/>
-        <stats-bar/>
         <footer-section/>
     </div>
 </template>
@@ -10,15 +9,13 @@
 <script>
 import FooterSection from '~/layouts/sections/Footer'
 import Navigation from '~/layouts/sections/Navigation'
-import StatsBar from '~/layouts/sections/StatsBar'
 import socket from '../socket'
 import { mapActions } from 'vuex'
 
 export default {
     components: {
         Navigation,
-        FooterSection,
-        StatsBar
+        FooterSection
     },
     mounted() {
         socket.on('notifyNode', data => {

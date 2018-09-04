@@ -11,6 +11,7 @@
                 <span aria-hidden="true"></span>
             </a>
         </div>
+        <stats-bar/>
         <div id="navbarMenu" class="navbar-menu">
             <div class="navbar-end">
                 <nuxt-link class="navbar-item white" active-class="is-active" to="/" exact>Home</nuxt-link>
@@ -18,8 +19,17 @@
                 <nuxt-link class="navbar-item" active-class="is-active" to="pools">Pools</nuxt-link>
                 <nuxt-link class="navbar-item" active-class="is-active" to="blocks">Blocks</nuxt-link>
                 <nuxt-link class="navbar-item" active-class="is-active" to="transactions">Transactions</nuxt-link>
+                <nuxt-link class="navbar-item" active-class="is-active" to="poolstats">My Pool Stats</nuxt-link>
                 <nuxt-link class="navbar-item" active-class="is-active" to="help">Help</nuxt-link>
             </div>
         </div>
     </nav>
 </template>
+
+<script>
+import StatsBar from '~/layouts/sections/StatsBar'
+
+export default {
+    components: { StatsBar }
+}
+</script>

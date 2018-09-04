@@ -1,9 +1,14 @@
 version: "3"
 
 services:
-  gather-turtles:
+  service-nodes-and-pools:
     volumes:
-      - ./go:/go
+      - ./service/nodes-and-pools:/go
+    command: tail -f /dev/null
+
+  service-daemon-cache:
+    volumes:
+      - ./service/daemon-cache:/go
     command: tail -f /dev/null
 
   web-backend:

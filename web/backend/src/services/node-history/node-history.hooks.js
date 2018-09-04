@@ -1,9 +1,13 @@
-const sequelize = require('sequelize');
+const redisBefore = require('feathers-hooks-rediscache').redisBeforeHook
+const redisAfter = require('feathers-hooks-rediscache').redisAfterHook
+const cache = require('feathers-hooks-rediscache').hookCache
+const sequelize = require('sequelize')
 
 module.exports = {
   before: {
     all: [],
     find: [
+      redisBefore(),
       context => {
         let attribute = ''
         switch (context.params.query.attribute) {
@@ -57,7 +61,7 @@ module.exports = {
         return Promise.resolve(context)
       }
     ],
-    get: [],
+    get: [redisBefore()],
     create: [],
     update: [],
     patch: [],
@@ -67,6 +71,8 @@ module.exports = {
   after: {
     all: [],
     find: [
+      cache({duration: 3600 * 24 * 7}),
+      redisAfter(),
       context => {
         if(context.result) {
           const results = context.result
@@ -90,7 +96,7 @@ module.exports = {
         return context
       }
     ],
-    get: [],
+    get: [cache({duration: 3600 * 24 * 7}), redisAfter()],
     create: [],
     update: [],
     patch: [],
