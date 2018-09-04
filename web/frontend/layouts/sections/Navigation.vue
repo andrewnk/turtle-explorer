@@ -19,6 +19,7 @@
                 <nuxt-link class="navbar-item" active-class="is-active" to="pools">Pools</nuxt-link>
                 <nuxt-link class="navbar-item" active-class="is-active" to="blocks">Blocks</nuxt-link>
                 <nuxt-link class="navbar-item" active-class="is-active" to="transactions">Transactions</nuxt-link>
+                <nuxt-link class="navbar-item" active-class="is-active" to="poolstats">My Pool Stats</nuxt-link>
                 <nuxt-link class="navbar-item" active-class="is-active" to="help">Help</nuxt-link>
             </div>
         </div>

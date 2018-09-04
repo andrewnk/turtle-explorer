@@ -33,6 +33,9 @@
                     </div>
                 </a>
             </div>
+            <p>
+                Donate: TRTLv3McrGBNauWQCx6kVDV38RMG3RbjNcA2551KNDmtDpAzzvx254ocn5vQptQ8M2LLqLrtDBvXjLg51k9WNUddUGMfBtxcwRv
+            </p>
         </div>
     </footer>
 </template>
