@@ -69,13 +69,13 @@ services:
       context: ./service/daemon-cache
     restart: always
     environment:
-      - DB_USER=turtlecoinservice
+      - DB_USER=service
       - DB_PASSWORD=98765
       - DB_PORT=5432
       - DB_HOST=db-daemon-cache
-      - DB_NAME=turtlecoincache
-      - TURTLECOIN_PORT=11898
-      - TURTLECOIN_HOST=daemon
+      - DB_NAME=daemon_cache
+      - DAEMON_RPC_PORT=11898
+      - DAEMON_RPC_HOST=daemon
     container_name: service-daemon-cache
     depends_on: 
       - db-daemon-cache

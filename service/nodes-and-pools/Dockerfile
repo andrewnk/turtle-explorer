@@ -30,4 +30,4 @@ RUN apk add --no-cache git postgresql-client && \
     CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags="-s" -o service-nodes-and-pools && \
     chmod +x wait-for-postgres.sh
 
-CMD ./wait-for-postgres.sh ${DB_HOST} ${DB_PORT} ${DB_USER} ${DB_PASSWORD} ${DB_NAME} ./service-nodes-and-pools -db-user=${DB_USER} -db-name=${DB_NAME} -db-password=${DB_PASSWORD} -db-host=${DB_HOST} -db-port=${DB_PORT} -db-ssl-mode=${DB_SSLMODE}
+CMD ["./wait-for-postgres.sh", "${DB_HOST}", "${DB_PORT}", "${DB_USER}", "${DB_PASSWORD}", "${DB_NAME}", "./service-nodes-and-pools", "-db-user=${DB_USER}", "-db-name=${DB_NAME}", "-db-password=${DB_PASSWORD}", "-db-host=${DB_HOST}", "-db-port=${DB_PORT}", "-db-ssl-mode=${DB_SSLMODE}"]

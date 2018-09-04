@@ -13,6 +13,7 @@ import (
     _ "github.com/lib/pq"
     "github.com/robfig/cron"
     "github.com/tidwall/sjson"
+    "github.com/turtlecoin/turtlecoin-rpc-go/turtlecoind"
 )
 
 var (
@@ -24,6 +25,8 @@ var (
     dbHost string
     dbPort string
     dbSSLMode string
+    daemonHost string
+    daemonPort int
     db *sql.DB
 )
 
@@ -57,7 +60,24 @@ func main() {
     flag.StringVar(&dbHost, "db-host", "", "Database Host")
     flag.StringVar(&dbPort, "db-port", "", "Database Port")
     flag.StringVar(&dbSSLMode, "db-ssl-mode", "", "Database SSL Mode")
+    flag.StringVar(&daemonHost, "daemon-host", "", "Daemon Host")
+    flag.IntVar(&daemonPort, "daemon-port", 11898, "Daemon Port")
     flag.Parse()
+
+    // hash := turtlecoind.GetBlockHash(daemonHost, daemonPort, 600000)
+    // block := turtlecoind.GetBlock(daemonHost, daemonPort, "446d9bd3b8709a74f4a9ecaa0a3054bb0036e99e0682028bfa87f8b862691eb3")
+    tx := turtlecoind.GetTransaction(daemonHost, daemonPort, "ddb482de5f435864c7b194c110f56dc61da3c93bf21c4193889efa38b1ccf351")
+    fmt.Println(tx)
+
+    // get record from database
+    // if no records exist start from 1 else get most recent block
+    // get block hash by height
+    // then get block info
+    // then get transactions info
+    // insert into db
+    // rinse and repeat
+
+
 
     initDb()
     setNodes()
@@ -256,7 +276,6 @@ func queryApi(url string, action string) []byte {
     }
 
     r, err := http.NewRequest(action, url, nil)
-    r.Header.Add("User-Agent", "Turtle-Explorer/1.0")
     response, err := request.Do(r)
 
     if err != nil {

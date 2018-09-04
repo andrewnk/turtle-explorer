@@ -3,9 +3,9 @@ set -e
 
 psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
     CREATE USER web WITH PASSWORD '$WEB_PASSWORD';
-    CREATE USER turtlecoinservice WITH PASSWORD '$TURTLECOINSERVICE_PASSWORD';
-    CREATE database turtlecoincache;
-    \connect turtlecoincache;
+    CREATE USER service WITH PASSWORD '$SERVICE_PASSWORD';
+    CREATE database daemon_cache;
+    \connect daemon_cache;
 
     CREATE TABLE IF NOT EXISTS transactions (
         block LONGBLOB NOT NULL,
@@ -73,7 +73,7 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
     CREATE TRIGGER updated_blocks_trigger AFTER INSERT ON blocks
     FOR EACH ROW EXECUTE PROCEDURE notify_blocks();
 
-    GRANT SELECT, INSERT ON ALL TABLES IN SCHEMA public TO turtlecoinservice;
+    GRANT SELECT, INSERT ON ALL TABLES IN SCHEMA public TO service;
     GRANT SELECT ON ALL TABLES IN SCHEMA public TO web;
 EOSQL
 

@@ -25,6 +25,7 @@
     "feathers-vuex": "^1.4.8",
     "highcharts": "^6.1.1",
     "material-design-icons-iconfont": "^3.0.3",
+    "node-fetch": "^2.2.0",
     "node-sass": "^4.9.2",
     "nuxt": "^1.4.2",
     "sass-loader": "^7.1.0",
