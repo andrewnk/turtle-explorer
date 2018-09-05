@@ -26,7 +26,7 @@
                             {{ humanReadableHashrate(nodes.hashrate) }}
                         </td>
                         <td>
-                            {{ humanReadableHashrate(poolHashrate) }}
+                            {{ poolHashrate !== null ? humanReadableHashrate(poolHashrate) : ''}}
                         </td>
                         <td>
                             {{ poolMiners.toLocaleString() }}

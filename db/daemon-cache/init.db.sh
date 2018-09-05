@@ -10,14 +10,14 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
     CREATE TABLE IF NOT EXISTS transactions (
         block LONGBLOB NOT NULL,
         tx LONGBLOB NOT NULL,
-        txDetails LONGBLOB NOT NULL,
+        tx_details LONGBLOB NOT NULL,
         hash VARCHAR(255) NOT NULL,
-        paymentId VARCHAR(255),
+        payment_id VARCHAR(255),
         mixin BIGINT NOT NULL,
         size BIGINT NOT NULL,
         fee BIGINT,
         amount_out BIGINT,
-        blockHash VARCHAR(255) NOT NULL,
+        block_hash VARCHAR(255) NOT NULL,
         PRIMARY KEY(hash,paymentId,blockHash)
     );
 

@@ -14,7 +14,8 @@ module.exports = {
     { src: '~/plugins/buefy.js', ssr: true },
     { src: '~/plugins/vue2-highcharts.js', ssr: false },
     { src: '~/plugins/daterange-picker.js', ssr: false },
-    { src: '~/plugins/vue-form-wizard.js', ssr: false }
+    { src: '~/plugins/vue-form-wizard.js', ssr: false },
+    { src: '~/plugins/vue-json-excel.js', ssr: false }
   ],
   loading: { color: '#3B8070' },
   css: [

@@ -1,8 +1,20 @@
 <template>
     <section>
         <div class="field">
-            <div class="control" :class="isLoading ? is-loading : ''">
+            <div class="control" :class="isLoading ? 'is-loading' : ''">
                 <input class="input" v-model="wallet" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
+            </div>
+        </div>
+        <div class="field" v-show="selectedPools.length > 0">
+            <div class="buttons has-addons is-right">
+                <download-excel
+                    class="button"
+                    :data="formattedDataForExport"
+                    :fields="exportFields"
+                    name="poolstats.xls"
+                >
+                    Download
+                </download-excel>
             </div>
         </div>
         <b-table
@@ -12,7 +24,7 @@
             :checked-rows.sync="selectedPools"
             detailed
             checkable
-            v-show="poolStats.length > 0"
+            v-show="poolStats.length > 0 || isLoading"
         >
             <template slot-scope="props">
                 <b-table-column field="name" label="Name" sortable>
@@ -24,24 +36,24 @@
                     </a>
                 </b-table-column>
                 <b-table-column field="hashrate" label="Current Hashrate" sortable>
-                    {{ props.row.data.stats.hasOwnProperty('hashrate') ? humanReadableHashrate(props.row.data.stats.hashrate) : '' }}
+                    {{ props.row.data.stats.hasOwnProperty('hashrate') ? formatHashrate(props.row.data.stats.hashrate) : '' }}
                 </b-table-column>
-                <b-table-column field="hashrate_6h" label="6 Hour Hashrate" sortable>
-                    {{ props.row.data.stats.hasOwnProperty('hashrate_6h') ? humanReadableHashrate(props.row.data.stats.hashrate_6h) : '' }}
+                <b-table-column field="hashrate6h" label="6 Hour Hashrate" sortable>
+                    {{ props.row.data.stats.hasOwnProperty('hashrate_6h') ? formatHashrate(props.row.data.stats.hashrate_6h) : '' }}
                 </b-table-column>
-                <b-table-column field="hashrate_24h" label="24 Hour Hashrate" sortable>
-                    {{ props.row.data.stats.hasOwnProperty('hashrate_24h') ? humanReadableHashrate(props.row.data.stats.hashrate_24h) : '' }}
+                <b-table-column field="hashrate24h" label="24 Hour Hashrate" sortable>
+                    {{ props.row.data.stats.hasOwnProperty('hashrate_24h') ? formatHashrate(props.row.data.stats.hashrate_24h) : '' }}
                 </b-table-column>
-                <b-table-column field="payments" label="Total Payments" sortable>
-                    {{ props.row.data.payments.length * 2 }}
+                <b-table-column field="payments" label="Recent Payments" sortable>
+                    {{ props.row.data.payments.length }}
                 </b-table-column>
-                <b-table-column field="total" label="Total Paid" sortable>
+                <b-table-column field="totalPaid" label="Total Paid" sortable>
                     {{ (props.row.data.stats.paid / 100).toLocaleString() }}
                 </b-table-column>
-                <b-table-column field="total" label="Total Hashes" sortable>
+                <b-table-column field="totalHashes" label="Total Hashes" sortable>
                     {{ parseInt(props.row.data.stats.hashes).toLocaleString() }}
                 </b-table-column>
-                <b-table-column field="total" label="Balance" sortable>
+                <b-table-column field="balance" label="Balance" sortable>
                     {{ (props.row.data.stats.balance / 100).toLocaleString() }}
                 </b-table-column>
             </template>
@@ -68,7 +80,7 @@
 
 <script>
 import vueMixin from '~/mixins/vueMixin.js'
-import fetch from 'node-fetch'
+import fetchTimeout from 'fetch-timeout'
 
 export default {
     name: 'List',
@@ -82,60 +94,96 @@ export default {
     },
     data () {
         return {
+            exportFields: {
+                'Pool': 'name',
+                'Total Paid': {
+                    field: 'stats.paid',
+                    callback: (value) => {
+                        return (value / 100)
+                    }
+                },
+                'Total Hashes': 'stats.hashes',
+                'Balance' : {
+                    field: 'stats.balance',
+                    callback: (value) => {
+                        return (value / 100)
+                    }
+                },
+                'Payments': {
+                    field: 'payments',
+                }
+            },
             isLoading: false,
             poolStats: [],
             selectedPools: [],
             wallet: ''
         }
     },
-    mounted () {
-        this.selectedPools.push(this.pools[0])
-        this.$emit('updated-pool-selection', this.selectedPools.map(val => val.id))
+    computed: {
+        formattedDataForExport () {
+            return this.selectedPools.map(pool => {
+                return Object.assign({}, pool.pool, pool.data)
+            })
+        }
+    },
+    methods: {
+        formatHashrate (hashrate) {
+            if(/[a-z]/i.test(hashrate)) {
+                return hashrate
+            }
+
+            return this.humanReadableHashrate(hashrate)
+        }
     },
     watch: {
         wallet: function (newVal) {
-            if (newVal.length !== 99) {
-                this.poolStats = []
-            }
             this.poolStats = []
+            if (newVal.length !== 99)  return
+            this.isLoading = true
+
+            let promises = []
             this.pools.forEach(pool => {
-                fetch(pool.api + 'stats_address?longpoll=true&address=' + newVal, {
+                this.isLoading = true
+                promises.push(fetchTimeout(pool.api + 'stats_address?longpoll=true&address=' + newVal, {
                     method: 'get',
                     headers: { 'Content-Type': 'application/json' },
+                }, 9000)
+                .then(result => {
+                    if (result.status === 200) {
+                        return result.json()
+                    }
                 })
-                .then(res => {
-                    this.isLoading = true
-                    return res.json()
-                })
-                .catch(err => {})
                 .then(json => {
                     if (!json.hasOwnProperty('error') && json.hasOwnProperty('payments') && json.payments.length > 0) {
                         let mergedPayments = []
                         let payment = ''
 
                         //because of goofy ass pool api array structure
-                        for (var i = json.payments.length - 1; i >= 0; i--) {
+                        for (let i = 0; i < json.payments.length; i++) {
                             if(i % 2 === 0) {
                                 //add to payment string
                                 payment = json.payments[i]
                             } else {
-                                if(payment.length > 0) {
-                                    //add timestamp to payment string, push into array, and clear string
-                                    payment += ':' + json.payments[i]
-                                    mergedPayments.push(payment)
-                                    payment = ''
-                                }
+                                //add timestamp to payment string, push into array, and clear string
+                                payment += ':' + json.payments[i]
+                                mergedPayments.push(payment)
+                                payment = ''
                             }
                         }
                         json.payments = mergedPayments
-                        this.poolStats.push({
+                        return {
                             pool: pool,
                             data: json
-                        })
-                        this.isLoading = false
+                        }
                     }
                 })
-                .catch(err => {})
+                .catch(err => {}))
+            })
+
+            Promise.all(promises)
+            .then(results => {
+                this.poolStats = results.filter(result => typeof result === 'object')
+                this.isLoading = false
             })
         },
         selectedPools: {

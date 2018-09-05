@@ -15,10 +15,10 @@ export default {
             return Date.UTC(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate(),23,59,59,999)
         },
         humanReadableHashrate: (bytes, decimals) => {
-            if (bytes === 0) return '0 H/sec'
+            if (bytes === 0) return '0 H'
             let k = 1024
             let dm = decimals || 2
-            let sizes = ['H/sec', 'KH/sec', 'MH/sec', 'GH/sec', 'TH/sec', 'PH/sec', 'EH/sec', 'ZH/sec', 'YH/sec']
+            let sizes = ['H', 'KH', 'MH', 'GH', 'TH', 'PH', 'EH', 'ZH', 'YH']
             let i = Math.floor(Math.log(bytes) / Math.log(k))
             return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
         },

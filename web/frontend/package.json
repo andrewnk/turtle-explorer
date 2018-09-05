@@ -23,6 +23,7 @@
     "@feathersjs/socketio-client": "^1.1.0",
     "buefy": "^0.6.6",
     "feathers-vuex": "^1.4.8",
+    "fetch-timeout": "0.0.2",
     "highcharts": "^6.1.1",
     "material-design-icons-iconfont": "^3.0.3",
     "node-fetch": "^2.2.0",
@@ -34,6 +35,7 @@
     "vue": "^2.5.17",
     "vue-draggable-resizable": "^1.7.1",
     "vue-form-wizard": "^0.8.4",
+    "vue-json-excel": "^0.2.83",
     "vue-server-renderer": "^2.5.17",
     "vue2-highcharts": "^1.2.5"
   },
