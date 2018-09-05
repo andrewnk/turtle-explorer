@@ -46,7 +46,8 @@ const store = () => new Vuex.Store({
         id: null,
         name: '',
         port: '',
-        url: ''
+        url: '',
+        ssl: ''
       }
     }),
     service('node-data', {
@@ -89,7 +90,6 @@ const store = () => new Vuex.Store({
       }))
 
       const nodes = await dispatch('node/find')
-
       const nodesData = await Promise.all(nodes.map(async (node) => {
         const nodeData = await dispatch('node-data/find', {
             query: {
