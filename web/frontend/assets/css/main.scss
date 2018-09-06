@@ -91,3 +91,33 @@ th,
 a {
     color: #f5f1f2;
 }
+
+/* Stats Bar */
+#stats-container {
+    position: fixed;
+    top: 75px;
+    z-index: 1;
+}
+
+#stats-bar-table {
+    position: relative;
+    font-size: 0.8rem;
+}
+
+#toggle {
+    position: absolute;
+    top: 0;
+    right: -13px;
+    cursor: pointer;
+    background: #3c3c3c;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    color: #fefefe;
+}
+
+.slide-fade-enter-active {
+    transition: all .3s ease;
+}
+.slide-fade-leave-active {
+    transform: translateX(0%);
+}
