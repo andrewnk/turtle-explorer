@@ -1,5 +1,9 @@
 @import 'overrides';
 
+html, body {
+    min-height: 100%;
+}
+
 body, .select select, .button, .input, .taginput .taginput-container.is-focusable, .textarea, .select select, .file-cta, .file-name, .pagination-previous, .pagination-next, .pagination-link, .pagination-ellipsis {
     font-size: 0.9rem;
 }
