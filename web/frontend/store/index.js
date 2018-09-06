@@ -70,7 +70,6 @@ const store = () => new Vuex.Store({
   actions: {
     async nuxtServerInit({ commit, dispatch }) {
       const pools = await dispatch('pool/find')
-
       const poolsData = await Promise.all(pools.map(async (pool) => {
         const poolData = await dispatch('pool-data/find', {
             query: {

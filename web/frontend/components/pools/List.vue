@@ -12,17 +12,17 @@
                 subtitle=""
                 color="#00853D"
             >
-                <tab-content title="Wallet Address" icon="ti-user">
+                <tab-content title="Wallet Address" icon="fas fa-wallet">
                     <div class="field">
                         <div class="control">
                             <input class="input" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
                         </div>
                     </div>
                 </tab-content>
-                <tab-content title="Verify" icon="ti-settings">
+                <tab-content title="Verify" icon="fas fa-check">
                     Verify Pool
                 </tab-content>
-                <tab-content title="Generate" icon="ti-check">
+                <tab-content title="Generate" icon="fas fa-cogs">
                     Generated Config File
                 </tab-content>
                 <template slot="custom-buttons-left">

@@ -448,9 +448,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-    #datepicker >>> .input {
-        padding-left: 1em;
-    }
-</style>
