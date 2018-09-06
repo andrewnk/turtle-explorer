@@ -96,7 +96,7 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
     CREATE TRIGGER updated_pooldata_trigger AFTER INSERT ON pool_data
     FOR EACH ROW EXECUTE PROCEDURE notify_pool_data();
 
-    GRANT SELECT, INSERT ON ALL TABLES IN SCHEMA public TO go;
+    GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO go;
     GRANT USAGE, SELECT ON SEQUENCE node_id_seq TO go;
     GRANT USAGE, SELECT ON SEQUENCE pool_id_seq TO go;
     GRANT SELECT ON ALL TABLES IN SCHEMA public TO web;
