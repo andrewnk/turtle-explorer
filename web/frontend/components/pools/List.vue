@@ -45,12 +45,17 @@
         >
             <template slot-scope="props">
                 <b-table-column field="name" label="Name" sortable>
-                    <a
-                        :href="props.row.url"
-                        target="_blank"
-                    >
+                    <div v-if="props.row.trusted">
+                        <a
+                            :href="props.row.url"
+                            target="_trtl-mining-pool"
+                        >
+                            {{ props.row.name }}
+                        </a>
+                    </div>
+                    <div v-else>
                         {{ props.row.name }}
-                    </a>
+                    </div>
                 </b-table-column>
                 <b-table-column field="data.pool.miners" label="Miners" sortable numeric>
                     <transition name="slide-fade" mode="out-in">
@@ -66,7 +71,7 @@
                         <div
                             :key="props.row.data.config.minPaymentThreshold"
                         >
-                            {{ (props.row.data.config.minPaymentThreshold / props.row.data.config.denominationUnit).toLocaleString() }}
+                            {{ (props.row.data.config.minPaymentThreshold / 100).toLocaleString() }}
                         </div>
                     </transition>
                 </b-table-column>
