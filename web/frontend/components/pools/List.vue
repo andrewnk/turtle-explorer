@@ -134,49 +134,57 @@
                         </div>
                     </transition>
                 </b-table-column>
+                <b-table-column field="trusted" label="Trusted" sortable>
+                    {{ props.row.trusted }}
+                </b-table-column>
             </template>
             <template slot="detail" slot-scope="props">
-                <div
-                    class="columns is-multiline"
-                    v-if="showCell(['data', 'config', 'ports'], props.row)"
-                >
+                <div v-if="props.row.trusted">
                     <div
-                        class="column is-3 is-flex"
-                        v-for="(config, index) in props.row.data.config.ports"
-                        :key="index"
+                        class="columns is-multiline"
+                        v-if="showCell(['data', 'config', 'ports'], props.row)"
                     >
-                        <div class="card">
-                            <div class="card-header">
-                                <p class="card-header-title">
-                                    {{ config.desc }}
-                                </p>
-                            </div>
-                            <div class="card-content">
-                                <p>Address: {{ props.row.mining_address }}</p>
-                                <p>Port: {{ config.port }}</p>
-                                <p>Difficulty: {{ config.difficulty }}</p>
-                                <div class="field has-addons">
-                                    <div class="control">
-                                        <div class="select">
-                                            <select class="select">
-                                                <option>Xmr-Stak</option>
-                                                <option>XMRig</option>
-                                                <option>XMRigCC</option>
-                                                <option>CPUMiner</option>
-                                                <option>Claymore</option>
-                                                <option>YAM Miner</option>
-                                                <option>CCminer</option>
-                                                <option>XMRMiner</option>
-                                            </select>
+                        <div
+                            class="column is-3 is-flex"
+                            v-for="(config, index) in props.row.data.config.ports"
+                            :key="index"
+                        >
+                            <div class="card">
+                                <div class="card-header">
+                                    <p class="card-header-title">
+                                        {{ config.desc }}
+                                    </p>
+                                </div>
+                                <div class="card-content">
+                                    <p>Address: {{ props.row.mining_address }}</p>
+                                    <p>Port: {{ config.port }}</p>
+                                    <p>Difficulty: {{ config.difficulty }}</p>
+                                    <div class="field has-addons">
+                                        <div class="control">
+                                            <div class="select">
+                                                <select class="select">
+                                                    <option>Xmr-Stak</option>
+                                                    <option>XMRig</option>
+                                                    <option>XMRigCC</option>
+                                                    <option>CPUMiner</option>
+                                                    <option>Claymore</option>
+                                                    <option>YAM Miner</option>
+                                                    <option>CCminer</option>
+                                                    <option>XMRMiner</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="control">
-                                        <a class="button is-primary" @click="isCardModalActive=true">Generate</a>
+                                        <div class="control">
+                                            <a class="button is-primary" @click="isCardModalActive=true">Generate</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div v-else>
+                    This pool is untrusted; we will not supply mining configs for untrusted pools.
                 </div>
             </template>
         </b-table>

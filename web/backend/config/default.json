@@ -1,5 +1,5 @@
 {
-  "host": "web-backend",
+  "host": "http://web-backend",
   "port": 3030,
   "public": "../public/",
   "paginate": {

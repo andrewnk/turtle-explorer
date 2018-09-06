@@ -20,7 +20,8 @@ const store = () => new Vuex.Store({
         name: '',
         type: '',
         url: '',
-        mining_address: ''
+        mining_address: '',
+        trusted: ''
       }
     }),
     service('pool-data', {
