@@ -1,11 +1,21 @@
 @import 'overrides';
 
-html, body {
-    min-height: 100%;
+html {
+    height: 100%;
+}
+
+body, #__nuxt, #__layout, #app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 body, .select select, .button, .input, .taginput .taginput-container.is-focusable, .textarea, .select select, .file-cta, .file-name, .pagination-previous, .pagination-next, .pagination-link, .pagination-ellipsis {
     font-size: 0.9rem;
+}
+
+a {
+    color: #f5f1f2;
 }
 
 .navbar, .footer, #app {
@@ -17,12 +27,18 @@ body, .select select, .button, .input, .taginput .taginput-container.is-focusabl
 }
 
 .main {
-    padding: 75px 0;
+    padding: 75px 0 0 0;
 }
 
 .footer {
-    padding-bottom:1.5rem;
+    padding-bottom: 1.5rem;
+    padding-top: 0.5rem;
     border-top: 1px solid $primary;
+    margin: auto 0 0 0;
+}
+
+.section {
+    padding: 3rem 1.5rem 0 1.5rem;
 }
 
 .page-enter-active, .page-leave-active {
@@ -92,9 +108,7 @@ th,
     vertical-align: middle;
 }
 
-a {
-    color: #f5f1f2;
-}
+
 
 /* Stats Bar */
 #stats-container {
