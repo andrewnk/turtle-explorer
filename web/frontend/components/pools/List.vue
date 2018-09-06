@@ -71,7 +71,7 @@
                         <div
                             :key="props.row.data.config.minPaymentThreshold"
                         >
-                            {{ (props.row.data.config.minPaymentThreshold / 100).toLocaleString() }}
+                            {{ (props.row.data.config.minPaymentThreshold / props.row.data.config.denominationUnit).toLocaleString() }}
                         </div>
                     </transition>
                 </b-table-column>
