@@ -112,10 +112,7 @@ export default {
             return this.pools.map(pool => pool.data.pool.totalMinersPaid).reduce((acc, val) => acc.length > 0 ? acc : acc + val)
         },
         nodes () {
-            return this.getNodes.filter(value => value.hasOwnProperty('data'))
-                .reduce((acc, val) => {
-                    return acc.hasOwnProperty('data') && acc.data.start_time > val.data.start_time ? acc.data : val.data
-                })
+            return this.getNodes.filter(val => val.hasOwnProperty('data')).sort((a, b) => (a.date - b.date) || 0)[0].data
         },
         fontClass() {
             return this.show ? 'fa-angle-double-left' : 'fa-angle-double-right'
