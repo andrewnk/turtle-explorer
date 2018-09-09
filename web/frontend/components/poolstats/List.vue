@@ -1,8 +1,18 @@
 <template>
     <section>
-        <div class="field">
-            <div class="control" :class="isLoading ? 'is-loading' : ''">
+        <div class="field has-addons">
+            <div class="control width-100" :class="isLoading ? 'is-loading' : ''">
                 <input class="input" v-model="wallet" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
+            </div>
+            <div class="control">
+                <button class="button is-iprimary" @click="pollOnce">
+                    Poll Once
+                </button>
+            </div>
+            <div class="control">
+                <button class="button is-info" @click="pollInterval">
+                    Poll Every Minute
+                </button>
             </div>
         </div>
         <div class="field" v-show="selectedPools.length > 0">
@@ -79,7 +89,7 @@
 </template>
 
 <script>
-import vueMixin from '~/mixins/vueMixin.js'
+import vueMixin from '~/mixins/vueMixin'
 import fetchTimeout from 'fetch-timeout'
 
 export default {
@@ -114,10 +124,14 @@ export default {
                 }
             },
             isLoading: false,
+            interval: null,
             poolStats: [],
             selectedPools: [],
             wallet: ''
         }
+    },
+    beforeDestroy () {
+        clearInterval(this.interval);
     },
     computed: {
         formattedDataForExport () {
@@ -133,21 +147,25 @@ export default {
             }
 
             return this.humanReadableHashrate(hashrate)
-        }
-    },
-    watch: {
-        wallet: function (newVal) {
-            this.poolStats = []
-            if (newVal.length !== 99)  return
+        },
+        pollOnce () {
+            this.pollPools()
+        },
+        pollInterval () {
+            this.pollPools()
+            this.interval = setInterval(() => this.pollPools(), 60000)
+        },
+        pollPools () {
+            if (this.wallet.length !== 99)  return
             this.isLoading = true
 
             let promises = []
             this.pools.forEach(pool => {
                 this.isLoading = true
-                promises.push(fetchTimeout(pool.api + 'stats_address?longpoll=true&address=' + newVal, {
+                promises.push(fetchTimeout(pool.api + 'stats_address?longpoll=true&address=' + this.wallet, {
                     method: 'get',
                     headers: { 'Content-Type': 'application/json' },
-                }, 9000)
+                }, 10000)
                 .then(result => {
                     if (result.status === 200) {
                         return result.json()
@@ -182,29 +200,11 @@ export default {
 
             Promise.all(promises)
             .then(results => {
+                this.poolStats = []
                 this.poolStats = results.filter(result => typeof result === 'object')
                 this.isLoading = false
             })
-        },
-        selectedPools: {
-            handler: function(newVal, oldVal) {
-                if(newVal !== oldVal) {
-                    this.$emit('updated-pool-selection', newVal.map(val => val.id))
-                }
-            },
-            deep: true
         }
     }
 }
 </script>
-
-<style>
-.modal-close {
-    display: none;
-}
-
-.modal-background {
-    background: #3c3c3c;
-    opacity: 0.7;
-}
-</style>
