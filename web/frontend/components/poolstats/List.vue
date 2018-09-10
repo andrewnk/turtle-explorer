@@ -131,7 +131,7 @@ export default {
         }
     },
     beforeDestroy () {
-        clearInterval(this.interval);
+        clearInterval(this.interval)
     },
     computed: {
         formattedDataForExport () {
@@ -149,6 +149,7 @@ export default {
             return this.humanReadableHashrate(hashrate)
         },
         pollOnce () {
+            clearInterval(this.interval)
             this.pollPools()
         },
         pollInterval () {
