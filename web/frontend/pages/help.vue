@@ -1,5 +1,5 @@
 <template>
-    <section class="container">
+    <section class="container is-block">
         <div class="columns has-text-centered is-multiline">
             <div class="column">
                 <h1 class="is-size-1 has-text-light">

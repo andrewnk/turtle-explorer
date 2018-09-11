@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container is-block">
         <section class="section">
             <div class="columns is-centered">
                 <list

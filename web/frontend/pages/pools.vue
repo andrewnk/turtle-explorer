@@ -1,43 +1,45 @@
 <template>
-    <div class="container">
-        <section class="section">
-            <div class="columns is-centered">
+    <section class="container is-block">
+        <div class="columns is-centered">
+            <div class="column is-6">
                 <no-ssr>
                     <pie
                         :series="hashrates"
                         titleText="Current Pool Hashrates"
                         seriesName="Hashrate"
-                        class="column is-6"
                     />
                 </no-ssr>
+            </div>
+            <div class="column is-6">
                 <no-ssr>
                     <pie
                         :series="miners"
                         titleText="Total Pool Miners"
                         seriesName="Miners"
-                        class="column is-6"
                     />
                 </no-ssr>
             </div>
-            <div class="columns is-centered">
+        </div>
+        <div class="columns is-centered">
+            <div class="column">
                 <no-ssr>
                     <pool-history
                         :pools="pools"
                         :selectedPools="selectedPools"
-                        class="column"
                     />
                 </no-ssr>
             </div>
-            <div class="columns is-centered">
+        </div>
+        <div class="columns is-centered">
+            <div class="column">
                 <list
                     :pools="pools"
                     :isLoading="!pools.length > 0"
                     @updated-pool-selection="updatePoolSelection($event)"
-                    class="column"
                 />
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
 </template>
 
 <script>
