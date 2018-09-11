@@ -9,15 +9,12 @@ $family-sans-serif: 'Roboto', sans-serif;
 // Bulma colors
 $primary: #00853D;
 $primary-invert: findColorInvert($primary);
-$colors: ('primary': ($primary, $primary-invert));
 
 $secondary: #212721;
 $secondary-invert: findColorInvert($secondary);
-$colors: ('secondary': ($secondary, $secondary-invert));
 
 $background: #1f1f1f;
 $background-invert: findColorInvert($background);
-$colors: ('background': ($background, $background-invert));
 
 // Import Bulma and Buefy styles
 @import '~bulma';

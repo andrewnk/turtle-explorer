@@ -1,40 +1,9 @@
 <template>
     <section>
-        <b-modal
-            :active.sync="isCardModalActive"
-            :width="640"
-            :canCancel="true"
-        >
-            <form-wizard
-                @on-complete="onComplete" 
-                shape="circle"
-                title="Generate Mining Config"
-                subtitle=""
-                color="#00853D"
-            >
-                <tab-content title="Wallet Address" icon="fas fa-wallet">
-                    <div class="field">
-                        <div class="control">
-                            <input class="input" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
-                        </div>
-                    </div>
-                </tab-content>
-                <tab-content title="Verify" icon="fas fa-check">
-                    Verify Pool
-                </tab-content>
-                <tab-content title="Generate" icon="fas fa-cogs">
-                    Generated Config File
-                </tab-content>
-                <template slot="custom-buttons-left">
-                    <wizard-button
-                        @click.native="cancel"
-                        class="has-background-danger has-text-white"
-                    >
-                        Cancel
-                    </wizard-button>
-                </template>
-            </form-wizard>
-        </b-modal>
+        <generate-config
+            :config="minerConfig"
+            :is-active="isConfigGeneratorActive"
+        />
         <b-table
             :data="pools"
             :is-row-checkable="(row) => true"
@@ -139,8 +108,8 @@
                         </div>
                     </transition>
                 </b-table-column>
-                <b-table-column field="trusted" label="Trusted" sortable>
-                    {{ props.row.trusted }}
+                <b-table-column field="trusted" label="Trusted" sortable class="has-text-centered">
+                    <i class="fas" :class="props.row.trusted ? 'fa-check' : 'fa-ban'"></i>
                 </b-table-column>
             </template>
             <template slot="detail" slot-scope="props">
@@ -160,27 +129,13 @@
                                         {{ config.desc }}
                                     </p>
                                 </div>
-                                <div class="card-content">
+                                <div class="card-content p-t-5">
                                     <p>Address: {{ props.row.mining_address }}</p>
                                     <p>Port: {{ config.port }}</p>
                                     <p>Difficulty: {{ config.difficulty }}</p>
-                                    <div class="field has-addons">
+                                    <div class="field p-t-15">
                                         <div class="control">
-                                            <div class="select">
-                                                <select class="select">
-                                                    <option>Xmr-Stak</option>
-                                                    <option>XMRig</option>
-                                                    <option>XMRigCC</option>
-                                                    <option>CPUMiner</option>
-                                                    <option>Claymore</option>
-                                                    <option>YAM Miner</option>
-                                                    <option>CCminer</option>
-                                                    <option>XMRMiner</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="control">
-                                            <a class="button is-primary" @click="isCardModalActive=true">Generate</a>
+                                            <button class="button is-primary" @click="loadConfig(props.row, config)">Generate</button>
                                         </div>
                                     </div>
                                 </div>
@@ -197,11 +152,14 @@
 </template>
 
 <script>
-import vueMixin from '~/mixins/vueMixin.js'
+import GenerateConfig from '~/components/pools/GenerateConfig'
+import vueMixin from '~/mixins/vueMixin'
+
 
 export default {
     name: 'List',
     mixins: [vueMixin],
+    components: { GenerateConfig },
     props: {
         pools: {
             type: Array,
@@ -215,7 +173,11 @@ export default {
     },
     data () {
         return {
-            isCardModalActive: false,
+            isConfigGeneratorActive: false,
+            minerConfig: {
+                pool: {},
+                config: {},
+            },
             selectedPools: []
         }
     },
@@ -224,8 +186,10 @@ export default {
         this.$emit('updated-pool-selection', this.selectedPools.map(val => val.id))
     },
     methods: {
-        onComplete () {
-            
+        loadConfig (pool, config) {
+            this.isConfigGeneratorActive = true
+            this.minerConfig.pool = pool
+            this.minerConfig.config = config
         }
     },
     watch: {

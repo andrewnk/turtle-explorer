@@ -117,41 +117,49 @@ export default {
                 {
                     id: 1,
                     label: 'Difficulty',
+                    location: 'data.network.difficulty',
                     name: 'difficulty'
                 },
                 {
                     id: 2,
                     label: 'Hashrate',
+                    location: 'data.pool.hashrate',
                     name: 'hashrate'
                 },
                 {
                     id: 3,
                     label: 'Height',
+                    location: 'data.network.height',
                     name: 'height'
                 },
                 {
                     id: 4,
                     label: 'Miners',
+                    location: 'data.pool.miners',
                     name: 'miners'
                 },
                 {
                     id: 5,
                     label: 'Total Blocks',
+                    location: 'data.pool.totalBlocks',
                     name: 'totalBlocks'
                 },
                 {
                     id: 6,
                     label: 'Total Miners Paid',
+                    location: 'data.pool.totalMinersPaid',
                     name: 'totalMinersPaid'
                 },
                 {
                     id: 7,
                     label: 'Total Payments',
+                    location: 'data.pool.totalPayments',
                     name: 'totalPayments'
                 },
                 {
                     id: 8,
                     label: 'Time',
+                    location: 'data.network.timestamp',
                     name: 'timestamp'
                 }
             ],
@@ -388,12 +396,19 @@ export default {
                 this.$refs.historical.chart.hideLoading()
             })
         },
+        addPoint(points, axisId) {
+            const series = this.$refs.historical.chart.get(axisId)
+            series.addPoint(points)
+        },
         clearData () {
             this.$store.commit('pool-history/clearAll')
             this.$refs.historical.removeSeries()
         },
         getAttributeLabel (id) {
             return this.attributes.filter(val => val.id === id)[0].label
+        },
+        getAttributeLocation (id) {
+            return this.attributes.filter(val => val.id === id)[0].location
         },
         getAttributeName (id) {
             return this.attributes.filter(val => val.id === id)[0].name
@@ -449,13 +464,16 @@ export default {
                 this.addSeries(this.getAttributeLabel(this.selectedAttribute), 'primary')
             },
             deep: true
-        }
+        },
+        // pools: {
+        //     handler: function(newVal) {
+        //         if(!this.live) return
+
+        //         const selectedPoolData = newVal.filter(pool => this.selectedPools.includes(pool.id))
+        //         const x = this.getAttributeLocation(this.selectedAttribute).split('.').reduce((acc, part) => acc && acc[part], selectedPoolData[0])
+        //     },
+        //     deep: true
+        // }
     }
 }
 </script>
-
-<style scoped>
-    #datepicker >>> .input {
-        padding-left: 1em;
-    }
-</style>

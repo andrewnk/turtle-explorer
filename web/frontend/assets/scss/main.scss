@@ -108,7 +108,9 @@ th,
     vertical-align: middle;
 }
 
-
+.vue-highcharts, .highcharts-container, .highcharts-root {
+    min-width: 100%;
+}
 
 /* Stats Bar */
 #stats-container {
@@ -138,4 +140,39 @@ th,
 }
 .slide-fade-leave-active {
     transform: translateX(0%);
+}
+
+.wrap-word {
+    word-wrap: break-word;
+}
+
+$spaceamounts: (5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100);
+$sides: (top, bottom, left, right);
+
+@each $space in $spaceamounts {
+    @each $side in $sides {
+        .m-#{str-slice($side, 0, 1)}-#{$space} {
+            margin-#{$side}: #{$space}px !important;
+        }
+
+        .p-#{str-slice($side, 0, 1)}-#{$space} {
+            padding-#{$side}: #{$space}px !important;
+        }
+    }
+}
+
+@each $space in $spaceamounts {
+    .width-#{$space} {
+        width: #{$space}% !important;
+    }
+}
+
+@each $space in $spaceamounts {
+    .width-#{$space}-px {
+        width: #{$space}px !important;
+    }
+}
+
+[v-cloak] {
+    display: none;
 }

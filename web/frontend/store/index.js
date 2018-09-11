@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import feathersVuex from 'feathers-vuex'
-import feathersClient from '../feathers-client'
-import socket from '../socket'
+import feathersClient from '../config/feathers'
+import socket from '../config/socket'
 
 const { service, FeathersVuex } = feathersVuex(feathersClient, { idField: 'id' })
 

@@ -1,90 +1,108 @@
 <template>
-    <section>
-        <div class="field has-addons">
-            <div class="control width-100" :class="isLoading ? 'is-loading' : ''">
-                <input class="input" v-model="wallet" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
-            </div>
-            <div class="control">
-                <button class="button is-iprimary" @click="pollOnce">
-                    Poll Once
-                </button>
-            </div>
-            <div class="control">
-                <button class="button is-info" @click="pollInterval">
-                    Poll Every Minute
-                </button>
-            </div>
-        </div>
-        <div class="field" v-show="selectedPools.length > 0">
-            <div class="buttons has-addons is-right">
-                <download-excel
-                    class="button"
-                    :data="formattedDataForExport"
-                    :fields="exportFields"
-                    name="poolstats.xls"
-                >
-                    Download
-                </download-excel>
+    <section class="container">
+        <div class="columns">
+            <div class="column is-12">
+                <div class="field has-addons">
+                    <div class="control width-100" :class="isLoading ? 'is-loading' : ''">
+                        <input class="input" v-model="wallet" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
+                    </div>
+                    <div class="control">
+                        <button class="button is-primary" :disabled="!isWalletValid" @click="pollOnce">
+                            Poll Once
+                        </button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-info" :disabled="!isWalletValid" @click="pollInterval">
+                            Poll Every Minute
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <b-table
-            :data="poolStats"
-            :is-row-checkable="(row) => true"
-            :loading="isLoading"
-            :checked-rows.sync="selectedPools"
-            detailed
-            checkable
-            v-show="poolStats.length > 0 || isLoading"
-        >
-            <template slot-scope="props">
-                <b-table-column field="name" label="Name" sortable>
-                    <a
-                        :href="props.row.pool.url"
-                        target="_blank"
-                    >
-                        {{ props.row.pool.name }}
-                    </a>
-                </b-table-column>
-                <b-table-column field="hashrate" label="Current Hashrate" sortable>
-                    {{ props.row.data.stats.hasOwnProperty('hashrate') ? formatHashrate(props.row.data.stats.hashrate) : '' }}
-                </b-table-column>
-                <b-table-column field="hashrate6h" label="6 Hour Hashrate" sortable>
-                    {{ props.row.data.stats.hasOwnProperty('hashrate_6h') ? formatHashrate(props.row.data.stats.hashrate_6h) : '' }}
-                </b-table-column>
-                <b-table-column field="hashrate24h" label="24 Hour Hashrate" sortable>
-                    {{ props.row.data.stats.hasOwnProperty('hashrate_24h') ? formatHashrate(props.row.data.stats.hashrate_24h) : '' }}
-                </b-table-column>
-                <b-table-column field="payments" label="Recent Payments" sortable>
-                    {{ props.row.data.payments.length }}
-                </b-table-column>
-                <b-table-column field="totalPaid" label="Total Paid" sortable>
-                    {{ (props.row.data.stats.paid / 100).toLocaleString() }}
-                </b-table-column>
-                <b-table-column field="totalHashes" label="Total Hashes" sortable>
-                    {{ parseInt(props.row.data.stats.hashes).toLocaleString() }}
-                </b-table-column>
-                <b-table-column field="balance" label="Balance" sortable>
-                    {{ (props.row.data.stats.balance / 100).toLocaleString() }}
-                </b-table-column>
-            </template>
-            <template slot="detail" slot-scope="props">
+        <div class="columns has-text-centered" v-if="failed">
+            <div class="column is-12">
+                Sorry we were not able to find any results
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column is-12">
+                <div class="field" v-show="selectedPools.length > 0">
+                    <div class="buttons has-addons is-right">
+                        <download-excel
+                            class="button"
+                            :data="formattedDataForExport"
+                            :fields="exportFields"
+                            name="poolstats.xls"
+                        >
+                            Download
+                        </download-excel>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column is-12">
                 <b-table
-                    :data="props.row.data.payments"
+                    :data="poolStats"
+                    :is-row-checkable="(row) => true"
+                    :loading="isLoading"
+                    :checked-rows.sync="selectedPools"
+                    :class="poolStats.length < 1 ? 'transparent' : ''"
+                    detailed
+                    checkable
+                    v-show="poolStats.length > 0 || isLoading"
                 >
                     <template slot-scope="props">
-                        <b-table-column field="time" label="Time" sortable>
-                            {{ getFromattedDate(props.row.split(':')[4] * 1000) }}
+                        <b-table-column field="name" label="Name" sortable>
+                            <a
+                                :href="props.row.pool.url"
+                                target="_blank"
+                            >
+                                {{ props.row.pool.name }}
+                            </a>
                         </b-table-column>
-                        <b-table-column field="hash" label="Hash" sortable>
-                            {{ props.row.split(':')[0] }}
+                        <b-table-column field="hashrate" label="Current Hashrate" sortable>
+                            {{ props.row.data.stats.hasOwnProperty('hashrate') ? formatHashrate(props.row.data.stats.hashrate) : '' }}
                         </b-table-column>
-                        <b-table-column field="amount" label="Amount" sortable>
-                            {{ (props.row.split(':')[1] / 100).toLocaleString() }}
+                        <b-table-column field="hashrate6h" label="6 Hour Hashrate" sortable>
+                            {{ props.row.data.stats.hasOwnProperty('hashrate_6h') ? formatHashrate(props.row.data.stats.hashrate_6h) : '' }}
+                        </b-table-column>
+                        <b-table-column field="hashrate24h" label="24 Hour Hashrate" sortable>
+                            {{ props.row.data.stats.hasOwnProperty('hashrate_24h') ? formatHashrate(props.row.data.stats.hashrate_24h) : '' }}
+                        </b-table-column>
+                        <b-table-column field="payments" label="Recent Payments" sortable>
+                            {{ props.row.data.payments.length }}
+                        </b-table-column>
+                        <b-table-column field="totalPaid" label="Total Paid" sortable>
+                            {{ (props.row.data.stats.paid / 100).toLocaleString() }}
+                        </b-table-column>
+                        <b-table-column field="totalHashes" label="Total Hashes" sortable>
+                            {{ parseInt(props.row.data.stats.hashes).toLocaleString() }}
+                        </b-table-column>
+                        <b-table-column field="balance" label="Balance" sortable>
+                            {{ (props.row.data.stats.balance / 100).toLocaleString() }}
                         </b-table-column>
                     </template>
+                    <template slot="detail" slot-scope="props">
+                        <b-table
+                            :data="props.row.data.payments"
+                        >
+                            <template slot-scope="props">
+                                <b-table-column field="time" label="Time" sortable>
+                                    {{ getFromattedDate(props.row.split(':')[4] * 1000) }}
+                                </b-table-column>
+                                <b-table-column field="hash" label="Hash" sortable>
+                                    {{ props.row.split(':')[0] }}
+                                </b-table-column>
+                                <b-table-column field="amount" label="Amount" sortable>
+                                    {{ (props.row.split(':')[1] / 100).toLocaleString() }}
+                                </b-table-column>
+                            </template>
+                        </b-table>
+                    </template>
                 </b-table>
-            </template>
-        </b-table>
+            </div>
+        </div>
     </section>
 </template>
 
@@ -123,6 +141,7 @@ export default {
                     field: 'payments',
                 }
             },
+            failed: false,
             isLoading: false,
             interval: null,
             poolStats: [],
@@ -138,6 +157,9 @@ export default {
             return this.selectedPools.map(pool => {
                 return Object.assign({}, pool.pool, pool.data)
             })
+        },
+        isWalletValid () {
+            return this.wallet.length === 99
         }
     },
     methods: {
@@ -157,8 +179,9 @@ export default {
             this.interval = setInterval(() => this.pollPools(), 60000)
         },
         pollPools () {
-            if (this.wallet.length !== 99)  return
+            if (!this.isWalletValid)  return
             this.isLoading = true
+            this.failed = false
 
             let promises = []
             this.pools.forEach(pool => {
@@ -203,9 +226,16 @@ export default {
             .then(results => {
                 this.poolStats = []
                 this.poolStats = results.filter(result => typeof result === 'object')
+                this.failed = this.poolStats.length < 1 ? true : false
                 this.isLoading = false
             })
         }
     }
 }
 </script>
+
+<style>
+    .transparent table {
+        background: transparent !important;
+    }
+</style>

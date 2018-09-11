@@ -18,7 +18,7 @@ module.exports = {
     }
   },
   css: [
-    { src: '~/assets/css/main.scss', lang: 'scss' },
+    { src: '~/assets/scss/main.scss', lang: 'scss' },
     { src: '@fortawesome/fontawesome-free/scss/solid.scss', lang: 'scss' },
     { src: '@fortawesome/fontawesome-free/scss/fontawesome.scss', lang: 'scss' }
   ],
@@ -44,9 +44,10 @@ module.exports = {
   },
   loading: { color: '#3B8070' },
   plugins: [
-    { src: '~/plugins/buefy.js', ssr: true },
+    { src: '~/plugins/buefy.js', ssr: false },
     { src: '~/plugins/vue2-highcharts.js', ssr: false },
     { src: '~/plugins/daterange-picker.js', ssr: false },
+    { src: '~/plugins/vue-clipboard.js', ssr: false },
     { src: '~/plugins/vue-form-wizard.js', ssr: false },
     { src: '~/plugins/vue-json-excel.js', ssr: false }
   ]
