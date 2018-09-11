@@ -1,4 +1,4 @@
-FROM timescale/timescaledb:0.9.2-pg10
+FROM postgres:latest
 
 ARG SERVICE_PASSWORD=98765
 ENV SERVICE_PASSWORD=${SERVICE_PASSWORD}

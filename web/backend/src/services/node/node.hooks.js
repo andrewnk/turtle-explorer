@@ -11,8 +11,8 @@ module.exports = {
 
   after: {
     all: [],
-    find: [cache({duration: 3600 * 24 * 7}), redisAfter()],
-    get: [cache({duration: 3600 * 24 * 7}), redisAfter()]
+    find: [cache({duration: 3600 * 24}), redisAfter()],
+    get: [cache({duration: 3600 * 24}), redisAfter()]
   },
 
   error: {
