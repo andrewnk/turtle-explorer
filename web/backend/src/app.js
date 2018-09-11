@@ -26,17 +26,13 @@ const app = express(feathers());
 // Load app configuration
 app.configure(configuration());
 app.configure(config);
-// Enable CORS, security, compression, favicon and body parsing
+// Enable CORS, security, compression, and body parsing
 app.use(cors());
 app.use(helmet());
 app.use(compress());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.configure(express.rest());
 app.use(express.errorHandler());
-app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
-// Host the public folder
-app.use('/', express.static(app.get('public')));
 
 // Set up Plugins and providers
 app.configure(socketio(io => {
@@ -60,23 +56,18 @@ app.configure(socketio(io => {
         pubsubClient.on('nodeData', channelPayload => {
             socket.emit('notifyNodeData', channelPayload)
         });
-    })
+    });
 }));
 
 app.configure(sequelize);
 app.configure(pgpubsub);
 
-// Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
-// Set up our services (see `services/index.js`)
 app.configure(services);
-// Set up event channels (see channels.js)
 app.configure(channels);
 
-app.configure(redisClient)
-// app.use('/cache', routes(app))
+app.configure(redisClient);
 
-// Configure a middleware for 404s and the error handler
 app.use(express.notFound());
 app.use(express.errorHandler({ logger }));
 

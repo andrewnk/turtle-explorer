@@ -1,194 +1,135 @@
 <template>
     <section>
-        <b-modal
-            :active.sync="isCardModalActive"
-            :width="640"
-            :canCancel="true"
-        >
-            <form-wizard
-                @on-complete="onComplete" 
-                shape="circle"
-                title="Generate Mining Config"
-                subtitle=""
-                color="#00853D"
+        <no-ssr>
+            <generate-config
+                :config="minerConfig"
+                :is-active="isConfigGeneratorActive"
+            />
+        </no-ssr>
+        <no-ssr>
+            <b-table
+                :data="pools"
+                :is-row-checkable="(row) => true"
+                :loading="isLoading"
+                :checked-rows.sync="selectedPools"
+                detailed
+                checkable
             >
-                <tab-content title="Wallet Address" icon="ti-user">
-                    <div class="field">
-                        <div class="control">
-                            <input class="input" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
+                <template slot-scope="props">
+                    <b-table-column field="name" label="Name" sortable>
+                        <div v-if="props.row.trusted">
+                            <a
+                                :href="props.row.url"
+                                target="_trtl-mining-pool"
+                            >
+                                {{ props.row.name }}
+                            </a>
                         </div>
-                    </div>
-                </tab-content>
-                <tab-content title="Verify" icon="ti-settings">
-                    Verify Pool
-                </tab-content>
-                <tab-content title="Generate" icon="ti-check">
-                    Generated Config File
-                </tab-content>
-                <template slot="custom-buttons-left">
-                    <wizard-button
-                        @click.native="cancel"
-                        class="has-background-danger has-text-white"
-                    >
-                        Cancel
-                    </wizard-button>
-                </template>
-            </form-wizard>
-        </b-modal>
-        <b-table
-            :data="pools"
-            :is-row-checkable="(row) => true"
-            :loading="isLoading"
-            :checked-rows.sync="selectedPools"
-            detailed
-            checkable
-        >
-            <template slot-scope="props">
-                <b-table-column field="name" label="Name" sortable>
-                    <a
-                        :href="props.row.url"
-                        target="_blank"
-                    >
-                        {{ props.row.name }}
-                    </a>
-                </b-table-column>
-                <b-table-column field="data.pool.miners" label="Miners" sortable numeric>
-                    <transition name="slide-fade" mode="out-in">
-                        <div
-                            :key="props.row.data.pool.miners"
-                        >
+                        <div v-else>
+                            {{ props.row.name }}
+                        </div>
+                    </b-table-column>
+                    <b-table-column field="data.pool.miners" label="Miners" sortable numeric>
+                        <div :key="props.row.data.pool.miners">
                             {{ props.row.data.pool.miners.toLocaleString() }}
                         </div>
-                    </transition>
-                </b-table-column>
-                <b-table-column field="data.config.minPaymentThreshold" label="Min. Payout" sortable numeric>
-                    <transition name="slide-fade" mode="out-in">
-                        <div
-                            :key="props.row.data.config.minPaymentThreshold"
-                        >
+                    </b-table-column>
+                    <b-table-column field="data.config.minPaymentThreshold" label="Min. Payout" sortable numeric>
+                        <div :key="props.row.data.config.minPaymentThreshold">
                             {{ (props.row.data.config.minPaymentThreshold / props.row.data.config.denominationUnit).toLocaleString() }}
                         </div>
-                    </transition>
-                </b-table-column>
-                <b-table-column field="data.config.fee" label="Fee" sortable numeric>
-                    <transition name="slide-fade" mode="out-in">
-                        <div
-                            :key="props.row.data.config.fee"
-                        >
+                    </b-table-column>
+                    <b-table-column field="data.config.fee" label="Fee" sortable numeric>
+                        <div :key="props.row.data.config.fee">
                             {{ twoDecimals(props.row.data.config.fee).toLocaleString() + '%' }}
                         </div>
-                    </transition>
-                </b-table-column>
-                <b-table-column field="data.pool.totalPayments" label="Total Payments" sortable numeric>
-                    <transition name="slide-fade" mode="out-in">
-                        <div
-                            :key="props.row.data.pool.totalPayments"
-                        >
+                    </b-table-column>
+                    <b-table-column field="data.pool.totalPayments" label="Total Payments" sortable numeric>
+                        <div :key="props.row.data.pool.totalPayments">
                             {{ props.row.data.pool.totalPayments.toLocaleString() }}
                         </div>
-                    </transition>
-                </b-table-column>
-                <b-table-column field="data.pool.totalMinersPaid" label="Miners Paid" sortable numeric>
-                    <transition name="slide-fade" mode="out-in">
-                        <div
-                            :key="props.row.data.pool.totalBlocks"
-                        >
+                    </b-table-column>
+                    <b-table-column field="data.pool.totalMinersPaid" label="Miners Paid" sortable numeric>
+                        <div :key="props.row.data.pool.totalBlocks">
                             {{ props.row.data.pool.totalMinersPaid.toLocaleString() }}
                         </div>
-                    </transition>
-                </b-table-column>
-                <b-table-column field="data.pool.totalBlocks" label="Total Blocks" sortable numeric>
-                    <transition name="slide-fade" mode="out-in">
-                        <div
-                            :key="props.row.data.pool.totalBlocks"
-                        >
+                    </b-table-column>
+                    <b-table-column field="data.pool.totalBlocks" label="Total Blocks" sortable numeric>
+                        <div :key="props.row.data.pool.totalBlocks">
                             {{ props.row.data.pool.totalBlocks.toLocaleString() }}
                         </div>
-                    </transition>
-                </b-table-column>
-                <b-table-column field="data.pool.hashrate" label="Hashrate" sortable numeric>
-                    <transition name="slide-fade" mode="out-in">
-                        <div
-                            :key="props.row.data.pool.hashrate"
-                        >
+                    </b-table-column>
+                    <b-table-column field="data.pool.hashrate" label="Hashrate" sortable numeric>
+                        <div :key="props.row.data.pool.hashrate">
                             {{ humanReadableHashrate(props.row.data.pool.hashrate, 2) }}
                         </div>
-                    </transition>
-                </b-table-column>
-                <b-table-column field="data.network.height" label="Height" sortable numeric>
-                    <transition name="slide-fade" mode="out-in">
-                        <div
-                            :key="props.row.data.network.height"
-                        >
+                    </b-table-column>
+                    <b-table-column field="data.network.height" label="Height" sortable numeric>
+                        <div :key="props.row.data.network.height">
                             {{ props.row.data.network.height.toLocaleString() }}
                         </div>
-                    </transition>
-                </b-table-column>
-                <b-table-column field="data.pool.lastBlockFound" label="Last Block Found" sortable>
-                    <transition name="slide-fade" mode="out-in">
+                    </b-table-column>
+                    <b-table-column field="data.pool.lastBlockFound" label="Last Block Found" sortable>
                         <div
                             class="has-text-right"
                             :key="props.row.data.pool.lastBlockFound"
                         >
                             {{ getFromattedDate(props.row.data.pool.lastBlockFound) }}
                         </div>
-                    </transition>
-                </b-table-column>
-            </template>
-            <template slot="detail" slot-scope="props">
-                <div
-                    class="columns is-multiline"
-                    v-if="showCell(['data', 'config', 'ports'], props.row)"
-                >
-                    <div
-                        class="column is-3 is-flex"
-                        v-for="(config, index) in props.row.data.config.ports"
-                        :key="index"
-                    >
-                        <div class="card">
-                            <div class="card-header">
-                                <p class="card-header-title">
-                                    {{ config.desc }}
-                                </p>
-                            </div>
-                            <div class="card-content">
-                                <p>Address: {{ props.row.mining_address }}</p>
-                                <p>Port: {{ config.port }}</p>
-                                <p>Difficulty: {{ config.difficulty }}</p>
-                                <div class="field has-addons">
-                                    <div class="control">
-                                        <div class="select">
-                                            <select class="select">
-                                                <option>Xmr-Stak</option>
-                                                <option>XMRig</option>
-                                                <option>XMRigCC</option>
-                                                <option>CPUMiner</option>
-                                                <option>Claymore</option>
-                                                <option>YAM Miner</option>
-                                                <option>CCminer</option>
-                                                <option>XMRMiner</option>
-                                            </select>
-                                        </div>
+                    </b-table-column>
+                    <b-table-column field="trusted" label="Trusted" sortable class="has-text-centered">
+                        <i class="fas" :class="props.row.trusted ? 'fa-check' : 'fa-ban'"></i>
+                    </b-table-column>
+                </template>
+                <template slot="detail" slot-scope="props">
+                    <div v-if="props.row.trusted">
+                        <div
+                            class="columns is-multiline"
+                            v-if="showCell(['data', 'config', 'ports'], props.row)"
+                        >
+                            <div
+                                class="column is-3 is-flex"
+                                v-for="(config, index) in props.row.data.config.ports"
+                                :key="index"
+                            >
+                                <div class="card">
+                                    <div class="card-header">
+                                        <p class="card-header-title">
+                                            {{ config.desc }}
+                                        </p>
                                     </div>
-                                    <div class="control">
-                                        <a class="button is-primary" @click="isCardModalActive=true">Generate</a>
+                                    <div class="card-content p-t-5">
+                                        <p>Address: {{ props.row.mining_address }}</p>
+                                        <p>Port: {{ config.port }}</p>
+                                        <p>Difficulty: {{ config.difficulty }}</p>
+                                        <div class="field p-t-15">
+                                            <div class="control">
+                                                <button class="button is-primary" @click="loadConfig(props.row, config)">Generate</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </template>
-        </b-table>
+                    <div v-else>
+                        This pool is untrusted; we will not supply mining configs for untrusted pools.
+                    </div>
+                </template>
+            </b-table>
+        </no-ssr>
     </section>
 </template>
 
 <script>
-import vueMixin from '~/mixins/vueMixin.js'
+import GenerateConfig from '~/components/pools/GenerateConfig'
+import vueMixin from '~/mixins/vueMixin'
+
 
 export default {
     name: 'List',
     mixins: [vueMixin],
+    components: { GenerateConfig },
     props: {
         pools: {
             type: Array,
@@ -202,7 +143,11 @@ export default {
     },
     data () {
         return {
-            isCardModalActive: false,
+            isConfigGeneratorActive: false,
+            minerConfig: {
+                pool: {},
+                config: {},
+            },
             selectedPools: []
         }
     },
@@ -211,8 +156,10 @@ export default {
         this.$emit('updated-pool-selection', this.selectedPools.map(val => val.id))
     },
     methods: {
-        onComplete () {
-            
+        loadConfig (pool, config) {
+            this.isConfigGeneratorActive = true
+            this.minerConfig.pool = pool
+            this.minerConfig.config = config
         }
     },
     watch: {

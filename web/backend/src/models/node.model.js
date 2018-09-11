@@ -12,6 +12,9 @@ module.exports = function (app) {
     },
     port: {
       type: DataTypes.STRING,
+    },
+    ssl: {
+      type: DataTypes.BOOLEAN,
     }
   }, {
     timestamps: false,

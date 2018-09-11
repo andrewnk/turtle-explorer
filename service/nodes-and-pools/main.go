@@ -222,17 +222,29 @@ func setPools() {
         err := db.QueryRow("SELECT name FROM pool WHERE name = $1 LIMIT 1", pools.Pools[i].Name).Scan(&name)
 
         if err == sql.ErrNoRows {
-            stmt, err := db.Prepare("INSERT INTO pool(name, url, api, type, mining_address) VALUES ($1, $2, $3, $4, $5)")
+            //insert
+            stmt, err := db.Prepare("INSERT INTO pool(name, url, api, type, mining_address, trusted) VALUES ($1, $2, $3, $4, $5, TRUE)")
             if err != nil {
                 log.Println("There was an error preparing to insert the pool: ", err)
             }
 
             _, err = stmt.Exec(pools.Pools[i].Name, pools.Pools[i].Url, pools.Pools[i].Api, pools.Pools[i].Type, pools.Pools[i].MiningAddress)
             if err != nil {
-                log.Println("There was an error inserting the pool into the database: ", err)
+                log.Println("There was an error inserting the pool: ", err)
             }
             stmt.Close()
-        }
+        } else {
+            //update
+            stmt, err := db.Prepare("UPDATE pool SET url = $2, api = $3, type = $4, mining_address = $5 WHERE name = $1")
+            if err != nil {
+                log.Println("There was an error preparing to update the pool: ", err)
+            }
+            _, err = stmt.Exec(pools.Pools[i].Name, pools.Pools[i].Url, pools.Pools[i].Api, pools.Pools[i].Type, pools.Pools[i].MiningAddress)
+            if err != nil {
+                log.Println("There was an error updating the pool: ", err)
+            }
+            stmt.Close()
+            }
     }
 }
 

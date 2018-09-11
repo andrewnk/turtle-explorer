@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import feathersVuex from 'feathers-vuex'
-import feathersClient from '../feathers-client'
-import socket from '../socket'
+import feathersClient from '../config/feathers'
+import socket from '../config/socket'
 
 const { service, FeathersVuex } = feathersVuex(feathersClient, { idField: 'id' })
 
@@ -20,7 +20,8 @@ const store = () => new Vuex.Store({
         name: '',
         type: '',
         url: '',
-        mining_address: ''
+        mining_address: '',
+        trusted: ''
       }
     }),
     service('pool-data', {
@@ -46,7 +47,8 @@ const store = () => new Vuex.Store({
         id: null,
         name: '',
         port: '',
-        url: ''
+        url: '',
+        ssl: ''
       }
     }),
     service('node-data', {
@@ -69,7 +71,6 @@ const store = () => new Vuex.Store({
   actions: {
     async nuxtServerInit({ commit, dispatch }) {
       const pools = await dispatch('pool/find')
-
       const poolsData = await Promise.all(pools.map(async (pool) => {
         const poolData = await dispatch('pool-data/find', {
             query: {
@@ -89,7 +90,6 @@ const store = () => new Vuex.Store({
       }))
 
       const nodes = await dispatch('node/find')
-
       const nodesData = await Promise.all(nodes.map(async (node) => {
         const nodeData = await dispatch('node-data/find', {
             query: {

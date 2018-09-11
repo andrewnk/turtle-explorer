@@ -11,7 +11,6 @@
                 <span aria-hidden="true"></span>
             </a>
         </div>
-        <stats-bar/>
         <div id="navbarMenu" class="navbar-menu">
             <div class="navbar-end">
                 <nuxt-link class="navbar-item white" active-class="is-active" to="/" exact>Home</nuxt-link>
@@ -25,11 +24,3 @@
         </div>
     </nav>
 </template>
-
-<script>
-import StatsBar from '~/layouts/sections/StatsBar'
-
-export default {
-    components: { StatsBar }
-}
-</script>

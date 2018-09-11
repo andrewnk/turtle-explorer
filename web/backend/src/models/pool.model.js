@@ -22,6 +22,9 @@ module.exports = function (app) {
     },
     mining_address: {
       type: DataTypes.STRING
+    },
+    trusted: {
+      type: DataTypes.BOOLEAN
     }
 
   }, {

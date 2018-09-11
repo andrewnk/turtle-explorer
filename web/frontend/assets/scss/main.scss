@@ -1,0 +1,168 @@
+@import 'overrides';
+
+html {
+    height: 100%;
+}
+
+body, #__nuxt, #__layout, #app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+body, .select select, .button, .input, .taginput .taginput-container.is-focusable, .textarea, .select select, .file-cta, .file-name, .pagination-previous, .pagination-next, .pagination-link, .pagination-ellipsis {
+    font-size: 0.9rem;
+}
+
+a {
+    color: #f5f1f2;
+}
+
+a.navbar-item.is-active:not(:hover), .navbar-link.is-active:not(:hover), a.navbar-item:hover, a.navbar-item.is-active, .navbar-link:hover, .navbar-link.is-active {
+    background: $primary;
+}
+
+.navbar, .footer, #app {
+    background-color: $background;
+}
+
+.navbar {
+    border-bottom: 1px solid $primary;
+}
+
+.main {
+    padding: 75px 0 0 0;
+}
+
+.footer {
+    padding-bottom: 1.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid $primary;
+    margin: auto 0 0 0;
+}
+
+.page-enter-active, .page-leave-active {
+    transition: opacity .1s;
+}
+
+.page-enter, .page-leave-to {
+    opacity: 0;
+}
+
+.modal-background {
+    background: transparent;
+}
+
+.vue-form-wizard {
+    background: #fff;
+    border: 1px solid $primary;
+}
+
+th,
+.table,
+.b-table .table tr.detail,
+.card,
+.card-header-title {
+    color: #fefefe !important;
+    background: #3c3c3c;
+}
+
+.b-table .table tr.detail {
+    box-shadow: none;
+}
+
+.card,
+.card-header-title {
+    background: #1f1f1f;
+}
+
+.navbar-item,
+.navbar-link,
+.navbar-item:hover,
+.navbar-link:hover {
+    color: #fefefe !important;
+}
+
+.table td, .table th {
+    border: 1px solid #4e6e7d;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-width: 0 0 1px;
+    padding: 0.25em 0.75em;
+    vertical-align: middle;
+}
+
+.vue-highcharts, .highcharts-container, .highcharts-root {
+    min-width: 100%;
+}
+
+/* Stats Bar */
+#stats-container {
+    position: fixed;
+    top: 75px;
+    z-index: 1;
+}
+
+#stats-bar-table {
+    position: relative;
+    font-size: 0.8rem;
+}
+
+#toggle {
+    position: absolute;
+    top: 0;
+    right: -13px;
+    cursor: pointer;
+    background: #3c3c3c;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    color: #fefefe;
+}
+
+.slide-fade-enter-active {
+    transition: all .3s ease;
+}
+.slide-fade-leave-active {
+    transform: translateX(0%);
+}
+
+.wrap-word {
+    word-wrap: break-word;
+}
+
+$spaceamounts: (5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100);
+$sides: (top, bottom, left, right);
+
+@each $space in $spaceamounts {
+    @each $side in $sides {
+        .m-#{str-slice($side, 0, 1)}-#{$space} {
+            margin-#{$side}: #{$space}px !important;
+        }
+
+        .p-#{str-slice($side, 0, 1)}-#{$space} {
+            padding-#{$side}: #{$space}px !important;
+        }
+    }
+}
+
+@each $space in $spaceamounts {
+    .width-#{$space} {
+        width: #{$space}% !important;
+    }
+}
+
+@each $space in $spaceamounts {
+    .width-#{$space}-px {
+        width: #{$space}px !important;
+    }
+}
+
+[v-cloak] {
+    display: none;
+}
+
+.has-text-white {
+    color: #fefefe !important;
+}

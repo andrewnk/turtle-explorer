@@ -1,27 +1,27 @@
 <template>
-    <div class="container">
-        <section class="section">
-            <div class="columns is-centered">
+    <section class="container is-block">
+        <div class="columns is-centered">
+            <div class="column">
                 <no-ssr>
                     <node-history
                         :nodes="nodes"
                         :selectedNodes="selectedNodes"
-                        class="column"
                     />
                 </no-ssr>
             </div>
-            <div class="columns is-centered">
+        </div>
+        <div class="columns is-centered">
+            <div class="column">
                 <no-ssr>
                     <list
                         :nodes="nodes"
                         :isLoading="!nodes.length > 0"
                         @updated-node-selection="updateNodeSelection($event)"
-                        class="column"
                     />
                 </no-ssr>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
 </template>
 
 <script>
