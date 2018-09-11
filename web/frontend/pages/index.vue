@@ -11,38 +11,56 @@
             </div>
         </div>
         <div class="columns is-multiline has-text-white">
-            <div class="column is-4">
-                <h2 class="is-size-4">Nodes</h2>
+            <div class="column p-t-25 p-b-25 is-4">
+                <nuxt-link to="nodes">
+                    <i class="fas fa-users is-size-1"></i>
+                    <h2 class="is-size-4">Nodes</h2>
+                </nuxt-link>
                 <p>
                     View real-time and historical node data from public nodes
                 </p>
             </div>
-            <div class="column is-4">
-                <h2 class="is-size-4">Pools</h2>
+            <div class="column p-t-25 p-b-25 is-4">
+                <nuxt-link to="pools">
+                    <i class="fas fa-people-carry is-size-1"></i>
+                    <h2 class="is-size-4">Pools</h2>
+                </nuxt-link>
                 <p>
                     View real-time and historical pool data and generate mining configs
                 </p>
             </div>
-            <div class="column is-4">
-                <h2 class="is-size-4">My Pool Stats</h2>
+            <div class="column p-t-25 p-b-25 is-4">
+                <nuxt-link to="poolstats">
+                    <i class="fas fa-server is-size-1"></i>
+                    <h2 class="is-size-4">My Pool Stats</h2>
+                </nuxt-link>
                 <p>
                   Get data from pools you've mined in or watch your pool mining stats in real-time
                 </p>
             </div>
-            <div class="column is-4">
-                <h2 class="is-size-4">Blocks</h2>
+            <div class="column p-t-25 p-b-25 is-4">
+                <nuxt-link to="blocks">
+                    <i class="fas fa-cubes is-size-1"></i>
+                    <h2 class="is-size-4">Blocks</h2>
+                </nuxt-link>
                 <p>
                   Soon&trade;
                 </p>
             </div>
-            <div class="column is-4">
-                <h2 class="is-size-4">Transactions</h2>
+            <div class="column p-t-25 p-b-25 is-4">
+                <nuxt-link to="transactions">
+                    <i class="fas fa-coins is-size-1"></i>
+                    <h2 class="is-size-4">Transactions</h2>
+                </nuxt-link>
                 <p>
                   Soon&trade;
                 </p>
             </div>
-            <div class="column is-4">
-                <h2 class="is-size-4">Help</h2>
+            <div class="column p-t-25 p-b-25 is-4">
+                <nuxt-link to="help">
+                    <i class="fas fa-info-circle is-size-1"></i>
+                    <h2 class="is-size-4">Help</h2>
+                </nuxt-link>
                 <p>
                   Soon&trade;
                 </p>
@@ -50,33 +68,3 @@
         </div>
     </section>
 </template>
-
-<style>
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #eee;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #eee;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>
