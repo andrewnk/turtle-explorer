@@ -33,6 +33,4 @@ RUN apk add --no-cache postgresql-client && \
 
 EXPOSE 3030
 
-USER node
-
-CMD ./wait-for-postgres.sh ${DB_HOST} ${DB_PORT} ${DB_USER} ${DB_PASSWORD} ${DB_NAME} pm2-runtime start ecosystem.config.js
+CMD ./wait-for-postgres.sh ${DB_HOST} ${DB_PORT} ${DB_USER} ${DB_PASSWORD} ${DB_NAME} pm2-runtime start config/ecosystem.config.js
