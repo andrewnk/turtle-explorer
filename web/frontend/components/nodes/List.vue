@@ -42,7 +42,7 @@
                     {{ props.row.data.version ? props.row.data.version : '' }}
                 </b-table-column>
                 <b-table-column field="status" label="Status" sortable>
-                    {{ props.row.data.status ? props.row.data.status : 'Unkown' }}
+                    {{ props.row.data.status ? props.row.data.status : 'Unknown' }}
                 </b-table-column>
             </template>
         </b-table>
