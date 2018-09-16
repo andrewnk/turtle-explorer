@@ -1,7 +1,13 @@
+const { iff } = require('feathers-hooks-common')
 const redisBefore = require('feathers-hooks-rediscache').redisBeforeHook
 const redisAfter = require('feathers-hooks-rediscache').redisAfterHook
 const cache = require('feathers-hooks-rediscache').hookCache
 const sequelize = require('sequelize')
+const toCache = context => {
+  let start = new Date().setHours(0,0,0,0)
+  let end = new Date().setHours(23,59,59,999)
+  return (context.params.query.time.$gte !== start && context.params.query.time.$lte !== end) || context.params.query.time.$lte !== end
+}
 
 module.exports = {
   before: {
@@ -78,8 +84,10 @@ module.exports = {
   after: {
     all: [],
     find: [
-      cache({duration: 3600 * 24 * 7}),
-      redisAfter(),
+      iff(toCache,
+        cache({duration: 3600 * 24 * 7}),
+        redisAfter()
+      ),
       context => {
         if(context.result) {
           const results = context.result
