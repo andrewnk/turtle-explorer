@@ -23,11 +23,12 @@ module.exports = {
     { src: '@fortawesome/fontawesome-free/scss/fontawesome.scss', lang: 'scss' }
   ],
   modules: [
-    'nuxt-fontawesome'
-    '@nuxtjs/google-analytics', {
-      id: 'UA-125865065-1'
-    }
+    'nuxt-fontawesome',
+    '@nuxtjs/google-analytics'
   ],
+  'google-analytics': {
+    id: 'UA-125865065-1'
+  },
   fontawesome: {
     imports: [
         {
