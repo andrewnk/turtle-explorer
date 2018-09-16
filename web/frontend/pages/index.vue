@@ -57,9 +57,9 @@
                 </p>
             </div>
             <div class="column p-t-25 p-b-25 is-4">
-                <nuxt-link to="help">
+                <nuxt-link to="resources">
                     <i class="fas fa-info-circle is-size-1"></i>
-                    <h2 class="is-size-4">Help</h2>
+                    <h2 class="is-size-4">Resources</h2>
                 </nuxt-link>
                 <p>
                   Soon&trade;
