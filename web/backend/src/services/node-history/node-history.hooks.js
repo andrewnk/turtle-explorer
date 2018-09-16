@@ -6,7 +6,7 @@ const sequelize = require('sequelize')
 const toCache = context => {
   let start = new Date().setHours(0,0,0,0)
   let end = new Date().setHours(23,59,59,999)
-  return (context.params.query.time.$gte !== start && context.params.query.time.$lte !== end) || context.params.query.time.$lte !== end
+  return (context.params.query.time.$gte !== start && context.params.query.time.$lte !== end) || context.params.query.time.$lte !== end  || context.params.query.time.$lte > end
 }
 
 module.exports = {
