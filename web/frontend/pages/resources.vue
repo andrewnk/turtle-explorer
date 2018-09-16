@@ -3,7 +3,7 @@
         <div class="columns has-text-centered is-multiline">
             <div class="column">
                 <h1 class="is-size-1 has-text-light">
-                    Help
+                    Resources
                   </h1>
             </div>
             <div class="column is-12">

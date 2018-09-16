@@ -3,7 +3,7 @@
         <div class="navbar-brand">
             <nuxt-link class="navbar-item" to="/">
                 <img src="~/static/turtlecoin_symbol_white.png" alt="Turtle Explorer">
-                TURTLECOIN
+                TURTLECOIN EXPLORER
             </nuxt-link>
             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
                 <span aria-hidden="true"></span>
@@ -19,7 +19,7 @@
                 <nuxt-link class="navbar-item" active-class="is-active" to="blocks">Blocks</nuxt-link>
                 <nuxt-link class="navbar-item" active-class="is-active" to="transactions">Transactions</nuxt-link>
                 <nuxt-link class="navbar-item" active-class="is-active" to="poolstats">My Pool Stats</nuxt-link>
-                <nuxt-link class="navbar-item" active-class="is-active" to="help">Help</nuxt-link>
+                <nuxt-link class="navbar-item" active-class="is-active" to="resources">Resources</nuxt-link>
             </div>
         </div>
     </nav>

@@ -1,5 +1,5 @@
 <template>
-    <section class="container">
+    <section>
         <div class="columns">
             <div class="column is-12">
                 <div class="field has-addons">
