@@ -2,38 +2,32 @@
     <section class="container is-block">
         <div class="columns is-centered">
             <div class="column is-6">
-                <no-ssr>
-                    <pie
-                        :series="hashrates"
-                        titleText="Current Pool Hashrates"
-                        seriesName="Hashrate"
-                    />
-                </no-ssr>
+                <pie
+                    :series="hashrates"
+                    titleText="Current Pool Hashrates"
+                    seriesName="Hashrate"
+                />
             </div>
             <div class="column is-6">
-                <no-ssr>
-                    <pie
-                        :series="miners"
-                        titleText="Total Pool Miners"
-                        seriesName="Miners"
-                    />
-                </no-ssr>
+                <pie
+                    :series="miners"
+                    titleText="Total Pool Miners"
+                    seriesName="Miners"
+                />
             </div>
         </div>
         <div class="columns is-centered">
             <div class="column">
-                <no-ssr>
-                    <pool-history
-                        :pools="pools"
-                        :selectedPools="selectedPools"
-                    />
-                </no-ssr>
+                <pool-history
+                    :pools="pools"
+                    :selectedPools="selectedPools"
+                />
             </div>
         </div>
         <div class="columns is-centered">
             <div class="column">
                 <list
-                    :pools="pools"
+                    :pools="getPools.filter(pool => pool.hasOwnProperty('data') && pool.data.pool)"
                     :isLoading="!pools.length > 0"
                     @updated-pool-selection="updatePoolSelection($event)"
                 />
@@ -52,18 +46,16 @@ export default {
     components: { Pie, PoolHistory, List },
     data () {
         return {
-            selectedPools: []
+            selectedPools: [],
         }
     },
     computed: {
         ...mapGetters('pool', { getPools: 'list' }),
         pools () {
-            return this.getPools.filter(value => value.hasOwnProperty('data'))
+            return this.getPools.filter(pool => pool.hasOwnProperty('data') && pool.data.pool)
         },
         miners () {
-            return this.pools
-                .filter(pool => pool.data !== null && pool.data.pool !== null)
-                .map(pool => {
+            return this.pools.map(pool => {
                 return {
                     name: pool.name,
                     y: pool.data.pool.miners
@@ -71,14 +63,12 @@ export default {
             })
         },
         hashrates () {
-            return this.pools
-                .filter(pool => pool.data !== null && pool.data.pool !== null)
-                .map(pool => {
-                    return {
-                        name: pool.name,
-                        y: pool.data.pool.hashrate
-                    }
-                })
+            return this.pools.map(pool => {
+                return {
+                    name: pool.name,
+                    y: pool.data.pool.hashrate
+                }
+            })
         }
     },
     methods: {

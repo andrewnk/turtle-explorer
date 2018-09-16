@@ -50,5 +50,8 @@ module.exports = {
     { src: '~/plugins/vue-clipboard.js', ssr: false },
     { src: '~/plugins/vue-form-wizard.js', ssr: false },
     { src: '~/plugins/vue-json-excel.js', ssr: false }
-  ]
+  ],
+  render: {
+    ssr: false
+  }
 }

@@ -97,6 +97,8 @@ services:
       - db-nodes-and-pools
       - service-nodes-and-pools
       # - db-daemon-cache
+    ports:
+      - 3030:3030
     networks:
       - nodes-and-pools-backend
       - daemon-backend
