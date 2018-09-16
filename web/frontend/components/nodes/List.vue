@@ -5,7 +5,6 @@
             :is-row-checkable="(row) => true"
             :loading="isLoading"
             :checked-rows.sync="selectedNodes"
-            detailed
             checkable
         >
             <template slot-scope="props">
