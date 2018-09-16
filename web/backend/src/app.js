@@ -1,7 +1,6 @@
 const path = require('path');
 const favicon = require('serve-favicon');
 const compress = require('compression');
-const cors = require('cors');
 const helmet = require('helmet');
 const logger = require('winston');
 
@@ -27,7 +26,6 @@ const app = express(feathers());
 app.configure(configuration());
 app.configure(config);
 // Enable CORS, security, compression, and body parsing
-app.use(cors());
 app.use(helmet());
 app.use(compress());
 app.use(express.json());

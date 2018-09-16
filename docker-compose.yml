@@ -13,7 +13,7 @@ services:
     container_name: db-nodes-and-pools
     volumes:
       #- db-nodes-and-pools:/var/lib/postgresql/data
-      - /home/andrewnk/timescaleBackup:/var/lib/postgresql/data
+      - /home/andrewnk/nodes-and-pools:/var/lib/postgresql/data
     networks:
       - nodes-and-pools-backend
 
@@ -31,7 +31,7 @@ services:
       - daemon
     volumes:
       #- db-daemon-cache:/var/lib/postgresql/data
-      - /home/andrewnk/turtlecoinCacheDb:/var/lib/postgresql/data
+      - /home/andrewnk/daemon-db:/var/lib/postgresql/data
     networks:
       - daemon-backend
 
@@ -43,7 +43,7 @@ services:
       - TURTLECOIN_PROGRAM=TurtleCoind
     container_name: daemon
     volumes:
-      - /home/andrewnk/turtlecoinDocker:/home/turtlecoin/.TurtleCoin
+      - /home/andrewnk/daemon:/home/turtlecoin/.TurtleCoin
     networks:
       - daemon-backend
 
@@ -98,7 +98,7 @@ services:
       - service-nodes-and-pools
       # - db-daemon-cache
     ports:
-      - 3030:3030
+      - 8080:3030
     networks:
       - nodes-and-pools-backend
       - daemon-backend
