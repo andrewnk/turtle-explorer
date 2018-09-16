@@ -2,23 +2,19 @@
     <section class="container is-block">
         <div class="columns is-centered">
             <div class="column">
-                <no-ssr>
-                    <node-history
-                        :nodes="nodes"
-                        :selectedNodes="selectedNodes"
-                    />
-                </no-ssr>
+                <node-history
+                    :nodes="nodes"
+                    :selectedNodes="selectedNodes"
+                />
             </div>
         </div>
         <div class="columns is-centered">
             <div class="column">
-                <no-ssr>
-                    <list
-                        :nodes="nodes"
-                        :isLoading="!nodes.length > 0"
-                        @updated-node-selection="updateNodeSelection($event)"
-                    />
-                </no-ssr>
+                <list
+                    :nodes="nodes"
+                    :isLoading="!nodes.length > 0"
+                    @updated-node-selection="updateNodeSelection($event)"
+                />
             </div>
         </div>
     </section>

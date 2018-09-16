@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section v-if="series">
         <vue-highcharts
             :options="options"
             :highcharts="highcharts"

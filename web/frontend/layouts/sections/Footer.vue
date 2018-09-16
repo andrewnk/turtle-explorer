@@ -44,7 +44,7 @@
                     </div>
                 </a>
             </div>
-            <div class="p-t-20">
+            <div class="p-t-20 wrap-word">
                 Donate: TRTLuz2tDXUDHSAPzB1bZnQU9qyGnN5cX6htZZzjxPJ3Qr9u5hrQjsQBi7j7d75SAgDygkR1adQBhZHdQrFeWoaMXqWwytS37xT
             </div>
         </div>

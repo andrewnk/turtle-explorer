@@ -1,5 +1,5 @@
 <template>
-    <section id="stats-container">
+    <section id="stats-container" v-if="isLoaded">
         <transition name="slide-fade">
             <table class="table" key="table" id="stats-bar-table" v-show="show">
                 <tbody>
@@ -99,6 +99,12 @@ import { mapGetters } from 'vuex'
 export default {
     name: 'StatsBar',
     mixins: [vueMixin],
+    props: {
+        isLoaded: {
+            type: Boolean,
+            default: true
+        }
+    },
     data () {
         return {
             show: true
@@ -126,7 +132,7 @@ export default {
             return this.pools.map(pool => pool.data.pool.totalMinersPaid).reduce((acc, val) => acc.length > 0 ? acc : acc + val)
         },
         nodes () {
-            return this.getNodes.filter(val => val.hasOwnProperty('data')).sort((a, b) => (a.date - b.date) || 0)[0].data
+            return this.getNodes.filter(val => val.hasOwnProperty('data')).sort((a, b) => (a.data.start_time - b.data.start_time) || 0)[0].data
         },
         fontClass() {
             return this.show ? 'fa-angle-double-left' : 'fa-angle-double-right'

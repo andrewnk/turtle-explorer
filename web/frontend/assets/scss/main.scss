@@ -174,3 +174,7 @@ $sides: (top, bottom, left, right);
 .has-text-white {
     color: #fefefe !important;
 }
+
+.wrap-word {
+    word-wrap: break-word;
+}
