@@ -11,11 +11,11 @@ Vue.use(FeathersVuex)
 const store = () => new Vuex.Store({
   plugins: [
     service('pool', {
-      debug: true,
       idField: 'id',
       instanceDefaults: {
         id: null,
         api: '',
+        data: '',
         name: '',
         type: '',
         url: '',
@@ -24,7 +24,6 @@ const store = () => new Vuex.Store({
       }
     }),
     service('pool-data', {
-      debug: true,
       idField: 'time',
       instanceDefaults: {
         pool_id: null,
@@ -33,7 +32,6 @@ const store = () => new Vuex.Store({
       }
     }),
     service('pool-history', {
-      debug: true,
       idField: 'pool_id',
       instanceDefaults: {
         pool_id: null,
@@ -44,6 +42,7 @@ const store = () => new Vuex.Store({
       idField: 'id',
       instanceDefaults: {
         id: null,
+        data: '',
         name: '',
         port: '',
         url: '',
@@ -59,7 +58,6 @@ const store = () => new Vuex.Store({
       }
     }),
     service('node-history', {
-      debug: true,
       idField: 'node_id',
       instanceDefaults: {
         node_id: null,
