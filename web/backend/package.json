@@ -34,6 +34,7 @@
     "@feathersjs/socketio": "^3.2.2",
     "compression": "^1.7.3",
     "dotenv": "^5.0.1",
+    "feathers-hooks-common": "^4.17.4",
     "feathers-hooks-rediscache": "^1.1.4",
     "feathers-sequelize": "^3.1.2",
     "helmet": "^3.12.2",
