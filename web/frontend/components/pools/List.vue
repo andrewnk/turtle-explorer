@@ -3,6 +3,7 @@
         <generate-config
             :config="minerConfig"
             :is-active="isConfigGeneratorActive"
+            @config-generator-status="isConfigGeneratorActive=$event"
         />
         <b-table
             :data="pools"

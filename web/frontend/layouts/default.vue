@@ -1,6 +1,9 @@
 <template>
     <div id="app">
         <navigation/>
+        <b-notification :closable="false">
+            <b-loading :is-full-page="true" :active="!isLoaded" :can-cancel="false"/>
+        </b-notification>
         <stats-bar v-if="isLoaded"/>
         <nuxt class="main" v-if="isLoaded"/>
         <footer-section/>
