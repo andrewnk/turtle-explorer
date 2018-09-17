@@ -198,6 +198,9 @@ export default {
     watch: {
         isActive (newVal) {
             this.configCopied = false
+            if(!newVal) {
+                this.$emit('config-generator-status', false)
+            }
         }
     }
 }
