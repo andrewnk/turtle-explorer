@@ -110,7 +110,7 @@ export default {
                         $gte: '',
                         $lte: ''
                     },
-                    attribute: 'miners'
+                    attribute: 'difficulty'
                 }
             },
             attributes: [
