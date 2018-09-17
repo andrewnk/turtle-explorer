@@ -99,7 +99,7 @@ export default {
                 start: '',
                 end: ''
             },
-            selectedAttribute: 4,
+            selectedAttribute: 1,
             selectedCompareAttribute: 0,
             chartParams: {
                 query: {
