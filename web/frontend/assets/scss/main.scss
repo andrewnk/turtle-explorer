@@ -87,7 +87,9 @@ th,
 .navbar-item,
 .navbar-link,
 .navbar-item:hover,
-.navbar-link:hover {
+.navbar-link:hover,
+.has-text-white,
+pre {
     color: #fefefe !important;
 }
 
@@ -171,10 +173,10 @@ $sides: (top, bottom, left, right);
     display: none;
 }
 
-.has-text-white {
-    color: #fefefe !important;
-}
-
 .wrap-word {
     word-wrap: break-word;
+}
+
+pre {
+    white-space: nowrap;
 }
