@@ -153,7 +153,10 @@ export default {
             options : {
                 chart: {
                     backgroundColor: '#3c3c3c',
-                    plotBorderColor: '#606063'
+                    plotBorderColor: '#606063',
+                    style: {
+                        fontFamily: 'Roboto,sans-serif'
+                    }
                 },
                 colors: [
                     '#f5f1f2',

@@ -12,20 +12,38 @@
                 subtitle=""
                 color="#00853D"
             >
-                <tab-content title="Software & OS" icon="fas fa-wallet" :before-change="validateSoftwareAndOS">
-                    <div class="field">
-                        <div class="control">
-                            <div class="select">
-                                <select v-model="miner.name">
-                                    <option v-for="miner in miners" :value="miner.name" :key="miner.name">{{ miner.name }}</option>
-                                </select>
+                <tab-content title="Software &amp; OS" icon="fas fa-wallet" :before-change="validateSoftwareAndOS">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Software</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control is-expanded">
+                                    <div class="select is-fullwidth">
+                                        <select class="is-fullwidth" v-model="minerConfig.miner.name" @change="clearMinerOS() && clearMinerCommand()">
+                                            <option :value="null" disabled>Select your mining software</option>
+                                            <option v-for="miner in miners" :value="miner.name" :key="miner.name">{{ miner.name }}</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="control">
-                            <div class="select">
-                                <select v-model="miner.os.name">
-                                    <option v-for="os in selectedSoftwareOS" :key="os.name">{{ os.name }}</option>
-                                </select>
+                    </div>
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">OS</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control is-expanded">
+                                    <div class="select is-fullwidth">
+                                        <select class="is-fullwidth" v-model="minerConfig.miner.os.name" @change="clearMinerCommand()">
+                                            <option :value="null" disabled>Select your operating system</option>
+                                            <option v-for="os in minerOS" :key="os.name">{{ os.name }}</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -33,35 +51,75 @@
                 <tab-content title="Wallet Address" icon="fas fa-wallet" :before-change="validateAddress">
                     <div class="field">
                         <div class="control">
-                            <input class="input" v-model="wallet" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
+                            <input class="input" v-model="minerConfig.wallet" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
                         </div>
                     </div>
                 </tab-content>
                 <tab-content title="Verify" icon="fas fa-check" :before-change="generateConfig">
-                    <div class="card">
+                    <div class="card has-text-left">
                         <div class="card-header">
-                            <div class="card-header-title">
-                                <p>{{ config.pool.name }}</p>
+                            <div class="card-header-title is-block">
+                                <p class="is-size-5">{{ config.pool.name }}</p>
                                 <p>{{ config.config.desc }}</p>
                             </div>
                         </div>
-                        <div class="card-content">
-                            <p class="wrap-word">Wallet: {{ minerConfig.wallet }}</p>
-                            <p>Address: {{ config.pool.address }}</p>
-                            <p>Port: {{ config.config.port }}</p>
-                            <p>Difficulty: {{ config.pool.difficulty }}</p>
-                        </div>
+                        <ul class="card-content">
+                            <li class="wrap-word">
+                                <span class="has-text-weight-semibold">
+                                    Wallet: 
+                                </span>
+                                {{ minerConfig.wallet }}
+                            </li>
+                            <li>
+                                <span class="has-text-weight-semibold">
+                                    Software: 
+                                </span>
+                                {{ minerConfig.miner.name }}
+                            </li>
+                            <li>
+                                <span class="has-text-weight-semibold">
+                                    OS: 
+                                </span>
+                                {{ minerConfig.miner.os.name }}
+                            </li>
+                            <li>
+                                <span class="has-text-weight-semibold">
+                                    Address: 
+                                </span>
+                                {{ config.pool.mining_address }}
+                            </li>
+                            <li>
+                                <span class="has-text-weight-semibold">
+                                    Port: 
+                                </span>
+                                {{ config.config.port }}
+                            </li>
+                            <li>
+                                <span class="has-text-weight-semibold">
+                                    Difficulty: 
+                                </span>
+                                {{ config.config.difficulty }}
+                            </li>
+                        </ul>
                     </div>
                 </tab-content>
                 <tab-content title="Generate" icon="fas fa-cogs">
                     <pre>
                         {{ minerConfig.result }}
                     </pre>
-                    <button class="button"
+
+                    <button class="button is-info is-medium m-t-20 m-b-20"
                         v-clipboard:copy="minerConfig.result"
-                        v-clipboard:success="copyConfigToClipboard"
+                        @click="copyConfig"
                     >
+                        <p v-if="!configCopied">
+                            <i class="fas fa-copy is-size-6 m-r-10"></i> Copy
+                        </p>
+                        <p v-else>
+                            <i class="fas fa-check is-size-6 m-r-10"></i> Copied
+                        </p>
                     </button>
+
                 </tab-content>
                 <template slot="custom-buttons-left">
                     <wizard-button
@@ -95,26 +153,16 @@ export default {
     data () {
         return {
             configCopied: false,
-            miner: {
-                name: '',
-                os: {
-                    name: '',
-                    command: ''
-                }
-            },
-            wallet: '',
-            result: '',
             minerConfig: {
-
-                result: '',
+                result: null,
                 miner: {
-                    name: '',
+                    name: null,
                     os: {
-                        name: '',
-                        command: ''
+                        name: null,
+                        command: null
                     }
                 },
-                wallet: ''
+                wallet: null
             },
             miners: [
                 {
@@ -167,40 +215,55 @@ export default {
             ]
         }
     },
-    mounted () {
-        this.miner.name = this.miners[0].name
-        this.miner.os = this.miners[0].os[0]
-    },
     computed: {
-        selectedSoftwareOS () {
-            const miner = this.miners.filter(miner => miner.name === this.miner.name)[0]
-            return typeof miner !== 'undefined' ? miner.os : []
+        selectedMiner () {
+            const miner = this.miners.filter(miner => miner.name === this.minerConfig.miner.name)[0]
+            return miner ? miner : null
         },
-        validateAddress () {
-            return this.wallet.length === 99
+        selectedMinerOS () {
+            if(this.minerOS === null) return null
+
+            const selectedMinerOS = this.minerOS.filter(miner => miner.name === this.minerConfig.miner.os.name)[0]
+            return selectedMinerOS ? selectedMinerOS : null
+        },
+        minerOS () {
+            return this.selectedMiner ? this.selectedMiner.os : null
         }
     },
     methods: {
         closeModal () {
-            this.isActive = false
-        },
-        copyConfigToClipboard () {
-            this.configCopied = true
+            this.$emit('update:isActive', false)
         },
         generateConfig () {
-            this.minerConfig.result = sprintf.sprintf(this.minerConfig.miner.command.trim(), this.minerConfig.poolAddress, this.minerConfig.poolConfig.port, this.minerConfig.wallet)
+            this.minerConfig.result = sprintf.sprintf(this.minerConfig.miner.os.command, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet)
             return true
         },
+        clearMinerOS () {
+            this.minerConfig.miner.os.name = null
+        },
+        clearMinerCommand () {
+            this.minerConfig.miner.os.command = null
+        },
+        validateAddress () {
+            return this.minerConfig.wallet.length === 99
+        },
         validateSoftwareAndOS () {
-            return this.miner.name.length > 0 && this.miner.os.name.length > 0
+            return this.minerConfig.miner.os.name.length > 0 && this.minerConfig.miner.name.length > 0 && this.minerConfig.miner.os.command.length > 0
+        },
+        copyConfig () {
+            this.configCopied = this.minerConfig.result !== null ? true : false
         }
     },
     watch: {
         isActive (newVal) {
             this.configCopied = false
             if(!newVal) {
-                this.$emit('config-generator-status', false)
+                this.closeModal()
             }
+        },
+        'minerConfig.miner.os.name' (newVal) {
+            this.clearMinerCommand()
+            this.minerConfig.miner.os.command = this.selectedMinerOS ? this.selectedMinerOS.command : null
         }
     }
 }

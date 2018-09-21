@@ -49,7 +49,10 @@ export default {
                     plotBackgroundColor: null,
                     plotBorderWidth: null,
                     plotShadow: false,
-                    type: 'pie'
+                    style: {
+                        fontFamily: 'Roboto,sans-serif'
+                    },
+                    type: 'pie',
                 },
                 contrastTextColor: '#3c3c3c',
                 colors: [
@@ -99,8 +102,7 @@ export default {
                             enabled: true,
                             format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                             style: {
-                                color: 'black',
-                                textOutline: '0px',
+                                textOutline: false,
                                 fontSize: '12px'
                             }
                         }

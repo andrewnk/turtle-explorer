@@ -9,6 +9,10 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
+      
+      config.node = {
+        fs: 'empty'
+      }
     },
     vendor: ['buefy'],
     postcss: {
@@ -24,6 +28,7 @@ module.exports = {
   ],
   modules: [
     'nuxt-fontawesome',
+    '@nuxtjs/dotenv',
     '@nuxtjs/google-analytics'
   ],
   'google-analytics': {
