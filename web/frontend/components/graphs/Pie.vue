@@ -49,7 +49,10 @@ export default {
                     plotBackgroundColor: null,
                     plotBorderWidth: null,
                     plotShadow: false,
-                    type: 'pie'
+                    style: {
+                        fontFamily: 'Roboto,sans-serif'
+                    },
+                    type: 'pie',
                 },
                 contrastTextColor: '#3c3c3c',
                 colors: [
