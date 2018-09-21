@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
 
-const socket = io('http://trtl.rocks:8080', {transports: ['websocket'], forceNew: true})
+const socket = io(`http://${process.env.WEBSOCKET_HOST}:${process.env.WEBSOCKET_PORT}`, {transports: ['websocket'], forceNew: true})
 
 export default socket
