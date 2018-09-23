@@ -297,7 +297,6 @@ export default {
         this.chartParams.query.time.$lte = endDate
         this.chartParams.query.node_id.$in = this.selectedNodes
         this.chartParams.attribute = this.getAttributeName(this.selectedAttribute)
-        this.addSeries(this.getAttributeLabel(this.selectedAttribute), 'primary')
     },
     computed: {
         ...mapGetters('node-history', { getChartData: 'list' }),

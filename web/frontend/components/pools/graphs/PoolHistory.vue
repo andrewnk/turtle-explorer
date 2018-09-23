@@ -310,7 +310,6 @@ export default {
         this.chartParams.query.time.$lte = endDate
         this.chartParams.query.pool_id.$in = this.selectedPools
         this.chartParams.attribute = this.getAttributeName(this.selectedAttribute)
-        this.addSeries(this.getAttributeLabel(this.selectedAttribute), 'primary')
     },
     computed: {
         ...mapGetters('pool-history', { getChartData: 'list' }),
