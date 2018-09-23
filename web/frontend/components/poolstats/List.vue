@@ -189,7 +189,7 @@ export default {
                 promises.push(fetchTimeout(pool.api + 'stats_address?longpoll=true&address=' + this.wallet, {
                     method: 'get',
                     headers: { 'Content-Type': 'application/json' },
-                }, 10000)
+                }, 15000)
                 .then(result => {
                     if (result.status === 200) {
                         return result.json()
