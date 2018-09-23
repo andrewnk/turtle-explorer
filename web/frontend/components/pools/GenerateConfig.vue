@@ -187,15 +187,18 @@ export default {
                   os: [
                     {
                         name: 'Linux',
-                        command: `"pool_list" : [{"pool_address" : "%1$s:%2$s", "wallet_address" : "%3$s", "rig_id" : "", pool_password" "", "use_nicehash" : false, "use_tls" : false, "tls_fingerprint" : "", "pool_weight" : 1 },],`
+                        command: `./xmrig -a cryptonight-lite -o %1$s:%2$s -u %3$s -p x -k`,
+                        config: ``
                     },
                     {
                         name: 'Windows',
-                        command: `"pool_list" : [{"pool_address" : "%1$s:%2$s", "wallet_address" : "%3$s", "rig_id" : "", pool_password" "", "use_nicehash" : false, "use_tls" : false, "tls_fingerprint" : "", "pool_weight" : 1 },],`
+                        command: `xmrig.exe -a cryptonight-lite -o %1$s:%2$s -u %3$s -p x -k`,
+                        config: ``
                     },
                     {
                         name: 'Mac',
-                        command: `"pool_list" : [{"pool_address" : "%1$s:%2$s", "wallet_address" : "%3$s", "rig_id" : "", pool_password" "", "use_nicehash" : false, "use_tls" : false, "tls_fingerprint" : "", "pool_weight" : 1 },],`
+                        command: `./xmrig -a cryptonight-lite -o %1$s:%2$s -u %3$s -p x -k`,
+                        config: ``
                     }
                   ]
                 },

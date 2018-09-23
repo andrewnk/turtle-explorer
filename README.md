@@ -72,6 +72,7 @@ TODO:
  - Add daemon
  - Add daemon db
  - Add daemon cache service to query the daemon and store the results in the db
+ - Add the ability to switch between historical and live line chart data
  - Format "my pool stats" downloadable spreadsheet
  - Add help section that explains all the pages and content
  - Work on the layout and design
