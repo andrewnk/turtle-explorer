@@ -268,10 +268,14 @@ export default {
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.85)',
                     formatter: function() {
+                        const points = this.points.sort((a, b) => {
+                            return b.y - a.y;
+                        })
+
                         let tooltip = '<b>' + this.points[0].series.options.label + '</b>';
 
                         this.points.forEach(point => {
-                            tooltip += '<br/><span style="color:' + point.series.color +';">' + point.series.name + ': ' + point.series.options.displayFormat(this.y) + '</span>'
+                            tooltip += '<br/><span style="color:' + point.series.color +';">' + point.series.name + ': ' + point.series.options.displayFormat(point.y) + '</span>'
                         })
 
                         return tooltip
