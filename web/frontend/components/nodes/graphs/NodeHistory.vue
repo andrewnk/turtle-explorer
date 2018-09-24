@@ -117,37 +117,58 @@ export default {
                 {
                     id: 1,
                     label: 'Difficulty',
-                    name: 'difficulty'
+                    name: 'difficulty',
+                    format: (val) => {
+                        return val.toLocaleString()
+                    }
                 },
                 {
                     id: 2,
                     label: 'Hashrate',
-                    name: 'hashrate'
+                    name: 'hashrate',
+                    format: (val) => {
+                        return this.humanReadableHashrate(val)
+                    }
                 },
                 {
                     id: 3,
                     label: 'Height',
-                    name: 'height'
+                    name: 'height',
+                    format: (val) => {
+                        return val.toLocaleString()
+                    }
                 },
                 {
                     id: 4,
                     label: 'Incoming Connection',
-                    name: 'incomingConnectionsCount'
+                    name: 'incomingConnectionsCount',
+                    format: (val) => {
+                        return val.toLocaleString()
+                    }
                 },
                 {
                     id: 5,
                     label: 'Outgoing Connections',
-                    name: 'outgoingConnectionsCount'
+                    name: 'outgoingConnectionsCount',
+                    format: (val) => {
+                        return val.toLocaleString()
+                    }
                 },
                 {
                     id: 6,
                     label: 'Last Known Block Index',
-                    name: 'lastKnownBlockIndex'
+                    name: 'lastKnownBlockIndex',
+                    format: (val) => {
+                        return val.toLocaleString()
+                    }
                 },
                 {
                     id: 7,
                     label: 'Time',
-                    name: 'startTime'
+                    name: 'startTime',
+                    format: (val) => {
+                        return (new Date(val * 1000)).toUTCString()
+                    }
                 }
             ],
             options : {
@@ -230,6 +251,9 @@ export default {
                 },
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                    formatter: function() {
+                        return this.points[0].series.name + ': '+ this.points[0].series.options.displayFormat(this.y) + ' - ' + this.points[0].series.options.label
+                    },
                     split: true,
                     style: {
                         color: '#F0F0F0'
@@ -377,7 +401,10 @@ export default {
                                 val[1]
                             ]
                         }),
-                        name: node[0].name + ' - ' + label,
+                        displayFormat: this.attributes.filter(attribute => attribute.label === label)[0].format,
+                        id: node[0].id,
+                        label: label,
+                        name: node[0].name,
                         yAxis: axisId
                     })
                 })
