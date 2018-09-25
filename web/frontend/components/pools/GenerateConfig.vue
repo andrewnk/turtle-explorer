@@ -20,7 +20,7 @@
                         <div class="field-body">
                             <div class="field">
                                 <div class="control is-expanded">
-                                    <div class="select is-fullwidth">
+                                    <div class="select is-fullwidth" :class="!minerConfig.miner.name ? 'is-danger' : ''">
                                         <select class="is-fullwidth" v-model="minerConfig.miner.name" @change="clearMinerOS() && clearMinerCommand()">
                                             <option :value="null" disabled>Select your mining software</option>
                                             <option v-for="miner in miners" :value="miner.name" :key="miner.name">{{ miner.name }}</option>
@@ -37,7 +37,7 @@
                         <div class="field-body">
                             <div class="field">
                                 <div class="control is-expanded">
-                                    <div class="select is-fullwidth">
+                                    <div class="select is-fullwidth" :class="!minerConfig.miner.os.name ? 'is-danger' : ''">
                                         <select class="is-fullwidth" v-model="minerConfig.miner.os.name" @change="clearMinerCommand()">
                                             <option :value="null" disabled>Select your operating system</option>
                                             <option v-for="os in minerOS" :key="os.name">{{ os.name }}</option>
@@ -48,10 +48,10 @@
                         </div>
                     </div>
                 </tab-content>
-                <tab-content title="Wallet Address" icon="fas fa-wallet" :before-change="validateWallet">
+                <tab-content title="Wallet Address" icon="fas fa-wallet" :before-change="validWallet">
                     <div class="field">
                         <div class="control">
-                            <input class="input" v-model="minerConfig.wallet" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
+                            <input class="input" :class="!validWallet() ? 'is-danger' : ''" v-model="minerConfig.wallet" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
                         </div>
                     </div>
                 </tab-content>
@@ -227,7 +227,7 @@ export default {
             this.minerConfig.miner.os.command = null
             this.minerConfig.miner.os.config = null
         },
-        validateWallet () {
+        validWallet () {
             return this.validateWalletAddress(this.minerConfig.wallet)
         },
         validateSoftwareAndOS () {

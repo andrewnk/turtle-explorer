@@ -4,7 +4,7 @@
             <div class="column is-12">
                 <div class="field has-addons">
                     <div class="control width-100" :class="isLoading ? 'is-loading' : ''">
-                        <input class="input" v-model="wallet" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
+                        <input class="input" :class="!validateWalletAddress(this.wallet) ? 'is-danger' : ''" v-model="wallet" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
                     </div>
                     <div class="control">
                         <button class="button is-primary" :disabled="!validateWalletAddress(this.wallet)" @click="pollOnce">
