@@ -43,6 +43,7 @@
     "v-calendar": "^0.9.7",
     "vue": "^2.5.17",
     "vue-clipboard2": "^0.2.1",
+    "vue-cookie": "^1.1.4",
     "vue-draggable-resizable": "^1.7.1",
     "vue-form-wizard": "^0.8.4",
     "vue-json-excel": "^0.2.83",

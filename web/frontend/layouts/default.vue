@@ -14,7 +14,7 @@
 import FooterSection from '~/layouts/sections/Footer'
 import Navigation from '~/layouts/sections/Navigation'
 import StatsBar from '~/layouts/sections/StatsBar'
-import socket from '../config/socket'
+import socket from '~/config/socket'
 import { mapActions } from 'vuex'
 
 export default {

@@ -48,7 +48,7 @@
                         </div>
                     </div>
                 </tab-content>
-                <tab-content title="Wallet Address" icon="fas fa-wallet" :before-change="validateAddress">
+                <tab-content title="Wallet Address" icon="fas fa-wallet" :before-change="validateWallet">
                     <div class="field">
                         <div class="control">
                             <input class="input" v-model="minerConfig.wallet" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
@@ -104,21 +104,42 @@
                     </div>
                 </tab-content>
                 <tab-content title="Generate" icon="fas fa-cogs">
-                    <pre>
-                        {{ minerConfig.result }}
-                    </pre>
+                    <div v-show="minerConfig.result.config">
+                        <div class="has-text-left is-size-5">Config</div>
+                        <pre>
+                            {{ minerConfig.result.config }}
+                        </pre>
+                        <button class="button is-info m-t-20 m-b-20"
+                            v-clipboard:copy="minerConfig.result.config"
+                            @click="copyConfig"
+                        >
+                            <p v-if="!configCopied">
+                                <i class="fas fa-copy is-size-6 m-r-10"></i> Copy Config
+                            </p>
+                            <p v-else>
+                                <i class="fas fa-check is-size-6 m-r-10"></i> Config Copied
+                            </p>
+                        </button>
+                    </div>
 
-                    <button class="button is-info is-medium m-t-20 m-b-20"
-                        v-clipboard:copy="minerConfig.result"
-                        @click="copyConfig"
-                    >
-                        <p v-if="!configCopied">
-                            <i class="fas fa-copy is-size-6 m-r-10"></i> Copy
-                        </p>
-                        <p v-else>
-                            <i class="fas fa-check is-size-6 m-r-10"></i> Copied
-                        </p>
-                    </button>
+                    <div v-show="minerConfig.result.command">
+                        <div class="has-text-left is-size-5">Command</div>
+                        <pre>
+                            {{ minerConfig.result.command }}
+                        </pre>
+
+                        <button class="button is-info m-t-20 m-b-20"
+                            v-clipboard:copy="minerConfig.result.command"
+                            @click="copyCommand"
+                        >
+                            <p v-if="!commandCopied">
+                                <i class="fas fa-copy is-size-6 m-r-10"></i> Copy Command
+                            </p>
+                            <p v-else>
+                                <i class="fas fa-check is-size-6 m-r-10"></i> Command Copied
+                            </p>
+                        </button>
+                    </div>
 
                 </tab-content>
                 <template slot="custom-buttons-left">
@@ -135,10 +156,13 @@
 </template>
 
 <script>
+import miners from '~/config/miners'
 import sprintf from 'sprintf-js'
+import vueMixin from '~/mixins/vueMixin'
 
 export default {
     name: 'GenerateConfig',
+    mixins: [vueMixin],
     props: {
         config: {
             type: Object,
@@ -153,69 +177,23 @@ export default {
     data () {
         return {
             configCopied: false,
+            commandCopied: false,
             minerConfig: {
-                result: null,
+                result: {
+                    config: null,
+                    command: null
+                },
                 miner: {
                     name: null,
                     os: {
                         name: null,
-                        command: null
+                        command: null,
+                        config: null
                     }
                 },
-                wallet: null
+                wallet: this.$cookie.get('wallet') ? this.$cookie.get('wallet') : null
             },
-            miners: [
-                {
-                  name: 'Xmr-Stak',
-                  os: [
-                    {
-                        name: 'Linux',
-                        command: `"pool_list" : [{"pool_address" : "%1$s:%2$s", "wallet_address" : "%3$s", "rig_id" : "", pool_password" "", "use_nicehash" : false, "use_tls" : false, "tls_fingerprint" : "", "pool_weight" : 1 },],`
-                    },
-                    {
-                        name: 'Windows',
-                        command: `"pool_list" : [{"pool_address" : "%1$s:%2$s", "wallet_address" : "%3$s", "rig_id" : "", pool_password" "", "use_nicehash" : false, "use_tls" : false, "tls_fingerprint" : "", "pool_weight" : 1 },],`
-                    },
-                    {
-                        name: 'Mac',
-                        command: `"pool_list" : [{"pool_address" : "%1$s:%2$s", "wallet_address" : "%3$s", "rig_id" : "", pool_password" "", "use_nicehash" : false, "use_tls" : false, "tls_fingerprint" : "", "pool_weight" : 1 },],`
-                    }
-                  ]
-                },
-                {
-                  name: 'XMRig',
-                  os: [
-                    {
-                        name: 'Linux',
-                        command: `./xmrig -a cryptonight-lite -o %1$s:%2$s -u %3$s -p x -k`,
-                        config: ``
-                    },
-                    {
-                        name: 'Windows',
-                        command: `xmrig.exe -a cryptonight-lite -o %1$s:%2$s -u %3$s -p x -k`,
-                        config: ``
-                    },
-                    {
-                        name: 'Mac',
-                        command: `./xmrig -a cryptonight-lite -o %1$s:%2$s -u %3$s -p x -k`,
-                        config: ``
-                    }
-                  ]
-                },
-                {
-                  name: 'XMRigCC',
-                  os: [
-                    {
-                        name: 'Windows',
-                        command: `"pool_list" : [{"pool_address" : "%1$s:%2$s", "wallet_address" : "%3$s", "rig_id" : "", pool_password" "", "use_nicehash" : false, "use_tls" : false, "tls_fingerprint" : "", "pool_weight" : 1 },],`
-                    },
-                    {
-                        name: 'Mac',
-                        command: `"pool_list" : [{"pool_address" : "%1$s:%2$s", "wallet_address" : "%3$s", "rig_id" : "", pool_password" "", "use_nicehash" : false, "use_tls" : false, "tls_fingerprint" : "", "pool_weight" : 1 },],`
-                    }
-                  ]
-                }
-            ]
+            miners: miners
         }
     },
     computed: {
@@ -238,7 +216,8 @@ export default {
             this.$emit('update:isActive', false)
         },
         generateConfig () {
-            this.minerConfig.result = sprintf.sprintf(this.minerConfig.miner.os.command, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet)
+            this.minerConfig.result.command = sprintf.sprintf(this.minerConfig.miner.os.command, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet)
+            this.minerConfig.result.config = sprintf.sprintf(this.minerConfig.miner.os.config, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet)
             return true
         },
         clearMinerOS () {
@@ -246,15 +225,20 @@ export default {
         },
         clearMinerCommand () {
             this.minerConfig.miner.os.command = null
+            this.minerConfig.miner.os.config = null
         },
-        validateAddress () {
-            return this.minerConfig.wallet.length === 99
+        validateWallet () {
+            return this.validateWalletAddress(this.minerConfig.wallet)
         },
         validateSoftwareAndOS () {
-            return this.minerConfig.miner.os.name.length > 0 && this.minerConfig.miner.name.length > 0 && this.minerConfig.miner.os.command.length > 0
+            return this.minerConfig.miner.os.name.length > 0 && this.minerConfig.miner.name.length > 0 && (this.minerConfig.miner.os.command.length > 0 || this.minerConfig.miner.os.config.length > 0)
         },
         copyConfig () {
-            this.configCopied = this.minerConfig.result !== null ? true : false
+            this.configCopied = this.minerConfig.result.config !== null ? true : false
+        }
+        ,
+        copyCommand () {
+            this.commandCopied = this.minerConfig.result.command !== null ? true : false
         }
     },
     watch: {
@@ -267,6 +251,12 @@ export default {
         'minerConfig.miner.os.name' (newVal) {
             this.clearMinerCommand()
             this.minerConfig.miner.os.command = this.selectedMinerOS ? this.selectedMinerOS.command : null
+            this.minerConfig.miner.os.config = this.selectedMinerOS ? this.selectedMinerOS.config : null
+        },
+        'minerConfig.wallet': function(newVal) {
+            if (this.validateWalletAddress(newVal)) {
+                this.$cookie.set('wallet', newVal, { expires: 365 })
+            }
         }
     }
 }
