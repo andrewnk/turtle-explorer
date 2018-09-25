@@ -7,12 +7,12 @@
                         <input class="input" v-model="wallet" type="text" minlength="99" maxlength="99" placeholder="Your Wallet Address">
                     </div>
                     <div class="control">
-                        <button class="button is-primary" :disabled="!isWalletValid" @click="pollOnce">
+                        <button class="button is-primary" :disabled="!validateWalletAddress(this.wallet)" @click="pollOnce">
                             Poll Once
                         </button>
                     </div>
                     <div class="control">
-                        <button class="button is-info" :disabled="!isWalletValid" @click="pollInterval">
+                        <button class="button is-info" :disabled="!validateWalletAddress(this.wallet)" @click="pollInterval">
                             Poll Every Minute
                         </button>
                     </div>
@@ -146,7 +146,7 @@ export default {
             interval: null,
             poolStats: [],
             selectedPools: [],
-            wallet: ''
+            wallet: this.$cookie.get('wallet') ? this.$cookie.get('wallet') : null
         }
     },
     beforeDestroy () {
@@ -157,9 +157,6 @@ export default {
             return this.selectedPools.map(pool => {
                 return Object.assign({}, pool.pool, pool.data)
             })
-        },
-        isWalletValid () {
-            return this.wallet.length === 99
         }
     },
     methods: {
@@ -179,7 +176,7 @@ export default {
             this.interval = setInterval(() => this.pollPools(), 60000)
         },
         pollPools () {
-            if (!this.isWalletValid)  return
+            if (!this.validateWalletAddress(this.wallet))  return
             this.isLoading = true
             this.failed = false
 
@@ -229,6 +226,13 @@ export default {
                 this.failed = this.poolStats.length < 1 ? true : false
                 this.isLoading = false
             })
+        }
+    },
+    watch: {
+        wallet: function(newVal) {
+            if (this.validateWalletAddress(newVal)) {
+                this.$cookie.set('wallet', newVal, { expires: 365 })
+            }
         }
     }
 }

@@ -55,12 +55,13 @@ module.exports = {
   },
   loading: { color: '#3B8070' },
   plugins: [
-    { src: '~/plugins/buefy.js', ssr: false },
-    { src: '~/plugins/vue2-highcharts.js', ssr: false },
-    { src: '~/plugins/daterange-picker.js', ssr: false },
-    { src: '~/plugins/vue-clipboard.js', ssr: false },
-    { src: '~/plugins/vue-form-wizard.js', ssr: false },
-    { src: '~/plugins/vue-json-excel.js', ssr: false }
+    { src: '~/plugins/buefy', ssr: false },
+    { src: '~/plugins/vue2-highcharts', ssr: false },
+    { src: '~/plugins/daterange-picker', ssr: false },
+    { src: '~/plugins/vue-clipboard', ssr: false },
+    { src: '~/plugins/vue-form-wizard', ssr: false },
+    { src: '~/plugins/vue-json-excel', ssr: false },
+    { src: '~/plugins/vue-cookie', ssr: false, injectAs: 'cookie' }
   ],
   render: {
     ssr: false

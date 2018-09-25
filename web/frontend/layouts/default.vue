@@ -14,7 +14,7 @@
 import FooterSection from '~/layouts/sections/Footer'
 import Navigation from '~/layouts/sections/Navigation'
 import StatsBar from '~/layouts/sections/StatsBar'
-import socket from '../config/socket'
+import socket from '~/config/socket'
 import { mapActions } from 'vuex'
 
 export default {
@@ -55,7 +55,7 @@ export default {
             })
         }))
 
-        promises.push(this.$store.dispatch('node/find', { query: { $sort: { name: 1 }}}).then(nodes => {
+        promises.push(this.$store.dispatch('node/find').then(nodes => {
             let nodePromise = []
             nodePromise = nodes.map(node => {
                 return this.$store.dispatch('node-data/find', {

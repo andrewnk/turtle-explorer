@@ -24,6 +24,11 @@ export default {
         },
         showCell (props, obj) {
             return props.reduce((xs, x) => (xs && xs[x]) ? xs[x] : false, obj)
-        }
+        },
+        validateWalletAddress (walletAddress) {
+
+            const regex = /^[a-z0-9]+$/i
+            return walletAddress && walletAddress.length === 99 && walletAddress.substring(0, 4) === 'TRTL' && regex.test(walletAddress)
+        },
     }
 }
