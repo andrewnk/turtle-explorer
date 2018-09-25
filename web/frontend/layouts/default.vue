@@ -55,7 +55,7 @@ export default {
             })
         }))
 
-        promises.push(this.$store.dispatch('node/find', { query: { $sort: { name: 1 }}}).then(nodes => {
+        promises.push(this.$store.dispatch('node/find').then(nodes => {
             let nodePromise = []
             nodePromise = nodes.map(node => {
                 return this.$store.dispatch('node-data/find', {
