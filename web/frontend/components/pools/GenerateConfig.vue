@@ -107,7 +107,8 @@
                     <div v-show="minerConfig.result.config">
                         <div class="has-text-left is-size-5">Config</div>
                         <pre>
-                            {{ minerConfig.result.config }}
+<!-- deals with spacing issue in pre-->
+{{ minerConfig.result.config }}
                         </pre>
                         <button class="button is-info m-t-20 m-b-20"
                             v-clipboard:copy="minerConfig.result.config"
@@ -125,7 +126,8 @@
                     <div v-show="minerConfig.result.command">
                         <div class="has-text-left is-size-5">Command</div>
                         <pre>
-                            {{ minerConfig.result.command }}
+<!-- deals with spacing issue in pre-->
+{{ minerConfig.result.command }}
                         </pre>
 
                         <button class="button is-info m-t-20 m-b-20"
@@ -216,8 +218,10 @@ export default {
             this.$emit('update:isActive', false)
         },
         generateConfig () {
-            this.minerConfig.result.command = sprintf.sprintf(this.minerConfig.miner.os.command, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet)
-            this.minerConfig.result.config = sprintf.sprintf(this.minerConfig.miner.os.config, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet)
+            console.log(sprintf.sprintf(this.minerConfig.miner.os.command, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet).trim())
+            this.minerConfig.result.command = sprintf.sprintf(this.minerConfig.miner.os.command, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet).trim()
+            console.log(sprintf.sprintf(this.minerConfig.miner.os.config, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet).trim())
+            this.minerConfig.result.config = sprintf.sprintf(this.minerConfig.miner.os.config, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet).trim()
             return true
         },
         clearMinerOS () {
