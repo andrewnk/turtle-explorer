@@ -181,8 +181,8 @@ func setNodes() {
     nodes := getNodeJson()
 
     for i := 0; i < len(nodes.Nodes); i++ {
-        var name string
-        err := db.QueryRow("SELECT name FROM node WHERE name = $1 LIMIT 1", nodes.Nodes[i].Name).Scan(&name)
+        var url string
+        err := db.QueryRow("SELECT url FROM node WHERE url = $1 LIMIT 1", nodes.Nodes[i].Url).Scan(&url)
 
         if err == sql.ErrNoRows {
             stmt, err := db.Prepare("INSERT INTO node(name, url, port, ssl) VALUES ($1, $2, $3, $4)")
@@ -218,8 +218,8 @@ func setPools() {
     pools := getPoolJson()
 
     for i := 0; i < len(pools.Pools); i++ {
-        var name string
-        err := db.QueryRow("SELECT name FROM pool WHERE name = $1 LIMIT 1", pools.Pools[i].Name).Scan(&name)
+        var url string
+        err := db.QueryRow("SELECT url FROM pool WHERE url = $1 LIMIT 1", pools.Pools[i].Url).Scan(&url)
 
         if err == sql.ErrNoRows {
             //insert
@@ -235,7 +235,7 @@ func setPools() {
             stmt.Close()
         } else {
             //update
-            stmt, err := db.Prepare("UPDATE pool SET url = $2, api = $3, type = $4, mining_address = $5 WHERE name = $1")
+            stmt, err := db.Prepare("UPDATE pool SET name = $1, api = $3, type = $4, mining_address = $5 WHERE url = $2")
             if err != nil {
                 log.Println("There was an error preparing to update the pool: ", err)
             }
