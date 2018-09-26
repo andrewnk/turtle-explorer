@@ -43,7 +43,7 @@ Get a shell in the go container, build, and start the program
 ```sh
 docker exec -it service-nodes-and-pools ash
 CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags="-s" -o service-nodes-and-pools
-./service-nodes-and-pools -db-user=go -db-name=trtl -db-password=98765 -db-host=timescale -db-port=5432 -db-ssl-mode=disable
+./service-nodes-and-pools -db-user=go -db-name=trtl -db-password=98765 -db-host=db-nodes-and-pools -db-port=5432 -db-ssl-mode=disable
 ```
 
 Get a shell in the backend web container and start
