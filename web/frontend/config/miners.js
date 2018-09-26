@@ -19,7 +19,8 @@ export default [
                         "tls_fingerprint": "",
                         "pool_weight": 1
                     },
-                ],`
+                ],
+                "currency": "cryptonight_lite_v7",`
             },
             {
                 name: 'Windows',
@@ -36,7 +37,8 @@ export default [
                         "tls_fingerprint": "",
                         "pool_weight": 1
                     },
-                ],`
+                ],
+                "currency": "cryptonight_lite_v7",`
             },
             {
                 name: 'Mac',
@@ -53,7 +55,8 @@ export default [
                         "tls_fingerprint": "",
                         "pool_weight": 1
                     },
-                ],`
+                ],
+                "currency": "cryptonight_lite_v7",`
             }
         ]
     },
