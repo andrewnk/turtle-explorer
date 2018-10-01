@@ -65,7 +65,7 @@ export default [
         os: [
             {
                 name: 'Linux',
-                command: `./xmrig -a cryptonight-lite -o %1$s:%2$s -u %3$s -p x -k`,
+                command: `./xmrig --algo=cryptonight-lite --variant 1 -o %1$s:%2$s -u %3$s -k --donate-level=1`,
                 config: outdent `
                 "pools": [
                     {
@@ -80,7 +80,7 @@ export default [
             },
             {
                 name: 'Windows',
-                command: `xmrig.exe -a cryptonight-lite -o %1$s:%2$s -u %3$s -p x -k`,
+                command: `xmrig.exe --algo=cryptonight-lite --variant 1 -o %1$s:%2$s -u %3$s -k --donate-level=1`,
                 config: outdent `
                 "pools": [
                     {
@@ -95,7 +95,7 @@ export default [
             },
             {
                 name: 'Mac',
-                command: `./xmrig -a cryptonight-lite -o %1$s:%2$s -u %3$s -p x -k`,
+                command: `./xmrig --algo=cryptonight-lite --variant 1 -o %1$s:%2$s -u %3$s -k --donate-level=1`,
                 config: outdent `
                 "pools": [
                     {
@@ -111,6 +111,153 @@ export default [
         ]
     },
     {
+        name: 'XMRig-AMD',
+        os: [
+            {
+                name: 'Linux',
+                command: `./xmrig-amd --algo=cryptonight-lite --variant 1 -o %1$s:%2$s -u %3$s -k --donate-level=1`,
+                config: outdent `
+                "pools": [
+                    {
+                        "url": "%1$s:%2$s",
+                        "user": "%3$s",
+                        "pass": "x",
+                        "keepalive": true,
+                        "nicehash": false,
+                        "variant": 1
+                    }
+                ],`
+            },
+            {
+                name: 'Windows',
+                command: ``,
+                config: outdent `
+                "pools": [
+                    {
+                        "url": "%1$s:%2$s",
+                        "user": "%3$s",
+                        "pass": "x",
+                        "keepalive": true,
+                        "nicehash": false,
+                        "variant": 1
+                    }
+                ],`
+            },
+            {
+                name: 'Mac',
+                command: `./xmrig-amd --algo=cryptonight-lite --variant 1 -o %1$s:%2$s -u %3$s -k --donate-level=1`,
+                config: outdent `
+                "pools": [
+                    {
+                        "url": "%1$s:%2$s",
+                        "user": "%3$s",
+                        "pass": "x",
+                        "keepalive": true,
+                        "nicehash": false,
+                        "variant": 1
+                    }
+                ],`
+            }
+        ]
+    },
+    {
+        name: 'XMRig-NVIDIA',
+        os: [
+            {
+                name: 'Linux',
+                command: `./xmrig-nvidia --algo=cryptonight-lite --variant 1 -o %1$s:%2$s -u %3$s -k --donate-level=1`,
+                config: outdent `
+                "pools": [
+                    {
+                        "url": "%1$s:%2$s",
+                        "user": "%3$s",
+                        "pass": "x",
+                        "keepalive": true,
+                        "nicehash": false,
+                        "variant": 1
+                    }
+                ],`
+            },
+            {
+                name: 'Windows',
+                command: ``,
+                config: outdent `
+                "pools": [
+                    {
+                        "url": "%1$s:%2$s",
+                        "user": "%3$s",
+                        "pass": "x",
+                        "keepalive": true,
+                        "nicehash": false,
+                        "variant": 1
+                    }
+                ],`
+            },
+            {
+                name: 'Mac',
+                command: `./xmrig-nvidia --algo=cryptonight-lite --variant 1 -o %1$s:%2$s -u %3$s -k --donate-level=1`,
+                config: outdent `
+                "pools": [
+                    {
+                        "url": "%1$s:%2$s",
+                        "user": "%3$s",
+                        "pass": "x",
+                        "keepalive": true,
+                        "nicehash": false,
+                        "variant": 1
+                    }
+                ],`
+            }
+        ]
+    },
+    {
+        name: 'XMRigCC',
+        os: [
+            {
+                name: 'Linux',
+                command: ``,
+                config: outdent `
+                "pools": [
+                    {
+                        "url": "%1$s:%2$s",
+                        "user": "%3$s",
+                        "pass": "x",
+                        "keepalive": true,
+                        "nicehash": false
+                    }
+                ],`
+            },
+            {
+                name: 'Windows',
+                command: ``,
+                config: outdent `
+                "pools": [
+                    {
+                        "url": "%1$s:%2$s",
+                        "user": "%3$s",
+                        "pass": "x",
+                        "keepalive": true,
+                        "nicehash": false
+                    }
+                ],`
+            },
+            {
+                name: 'Mac',
+                command: ``,
+                config: outdent `
+                "pools": [
+                    {
+                        "url": "%1$s:%2$s",
+                        "user": "%3$s",
+                        "pass": "x",
+                        "keepalive": true,
+                        "nicehash": false
+                    }
+                ],`
+            }
+        ]
+    },
+    {
         name: 'SRBMiner',
         os: [
             {
@@ -118,9 +265,13 @@ export default [
                 command: `SRBMiner-CN.exe --sendallstales --ccryptonighttype liteV7 --cgpuid 0 --cgpuintensity 120 --cgputhreads 2 --cpool %1$s:%2$s --cwallet %3$s`,
                 config: outdent`
                 {
-                    "pools" : [
-                            {"pool" : "%1$s:%2$s", "wallet" : "%3$s", "password" : "x"}
-                        ]
+                    "pools": [
+                        {
+                            "pool": "%1$s:%2$s",
+                            "wallet": "%3$s",
+                            "password": "x"
+                        }
+                    ]
                 }`
             }
         ]

@@ -35,6 +35,9 @@ module.exports = {
           case 'lastKnownBlockIndex':
             attribute = "(data->>'last_known_block_index')::float"
             break;
+          case 'transactionPool':
+            attribute = "(data->>'tx_pool_size')::float"
+            break;
           case 'startTime':
             attribute = "(data->>'start_time')::float"
             break;
