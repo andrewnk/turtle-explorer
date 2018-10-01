@@ -145,11 +145,10 @@ export default {
                 pool: {},
                 config: {},
             },
-            selectedPools: []
+            selectedPools: [this.pools[0]]
         }
     },
     mounted () {
-        this.selectedPools.push(this.pools[0])
         this.$emit('updated-pool-selection', this.selectedPools.map(val => val.id))
     },
     methods: {
