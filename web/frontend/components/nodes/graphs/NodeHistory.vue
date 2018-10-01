@@ -164,6 +164,14 @@ export default {
                 },
                 {
                     id: 7,
+                    label: 'Transaction Pool',
+                    name: 'transactionPool',
+                    format: (val) => {
+                        return val.toLocaleString()
+                    }
+                },
+                {
+                    id: 8,
                     label: 'Time',
                     name: 'startTime',
                     format: (val) => {
