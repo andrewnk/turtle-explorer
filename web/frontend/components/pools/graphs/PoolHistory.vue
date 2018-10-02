@@ -89,6 +89,11 @@ export default {
             type: Array,
             required: true,
             default: () => []
+        },
+        selectedPoolData: {
+            type: Array,
+            required: true,
+            default: () => []
         }
     },
     mixins: [vueMixin],
@@ -267,20 +272,6 @@ export default {
                 },
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.85)',
-                    formatter: function() {
-                        const points = this.points.sort((a, b) => {
-                            return b.y - a.y;
-                        })
-
-                        let tooltip = '<b>' + this.points[0].series.options.label + '</b>';
-
-                        this.points.forEach(point => {
-                            tooltip += '<br/><span style="color:' + point.series.color +';">' + point.series.name + ': ' + point.series.options.displayFormat(point.y) + '</span>'
-                        })
-
-                        return tooltip
-                    },
-                    shared: true,
                     split: true,
                     style: {
                         color: '#F0F0F0'
@@ -508,12 +499,22 @@ export default {
             },
             deep: true
         },
-        pools: {
+        selectedPoolData: {
             handler: function(newVal) {
                 // if(!this.live) return
 
-                // const selectedPoolData = newVal.filter(pool => this.selectedPools.includes(pool.id))
-                // console.log(selectedPoolData)
+                const selectedPoolData = newVal.filter(pool => this.selectedPools.includes(pool.id))
+
+                selectedPoolData.forEach(poolData => {
+                    if(!poolData.data) return
+
+                    const series = this.$refs.historical.chart.get(poolData.id)
+                    if (series === undefined) return
+                    // console.log(series.options)
+                    const yAxis = series.yAxis.options.id
+                    // console.log(poolData.data)
+                })
+
                 // console.log(this.$refs.historical.chart.get(newVal.id))
                 // const x = this.getAttributeLocation(this.selectedAttribute).split('.').reduce((acc, part) => acc && acc[part], selectedPoolData)
                 // console.log(x)
