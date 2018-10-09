@@ -12,3 +12,27 @@
         </div>
     </section>
 </template>
+
+<script>
+    export default {
+        head () {
+            return {
+                title: 'TurtleCoin Resources',
+                meta: [
+                    {
+                        hid: 'description',
+                        name: 'description',
+                        content: 'TurtleCoin Resources'
+                    },
+                    {
+                        charset: 'utf-8'
+                    },
+                    {
+                        name: 'viewport',
+                        content: 'width=device-width, initial-scale=1'
+                    }
+                ]
+            }
+        }
+    }
+</script>

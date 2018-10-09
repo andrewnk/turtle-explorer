@@ -44,6 +44,25 @@ import PoolHistory from '~/components/pools/graphs/PoolHistory.vue'
 import { mapGetters } from 'vuex'
 
 export default {
+    head () {
+        return {
+            title: 'Pool Explorer',
+            meta: [
+                {
+                    hid: 'description',
+                    name: 'description',
+                    content: 'View live and historical information for TurtleCoin pools and generate mining configs'
+                },
+                {
+                    charset: 'utf-8'
+                },
+                {
+                    name: 'viewport',
+                    content: 'width=device-width, initial-scale=1'
+                }
+            ]
+        }
+    },
     components: { Pie, PoolHistory, List },
     data () {
         return {

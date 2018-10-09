@@ -26,6 +26,25 @@ import NodeHistory from '~/components/nodes/graphs/NodeHistory.vue'
 import { mapGetters } from 'vuex'
 
 export default {
+    head () {
+        return {
+            title: 'Node Explorer',
+            meta: [
+                {
+                    hid: 'description',
+                    name: 'description',
+                    content: 'View live and historical information for public nodes on the TurtlCoin network'
+                },
+                {
+                    charset: 'utf-8'
+                },
+                {
+                    name: 'viewport',
+                    content: 'width=device-width, initial-scale=1'
+                }
+            ]
+        }
+    },
     components: { List, NodeHistory },
     data () {
         return {
