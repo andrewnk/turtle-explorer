@@ -19,19 +19,12 @@ import { mapGetters } from 'vuex'
 export default {
     head () {
         return {
-            title: 'My Pool Stats',
+            title: 'TurtleCoin Explorer - My Pool Stats',
             meta: [
                 {
                     hid: 'description',
                     name: 'description',
                     content: 'View data from all the TurtleCoin pools you\'ve mined at'
-                },
-                {
-                    charset: 'utf-8'
-                },
-                {
-                    name: 'viewport',
-                    content: 'width=device-width, initial-scale=1'
                 }
             ]
         }

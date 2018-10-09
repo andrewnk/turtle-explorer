@@ -28,19 +28,12 @@ import { mapGetters } from 'vuex'
 export default {
     head () {
         return {
-            title: 'Node Explorer',
+            title: 'TurtleCoin Explorer - Node Explorer',
             meta: [
                 {
                     hid: 'description',
                     name: 'description',
                     content: 'View live and historical information for public nodes on the TurtlCoin network'
-                },
-                {
-                    charset: 'utf-8'
-                },
-                {
-                    name: 'viewport',
-                    content: 'width=device-width, initial-scale=1'
                 }
             ]
         }

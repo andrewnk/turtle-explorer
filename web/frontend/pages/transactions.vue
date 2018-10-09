@@ -18,19 +18,12 @@
     export default {
         head () {
             return {
-                title: 'Transactions',
+                title: 'TurtleCoin Explorer - Transactions',
                 meta: [
                     {
                         hid: 'description',
                         name: 'description',
                         content: 'View TurtleCoin transactions'
-                    },
-                    {
-                        charset: 'utf-8'
-                    },
-                    {
-                        name: 'viewport',
-                        content: 'width=device-width, initial-scale=1'
                     }
                 ]
             }

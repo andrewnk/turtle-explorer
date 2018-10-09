@@ -79,13 +79,6 @@
                         hid: 'description',
                         name: 'description',
                         content: 'Explore block, node, pool, and transaction data for TurtleCoin'
-                    },
-                    {
-                        charset: 'utf-8'
-                    },
-                    {
-                        name: 'viewport',
-                        content: 'width=device-width, initial-scale=1'
                     }
                 ]
             }
