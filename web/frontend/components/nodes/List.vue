@@ -8,8 +8,14 @@
             checkable
         >
             <template slot-scope="props">
-                <b-table-column field="name" label="Name" sortable numeric>
+                <b-table-column field="name" label="Name" sortable>
                     {{ props.row.name }}
+                </b-table-column>
+                <b-table-column field="url" label="Url" sortable>
+                    {{ props.row.url }}
+                </b-table-column>
+                <b-table-column field="port" label="Port" sortable>
+                    {{ props.row.port }}
                 </b-table-column>
                 <b-table-column field="height" label="Height" sortable numeric>
                     {{ props.row.data.height ? props.row.data.height.toLocaleString() : ''}}
