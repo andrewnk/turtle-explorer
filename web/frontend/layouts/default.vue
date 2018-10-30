@@ -73,8 +73,8 @@ export default {
 
             return Promise.all(nodePromise).then(results => {
                 results.forEach(result => {
-                    if(result.length > 0 && result[0].data) {
-                        this.$store.state.node.keyedById[result[0].node_id].data = result[0].data
+                    if(result.length > 0 && result[0]) {
+                        this.$store.state.node.keyedById[result[0].node_id].data = result[0]
                     }
                 })
             })
@@ -90,8 +90,8 @@ export default {
             }
         })
         socket.on('notifyNodeData', data => {
-            if(this.$store.state.node.keyedById[data.node_id].hasOwnProperty('data')) {
-                this.$store.state.node.keyedById[data.node_id].data = data.data
+            if(this.$store.state.node.keyedById[data.node_id]) {
+                this.$store.state.node.keyedById[data.node_id].data = data
             }
         })
         socket.on('notifyPool', data => {

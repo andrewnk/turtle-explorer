@@ -11,8 +11,68 @@ module.exports = function (app) {
     node_id: {
       type: DataTypes.INTEGER
     },
-    data: {
-      type: DataTypes.JSONB
+    alt_blocks_count: {
+      type: DataTypes.BIGINT
+    },
+    difficulty: {
+      type: DataTypes.BIGINT
+    },
+    gray_peerlist_size: {
+      type: DataTypes.BIGINT
+    },
+    hashrate: {
+      type: DataTypes.BIGINT
+    },
+    height: {
+      type: DataTypes.BIGINT
+    },
+    incoming_connections_count: {
+      type: DataTypes.BIGINT
+    },
+    last_known_block_index: {
+      type: DataTypes.BIGINT
+    },
+    major_version: {
+      type: DataTypes.BIGINT
+    },
+    minor_version: {
+      type: DataTypes.BIGINT
+    },
+    network_height: {
+      type: DataTypes.BIGINT
+    },
+    outgoing_connections_count: {
+      type: DataTypes.BIGINT
+    },
+    start_time: {
+      type: DataTypes.BIGINT
+    },
+    status: {
+      type: DataTypes.STRING
+    },
+    supported_height: {
+      type: DataTypes.BIGINT
+    },
+    synced: {
+      type: DataTypes.BOOLEAN
+    },
+    testnet: {
+      type: DataTypes.BOOLEAN
+    },
+    tx_count: {
+      type: DataTypes.BIGINT
+    },
+    tx_pool_size: {
+      type: DataTypes.BIGINT
+    },
+    version: {
+      type: DataTypes.STRING
+    },
+    white_peerlist_size: {
+      type: DataTypes.BIGINT
+    },
+    fee: {
+      type: DataTypes.BIGINT
     }
   },
   {

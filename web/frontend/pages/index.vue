@@ -78,7 +78,7 @@
                     {
                         hid: 'description',
                         name: 'description',
-                        content: 'Explore block, node, pool, and transaction data for TurtleCoin'
+                        content: 'Explore historical and live block, node, pool, and transaction data for TurtleCoin'
                     }
                 ]
             }

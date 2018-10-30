@@ -1,10 +1,28 @@
 <template>
     <section>
+        <b-field grouped class="is-pulled-right" >
+            <b-input v-model="search" placeholder="Search"></b-input>
+            <b-select v-model="perPage" class="is-pulled-right">
+                <option value="5">5 per page</option>
+                <option value="10">10 per page</option>
+                <option value="15">15 per page</option>
+                <option value="20">20 per page</option>
+                <option :value="this.searchResults.length">All</option>
+            </b-select>
+        </b-field>
+        <b-taglist attached>
+            <b-tag type="is-dark">Total Nodes</b-tag>
+            <b-tag type="is-primary">{{ this.searchResults.length }}</b-tag>
+        </b-taglist>
         <b-table
-            :data="nodes"
+            :data="searchResults"
             :is-row-checkable="(row) => true"
             :loading="isLoading"
             :checked-rows.sync="selectedNodes"
+            :row-class="(row, index) => selectedNodes.map(val => val.id).includes(row.id) ? 'has-background-grey-dark' : ''"
+            :paginated="true"
+            :per-page="perPage"
+            focusable
             checkable
         >
             <template slot-scope="props">
@@ -18,34 +36,37 @@
                     {{ props.row.port }}
                 </b-table-column>
                 <b-table-column field="height" label="Height" sortable numeric>
-                    {{ props.row.data.height ? props.row.data.height.toLocaleString() : ''}}
+                    {{ props.row.data.status && props.row.data.height ? props.row.data.height.toLocaleString() : ''}}
                 </b-table-column>
                 <b-table-column field="difficulty" label="Difficulty" sortable numeric>
-                    {{ props.row.data.difficulty ? props.row.data.difficulty.toLocaleString() : '' }}
+                    {{ props.row.data.status && props.row.data.difficulty ? props.row.data.difficulty.toLocaleString() : '' }}
                 </b-table-column>
                 <b-table-column field="hashrate" label="Hashrate" sortable numeric>
-                    {{ props.row.data.hashrate ? humanReadableHashrate(props.row.data.hashrate) : ''}}
+                    {{ props.row.data.status && props.row.data.hashrate ? humanReadableHashrate(props.row.data.hashrate) : ''}}
                 </b-table-column>
                 <b-table-column field="txcount" label="TX Count" sortable numeric>
-                    {{ props.row.data.tx_count ? props.row.data.tx_count.toLocaleString() : ''}}
+                    {{ props.row.data.status && props.row.data.tx_count ? props.row.data.tx_count.toLocaleString() : ''}}
                 </b-table-column>
                 <b-table-column field="txpoolsize" label="TX Pool" sortable numeric>
-                    {{ props.row.data.tx_pool_size ? props.row.data.tx_pool_size.toLocaleString() : ''}}
+                    {{ props.row.data.status && props.row.data.tx_pool_size ? props.row.data.tx_pool_size.toLocaleString() : ''}}
                 </b-table-column>
                 <b-table-column field="incoming" label="Incoming Conn" sortable numeric>
-                    {{ props.row.data.incoming_connections_count ? props.row.data.incoming_connections_count.toLocaleString() : '' }}
+                    {{ props.row.data.status && props.row.data.incoming_connections_count ? props.row.data.incoming_connections_count.toLocaleString() : '' }}
                 </b-table-column>
                 <b-table-column field="outgoing" label="Outgoing Conn" sortable numeric>
-                    {{ props.row.data.outgoing_connections_count ? props.row.data.outgoing_connections_count.toLocaleString() : '' }}
+                    {{ props.row.data.status && props.row.data.outgoing_connections_count ? props.row.data.outgoing_connections_count.toLocaleString() : '' }}
                 </b-table-column>
                 <b-table-column field="last_known_block_index" label="Block Index" sortable>
-                    {{ props.row.data.last_known_block_index ? props.row.data.last_known_block_index.toLocaleString() : ''}}
+                    {{ props.row.data.status && props.row.data.last_known_block_index ? props.row.data.last_known_block_index.toLocaleString() : ''}}
+                </b-table-column>
+                <b-table-column field="fee" label="Fee" sortable>
+                    {{ props.row.data.status && props.row.data.fee ? (props.row.data.fee / 100).toLocaleString() : ''}}
                 </b-table-column>
                 <b-table-column field="time" label="Timestamp" class="has-text-right" sortable>
-                    {{ props.row.data.start_time ? getFromattedDate(props.row.data.start_time * 1000) : ''}}
+                    {{ props.row.data.status && props.row.data.start_time ? getFromattedDate(props.row.data.start_time * 1000) : ''}}
                 </b-table-column>
                 <b-table-column field="version" label="Version" sortable numeric>
-                    {{ props.row.data.version ? props.row.data.version : '' }}
+                    {{ props.row.data.status && props.row.data.version ? props.row.data.version : '' }}
                 </b-table-column>
                 <b-table-column field="status" label="Status" sortable>
                     {{ props.row.data.status ? props.row.data.status : 'Unknown' }}
@@ -57,6 +78,7 @@
 
 <script>
 import vueMixin from '~/mixins/vueMixin.js'
+import fuse from 'fuse.js'
 
 export default {
     name: 'List',
@@ -74,12 +96,30 @@ export default {
     },
     data () {
         return {
-            selectedNodes: []
+            fuseObject: {},
+            perPage: 10,
+            search: '',
+            selectedNodes: [],
+            searchResults: []
         }
     },
     mounted () {
         this.selectedNodes.push(this.nodes[0])
         this.$emit('updated-node-selection', this.selectedNodes.map(val => val.id))
+        this.fuseObject = new fuse(this.nodes, {
+                shouldSort: true,
+                includeScore: true,
+                threshold: 0.3,
+                location: 0,
+                distance: 100,
+                maxPatternLength: 32,
+                minMatchCharLength: 1,
+                keys: [
+                    "name",
+                    "url"
+                ]
+            })
+        this.searchResults = this.fuseObject.list
     },
     watch: {
         selectedNodes: {
@@ -89,6 +129,13 @@ export default {
                 }
             },
             deep: true
+        },
+        search: function(newVal) {
+            if(newVal.length > 0) {
+                this.searchResults = this.fuseObject.search(newVal).map(val => val.item)
+            } else {
+                this.searchResults = this.fuseObject.list
+            }
         }
     }
 }

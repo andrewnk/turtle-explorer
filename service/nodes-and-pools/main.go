@@ -38,6 +38,30 @@ type Nodes struct {
     Nodes []Node `json:"nodes"`
 }
 
+type NodeData struct {
+    AltBlocksCount int `json:"alt_blocks_count"`
+    Difficulty int `json:"difficulty"`
+    GrayPeerlistSize int `json:"gray_peerlist_size"`
+    Hashrate int `json:"hashrate"`
+    Height int `json:"height"`
+    IncomingConnectionsCount int `json:"incoming_connections_count"`
+    LastKnownBlockIndex int `json:"last_known_block_index"`
+    MajorVersion int `json:"major_version"`
+    MinorVersion int `json:"minor_version"`
+    NetworkHeight int `json:"network_height"`
+    OutgoingConnectionsCount int `json:"outgoing_connections_count"`
+    StartTime int `json:"start_time"`
+    Status string `json:"status"`
+    SupportedHeight int `json:"supported_height"`
+    Synced bool `json:"synced"`
+    Testnet bool `json:"testnet"`
+    TxCount int `json:"tx_count"`
+    TxPoolSize int `json:"tx_pool_size"`
+    Version string `json:"version"`
+    WhitePeerlistSize int `json:"white_peerlist_size"`
+    Fee int `json:"amount"`
+}
+
 type Pool struct {
     Name string `json:"name"`
     Url string `json:"url"`
@@ -113,21 +137,37 @@ func setNodeData() {
             if ssl == true {
                 protocol = "https://"
             }
-            url := fmt.Sprintf("%[1]s%#[2]s:%#[3]s/getinfo", protocol, url, strconv.Itoa(port))
-            response := queryApi(url, "GET")
 
-            if isValidJson(response) && len(response) > 0 {
-                stmt, err := db.Prepare("INSERT INTO node_data(time, node_id, data) VALUES(NOW(),$1,$2)")
-                if err != nil {
-                    log.Println("There was an error preparing to insert the node data: ", err)
-                }
+            var nodeData NodeData
 
-                _, err = stmt.Exec(id, string(response))
-                if err != nil {
-                    log.Println("There was an error inserting the node data: ", err)
-                }
-                stmt.Close()
+            feeUrl := fmt.Sprintf("%[1]s%#[2]s:%#[3]s/feeinfo", protocol, url, strconv.Itoa(port))
+            feeResponse := queryApi(feeUrl, "GET")
+
+            err := json.Unmarshal(feeResponse, &nodeData)
+
+            if err != nil {
+                log.Println("There was an error getting the node fee (feeinfo): ", err)
             }
+
+            infoUrl := fmt.Sprintf("%[1]s%#[2]s:%#[3]s/getinfo", protocol, url, strconv.Itoa(port))
+            infoResponse := queryApi(infoUrl, "GET")
+
+            err = json.Unmarshal(infoResponse, &nodeData)
+
+            if err != nil {
+                log.Println("There was an error getting the node data (getinfo): ", err)
+            }
+
+            stmt, err := db.Prepare("INSERT INTO node_data(time, node_id, alt_blocks_count, difficulty, gray_peerlist_size, hashrate, height, incoming_connections_count, last_known_block_index, major_version, minor_version, network_height, outgoing_connections_count, start_time, status, supported_height, synced, testnet, tx_count, tx_pool_size, version, white_peerlist_size, fee) VALUES(NOW(),$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)")
+            if err != nil {
+                log.Println("There was an error preparing to insert the node data: ", err)
+            }
+
+            _, err = stmt.Exec(id, nodeData.AltBlocksCount, nodeData.Difficulty, nodeData.GrayPeerlistSize, nodeData.Hashrate, nodeData.Height, nodeData.IncomingConnectionsCount, nodeData.LastKnownBlockIndex, nodeData.MajorVersion, nodeData.MinorVersion, nodeData.NetworkHeight, nodeData.OutgoingConnectionsCount, nodeData.StartTime, nodeData.Status, nodeData.SupportedHeight, nodeData.Synced, nodeData.Testnet, nodeData.TxCount, nodeData.TxPoolSize, nodeData.Version, nodeData.WhitePeerlistSize, nodeData.Fee)
+            if err != nil {
+                log.Println("There was an error inserting the node data: ", err)
+            }
+            stmt.Close()
         }
     }
 }

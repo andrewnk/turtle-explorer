@@ -47,7 +47,7 @@ export default {
     computed: {
         ...mapGetters('node', { getNodes: 'list' }),
         nodes () {
-            return this.getNodes.filter(value => value.hasOwnProperty('data'))
+            return this.getNodes
         }
     },
     methods: {

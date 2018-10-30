@@ -117,66 +117,42 @@ export default {
                 {
                     id: 1,
                     label: 'Difficulty',
-                    name: 'difficulty',
-                    format: (val) => {
-                        return val.toLocaleString()
-                    }
+                    name: 'difficulty'
                 },
                 {
                     id: 2,
                     label: 'Hashrate',
-                    name: 'hashrate',
-                    format: (val) => {
-                        return this.humanReadableHashrate(val)
-                    }
+                    name: 'hashrate'
                 },
                 {
                     id: 3,
                     label: 'Height',
-                    name: 'height',
-                    format: (val) => {
-                        return val.toLocaleString()
-                    }
+                    name: 'height'
                 },
                 {
                     id: 4,
                     label: 'Incoming Connection',
-                    name: 'incomingConnectionsCount',
-                    format: (val) => {
-                        return val.toLocaleString()
-                    }
+                    name: 'incomingConnectionsCount'
                 },
                 {
                     id: 5,
                     label: 'Outgoing Connections',
-                    name: 'outgoingConnectionsCount',
-                    format: (val) => {
-                        return val.toLocaleString()
-                    }
+                    name: 'outgoingConnectionsCount'
                 },
                 {
                     id: 6,
                     label: 'Last Known Block Index',
-                    name: 'lastKnownBlockIndex',
-                    format: (val) => {
-                        return val.toLocaleString()
-                    }
+                    name: 'lastKnownBlockIndex'
                 },
                 {
                     id: 7,
                     label: 'Transaction Pool',
-                    name: 'transactionPool',
-                    format: (val) => {
-                        return val.toLocaleString()
-                    }
+                    name: 'transactionPool'
                 },
                 {
                     id: 8,
                     label: 'Time',
-                    name: 'startTime',
-                    format: (val) => {
-                        return (new Date(val * 1000)).toUTCString()
-                    }
+                    name: 'startTime'
                 }
             ],
             options : {
@@ -403,10 +379,9 @@ export default {
                             const catTime = new Date(val[0])
                             return [
                                 catTime.getTime(),
-                                val[1]
+                                parseInt(val[1])
                             ]
                         }),
-                        displayFormat: this.attributes.filter(attribute => attribute.label === label)[0].format,
                         id: node[0].id,
                         label: label,
                         name: node[0].name,

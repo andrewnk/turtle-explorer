@@ -42,7 +42,6 @@ const store = () => new Vuex.Store({
       idField: 'id',
       instanceDefaults: {
         id: null,
-        data: '',
         name: '',
         port: '',
         url: '',
@@ -52,9 +51,29 @@ const store = () => new Vuex.Store({
     service('node-data', {
       idField: 'time',
       instanceDefaults: {
-        data: '',
         time: '',
-        node_id: null
+        node_id: null,
+        alt_blocks_count: '',
+        difficulty: '',
+        gray_peerlist_size: '',
+        hashrate: '',
+        height: '',
+        incoming_connections_count: '',
+        last_known_block_index: '',
+        major_version: '',
+        minor_version: '',
+        network_height: '',
+        outgoing_connections_count: '',
+        start_time: '',
+        status: '',
+        supported_height: '',
+        synced: '',
+        testnet: '',
+        tx_count: '',
+        tx_pool_size: '',
+        version: '',
+        white_peerlist_size: '',
+        fee: ''
       }
     }),
     service('node-history', {

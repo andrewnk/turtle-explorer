@@ -18,28 +18,28 @@ module.exports = {
         let attribute = ''
         switch (context.params.query.attribute) {
           case 'difficulty':
-            attribute = "(data->>'difficulty')::float"
+            attribute = "difficulty"
             break;
           case 'hashrate':
-            attribute = "(data->>'hashrate')::float"
+            attribute = "hashrate"
             break;
           case 'height':
-            attribute = "(data->>'height')::float"
+            attribute = "height"
             break;
           case 'incomingConnectionsCount':
-            attribute = "(data->>'incoming_connections_count')::float"
+            attribute = "incoming_connections_count"
             break;
           case 'outgoingConnectionsCount':
-            attribute = "(data->>'outgoing_connections_count')::float"
+            attribute = "outgoing_connections_count"
             break;
           case 'lastKnownBlockIndex':
-            attribute = "(data->>'last_known_block_index')::float"
+            attribute = "last_known_block_index"
             break;
           case 'transactionPool':
-            attribute = "(data->>'tx_pool_size')::float"
+            attribute = "tx_pool_size"
             break;
           case 'startTime':
-            attribute = "(data->>'start_time')::float"
+            attribute = "start_time"
             break;
           default:
             return Promise.resolve(context)
@@ -54,13 +54,13 @@ module.exports = {
         context.params.sequelize = {
           attributes: [
             sequelize.literal("time_bucket('"+ timeBucket +"', time)::timestamp without time zone as \"timebucket\""),
-            sequelize.literal(attribute + " as \"data\""),
+            sequelize.literal('"' + attribute + '"' + ' as "data"'),
             'node_id'
           ],
           group: [
             [sequelize.literal('"timebucket"')],
-            ['node_id'],
-            ['data']
+            [attribute],
+            ['node_id']
           ],
           order: [
             [sequelize.literal('"timebucket" ASC')]
