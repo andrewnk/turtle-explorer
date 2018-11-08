@@ -30,5 +30,8 @@ export default {
             const regex = /^[a-z0-9]+$/i
             return walletAddress && walletAddress.length === 99 && walletAddress.substring(0, 4) === 'TRTL' && regex.test(walletAddress)
         },
+        getMostCommonElement (elements) {
+            return elements.sort((a, b) => elements.filter(v => v === a).length - elements.filter(v => v === b).length).pop()
+        }
     }
 }

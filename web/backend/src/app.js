@@ -25,7 +25,7 @@ const app = express(feathers());
 // Load app configuration
 app.configure(configuration());
 app.configure(config);
-// Enable CORS, security, compression, and body parsing
+// Enable security, compression, and body parsing
 app.use(helmet());
 app.use(compress());
 app.use(express.json());
@@ -39,14 +39,8 @@ app.configure(socketio(io => {
         pubsubClient.on('pool', channelPayload => {
             socket.emit('notifyPool', channelPayload)
         });
-        pubsubClient.on('poolNetwork', channelPayload => {
-            socket.emit('notifyPoolNetwork', channelPayload)
-        });
-        pubsubClient.on('poolConfig', channelPayload => {
-            socket.emit('notifyPoolConfig', channelPayload)
-        });
-        pubsubClient.on('poolPool', channelPayload => {
-            socket.emit('notifyPoolPool', channelPayload)
+        pubsubClient.on('poolData', channelPayload => {
+            socket.emit('notifyPoolData', channelPayload)
         });
         pubsubClient.on('node', channelPayload => {
             socket.emit('notifyNode', channelPayload)

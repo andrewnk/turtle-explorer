@@ -11,8 +11,38 @@ module.exports = function (app) {
     pool_id: {
       type: DataTypes.INTEGER
     },
-    data: {
-      type: DataTypes.JSONB
+    miners: {
+      type: DataTypes.INTEGER
+    },
+    min_payout: {
+      type: DataTypes.INTEGER
+    },
+    fee: {
+      type: DataTypes.FLOAT
+    },
+    hashrate: {
+      type: DataTypes.INTEGER
+    },
+    height: {
+      type: DataTypes.INTEGER
+    },
+    total_payments: {
+      type: DataTypes.INTEGER
+    },
+    miners_paid: {
+      type: DataTypes.INTEGER
+    },
+    total_blocks: {
+      type: DataTypes.INTEGER
+    },
+    last_block_found: {
+      type: DataTypes.STRING
+    },
+    difficulty: {
+      type: DataTypes.INTEGER
+    },
+    status: {
+      type: DataTypes.STRING
     }
   },
   {

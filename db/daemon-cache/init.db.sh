@@ -7,73 +7,69 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
     CREATE database daemon_cache;
     \connect daemon_cache;
 
-    CREATE TABLE IF NOT EXISTS transactions (
-        block LONGBLOB NOT NULL,
-        tx LONGBLOB NOT NULL,
-        tx_details LONGBLOB NOT NULL,
-        hash VARCHAR(255) NOT NULL,
-        payment_id VARCHAR(255),
-        mixin BIGINT NOT NULL,
-        size BIGINT NOT NULL,
-        fee BIGINT,
-        amount_out BIGINT,
-        block_hash VARCHAR(255) NOT NULL,
-        PRIMARY KEY(hash,paymentId,blockHash)
-    );
-
-    CREATE INDEX IF NOT EXISTS on transactions (paymentId, blockHash);
-
-    CREATE FUNCTION notify_transactions() RETURNS trigger
-      LANGUAGE plpgsql
-      AS '
-    BEGIN
-      PERFORM pg_notify(''transactions'', row_to_json(NEW)::text);
-      RETURN NULL;
-    END;
-    ';
-
-    CREATE TRIGGER updated_transactions_trigger AFTER INSERT ON transactions
-    FOR EACH ROW EXECUTE PROCEDURE notify_transactions();
-
-    CREATE TABLE IF NOT EXISTS blocks (
-      already_generated_coins VARCHAR(255) NOT NULL,
-      already_generated_transactions BIGINT NOT NULL,
-      base_reward BIGINT NOT NULL,
-      block_size BIGINT NOT NULL,
-      depth BIGINT NOT NULL,
-      difficulty BIGINT NOT NULL,
-      effective_size_median BIGINT NOT NULL,
-      hash VARCHAR(255) NOT NULL,
+    CREATE TABLE IF NOT EXISTS block (
       height BIGINT NOT NULL,
-      major_version BIGINT NOT NULL,
-      minor_version BIGINT NOT NULL,
-      nonce BIGINT NOT NULL,
-      orphan_status BOOLEAN NOT NULL,
-      penalty BIGINT NOT NULL,
-      prev_hash VARCHAR(255) NOT NULL,
-      reward BIGINT NOT NULL,
-      size_median BIGINT NOT NULL,
-      timestamp BIGINT NOT NULL,
-      total_fee_amount NUMERIC NOT NULL,
-      transactions LONGBLOB NOT NULL,
-      transactions_cumulative_size BIGINT NOT NULL,
-      status string
+      hash VARCHAR(255) NOT NULL CONSTRAINT block_pk,
+      data JSONB NOT NULL
       PRIMARY KEY(height, hash)
     )
 
-    CREATE INDEX IF NOT EXISTS ON blocks (timestamp);
+    CREATE INDEX IF NOT EXISTS ON block (hash, height);
+    CREATE INDEX idxgin_block ON block USING GIN (data);
 
-    CREATE FUNCTION notify_blocks() RETURNS trigger
+    CREATE FUNCTION notify_block() RETURNS trigger
       LANGUAGE plpgsql
       AS '
     BEGIN
-      PERFORM pg_notify(''blocks'', row_to_json(NEW)::text);
+      PERFORM pg_notify(''block'', height);
       RETURN NULL;
     END;
     ';
 
-    CREATE TRIGGER updated_blocks_trigger AFTER INSERT ON blocks
-    FOR EACH ROW EXECUTE PROCEDURE notify_blocks();
+    CREATE TRIGGER updated_block_trigger AFTER INSERT ON block
+    FOR EACH ROW EXECUTE PROCEDURE notify_block();
+
+    CREATE TABLE IF NOT EXISTS transaction (
+        block_hash VARCHAR(255) NOT NULL references block(hash),
+        data JSONB NOT NULL
+        PRIMARY KEY(data)
+    );
+
+    CREATE INDEX IF NOT EXISTS on transaction (block_hash);
+    CREATE INDEX idxgin_transaction ON transaction USING GIN (data);
+
+    CREATE FUNCTION notify_transaction() RETURNS trigger
+      LANGUAGE plpgsql
+      AS '
+    BEGIN
+      PERFORM pg_notify(''transaction'', block_hash);
+      RETURN NULL;
+    END;
+    ';
+
+    CREATE TRIGGER updated_transaction_trigger AFTER INSERT ON transaction
+    FOR EACH ROW EXECUTE PROCEDURE notify_transaction();
+
+    CREATE TABLE IF NOT EXISTS mempool (
+        id SERIAL,
+        data JSONB NOT NULL
+        PRIMARY KEY(data)
+    );
+
+    CREATE INDEX IF NOT EXISTS on mempool (id);
+    CREATE INDEX idxgin_mempool ON mempool USING GIN (data);
+
+    CREATE FUNCTION notify_mempool() RETURNS trigger
+      LANGUAGE plpgsql
+      AS '
+    BEGIN
+      PERFORM pg_notify(''mempool'', id);
+      RETURN NULL;
+    END;
+    ';
+
+    CREATE TRIGGER updated_mempool_trigger AFTER INSERT ON mempool
+    FOR EACH ROW EXECUTE PROCEDURE notify_mempool();
 
     GRANT SELECT, INSERT ON ALL TABLES IN SCHEMA public TO service;
     GRANT SELECT ON ALL TABLES IN SCHEMA public TO web;

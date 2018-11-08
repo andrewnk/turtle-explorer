@@ -66,23 +66,23 @@ services:
     depends_on:
       - db-nodes-and-pools
 
-  service-daemon-cache:
-    build:
-      context: ./service/daemon-cache
-      args:
-        DB_USER: service
-        DB_NAME: daemon_cache
-        DB_PASSWORD: 98765
-        DB_HOST: db-daemon-cache
-        DB_PORT: 5432
-        DAEMON_RPC_PORT: 11898
-        DAEMON_RPC_HOST: daemon
-    restart: always
-    container_name: service-daemon-cache
-    depends_on: 
-      - db-daemon-cache
-    networks:
-      - daemon-backend
+  # service-daemon-cache:
+  #   build:
+  #     context: ./service/daemon-cache
+  #     args:
+  #       DB_USER: service
+  #       DB_NAME: daemon_cache
+  #       DB_PASSWORD: 98765
+  #       DB_HOST: db-daemon-cache
+  #       DB_PORT: 5432
+  #       DAEMON_RPC_PORT: 11898
+  #       DAEMON_RPC_HOST: daemon
+  #   restart: always
+  #   container_name: service-daemon-cache
+  #   depends_on: 
+  #     - db-daemon-cache
+  #   networks:
+  #     - daemon-backend
 
   web-backend:
     build:

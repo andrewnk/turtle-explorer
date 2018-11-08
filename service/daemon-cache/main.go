@@ -2,23 +2,19 @@ package main
 
 import (
     "fmt"
-    "io/ioutil"
+    // "io/ioutil"
     "log"
-    "net/http"
     "encoding/json"
-    "time"
     "strconv"
     "database/sql"
     "flag"
     _ "github.com/lib/pq"
     "github.com/robfig/cron"
     "github.com/tidwall/sjson"
-    "github.com/turtlecoin/turtlecoin-rpc-go/turtlecoind"
+    turtlecoind "github.com/turtlecoin/turtlecoin-rpc-go"
 )
 
 var (
-    poolsJsonLink string = "https://raw.githubusercontent.com/turtlecoin/turtlecoin-pools-json/master/v2/turtlecoin-pools.json"
-    nodesJsonLink string = "https://raw.githubusercontent.com/turtlecoin/turtlecoin-nodes-json/master/turtlecoin-nodes.json"
     dbUser string
     dbName string
     dbPassword string
@@ -29,29 +25,6 @@ var (
     daemonPort int
     db *sql.DB
 )
-
-type Node struct {
-    Name string `json:"name"`
-    Url string `json:"url"`
-    Port int `json:"port"`
-    SSL bool `json:"ssl"`
-}
-
-type Nodes struct {
-    Nodes []Node `json:"nodes"`
-}
-
-type Pool struct {
-    Name string `json:"name"`
-    Url string `json:"url"`
-    Api string `json:"api"`
-    Type string `json:"type"`
-    MiningAddress string `json:"miningAddress"`
-}
-
-type Pools struct {
-    Pools []Pool `json:"pools"`
-}
 
 func main() {
     flag.StringVar(&dbUser, "db-user", "", "Database User")
@@ -64,7 +37,7 @@ func main() {
     flag.IntVar(&daemonPort, "daemon-port", 11898, "Daemon Port")
     flag.Parse()
 
-    // hash := turtlecoind.GetBlockHash(daemonHost, daemonPort, 600000)
+    // hash := turtlecoind.GetBlockHash(daemonHost, daemonPort, 1)
     // block := turtlecoind.GetBlock(daemonHost, daemonPort, "446d9bd3b8709a74f4a9ecaa0a3054bb0036e99e0682028bfa87f8b862691eb3")
     tx := turtlecoind.GetTransaction(daemonHost, daemonPort, "ddb482de5f435864c7b194c110f56dc61da3c93bf21c4193889efa38b1ccf351")
     fmt.Println(tx)
@@ -72,29 +45,29 @@ func main() {
     // get record from database
     // if no records exist start from 1 else get most recent block
     // get block hash by height
-    // then get block info
+    // then get block using block hash
+    // for each transaction get transaction info using transaction hash
     // then get transactions info
     // insert into db
     // rinse and repeat
 
-
+    //get transactions in mem pool
+    //loop through db mempool transactions
+    //if db mempool transaction is not in new transaction then delete
+    //after loop is complete add all mempool transactions into db
+    mempool := turtlecoind.GetTransactionPool(daemonHost, daemonPort)
+    fmt.Println(mempool)
 
     initDb()
-    setNodes()
-    setPools()
+    setBlock()
+    setMemPool()
 
     c := cron.New()
     c.Start()
-    // update node and pool stats every 30 seconds
-    c.AddFunc("30 * * * * *", func() {
-        setNodeData()
-        setPoolData()
-    })
-
-    // update nodes and pools every 12 hours
-    c.AddFunc("@every 12h", func() {
-        setNodes()
-        setPools()
+    // update blocks and mempool every 25 seconds
+    c.AddFunc("25 * * * * *", func() {
+        setBlock()
+        setMemPool()
     })
 
     // keep the program running indefinitely
@@ -111,14 +84,19 @@ func initDb() {
     }
 }
 
-func setNodeData() {
-    nodes, err := db.Query("SELECT id, url, port, ssl FROM node")
-
+func setBlock() {
+    blockHeight, err := db.Query()
+    blockRow := db.QueryRow("SELECT max(height) FROM block")
+    err := row.Scan(&height)
     if err != nil {
-        log.Println("There was an error getting the nodes from the db: ", err)
+        log.Println("There was an error getting the block height from the db: ", err)
     }
 
-    defer nodes.Close()
+    hash, err := turtlecoind.GetBlockHash(daemonHost, daemonPort, 1)
+    block, err := turtlecoind.GetBlock(daemonHost, daemonPort, "446d9bd3b8709a74f4a9ecaa0a3054bb0036e99e0682028bfa87f8b862691eb3")
+    tx, err := turtlecoind.GetTransaction(daemonHost, daemonPort, "ddb482de5f435864c7b194c110f56dc61da3c93bf21c4193889efa38b1ccf351")
+
+    defer block.Close()
     for nodes.Next() {
         var id int
         var url string
@@ -152,7 +130,7 @@ func setNodeData() {
     }
 }
 
-func setPoolData() {
+func setMemPool() {
     pools, err := db.Query("SELECT id, api FROM pool")
 
     if err != nil {
@@ -195,103 +173,6 @@ func setPoolData() {
             }
         }
     }
-}
-
-func setNodes() {
-    nodes := getNodeJson()
-
-    for i := 0; i < len(nodes.Nodes); i++ {
-        var name string
-        err := db.QueryRow("SELECT name FROM node WHERE name = $1 LIMIT 1", nodes.Nodes[i].Name).Scan(&name)
-
-        if err == sql.ErrNoRows {
-            stmt, err := db.Prepare("INSERT INTO node(name, url, port, ssl) VALUES ($1, $2, $3, $4)")
-            if err != nil {
-                log.Println("There was an error preparing to insert the node: ", err)
-            }
-
-            _, err = stmt.Exec(nodes.Nodes[i].Name, nodes.Nodes[i].Url, nodes.Nodes[i].Port, nodes.Nodes[i].SSL)
-            if err != nil {
-                log.Println("There was an error inserting the node into the database: ", err)
-            }
-            stmt.Close()
-        }
-    }
-}
-
-func getNodeJson() Nodes {
-    response := queryApi(nodesJsonLink, "GET")
-
-    var nodes Nodes
-    err := json.Unmarshal(response, &nodes)
-
-    if err != nil {
-        log.Println("There was an error getting the nodes", err)
-    } else {
-        log.Println("Successfully got nodes")
-    }
-
-    return nodes
-}
-
-func setPools() {
-    pools := getPoolJson()
-
-    for i := 0; i < len(pools.Pools); i++ {
-        var name string
-        err := db.QueryRow("SELECT name FROM pool WHERE name = $1 LIMIT 1", pools.Pools[i].Name).Scan(&name)
-
-        if err == sql.ErrNoRows {
-            stmt, err := db.Prepare("INSERT INTO pool(name, url, api, type, mining_address) VALUES ($1, $2, $3, $4, $5)")
-            if err != nil {
-                log.Println("There was an error preparing to insert the pool: ", err)
-            }
-
-            _, err = stmt.Exec(pools.Pools[i].Name, pools.Pools[i].Url, pools.Pools[i].Api, pools.Pools[i].Type, pools.Pools[i].MiningAddress)
-            if err != nil {
-                log.Println("There was an error inserting the pool into the database: ", err)
-            }
-            stmt.Close()
-        }
-    }
-}
-
-func getPoolJson() Pools {
-    response := queryApi(poolsJsonLink, "GET")
-
-    var pools Pools
-    err := json.Unmarshal(response, &pools)
-    if err != nil {
-        log.Println("There was an error getting the pools", err)
-    } else {
-        log.Println("Successfully got pools")
-    }
-
-    return pools
-}
-
-func queryApi(url string, action string) []byte {
-    request := &http.Client{
-        Timeout: 30 * time.Second,
-    }
-
-    r, err := http.NewRequest(action, url, nil)
-    response, err := request.Do(r)
-
-    if err != nil {
-        log.Println("There was an error querying the url: ", err)
-        return []byte{}
-    }
-
-    defer response.Body.Close()
-
-    responseData, err := ioutil.ReadAll(response.Body)
-
-    if err != nil {
-        log.Println("There was an error reading the response: ", err)
-    }
-
-    return responseData
 }
 
 func isValidJson(data []byte) bool {

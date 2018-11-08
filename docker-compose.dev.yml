@@ -6,10 +6,10 @@ services:
       - ./service/nodes-and-pools:/go
     command: tail -f /dev/null
 
-  service-daemon-cache:
-    volumes:
-      - ./service/daemon-cache:/go
-    command: tail -f /dev/null
+  # service-daemon-cache:
+  #   volumes:
+  #     - ./service/daemon-cache:/go
+  #   command: tail -f /dev/null
 
   web-backend:
     volumes:

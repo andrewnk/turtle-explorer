@@ -26,7 +26,6 @@ WORKDIR /go
 RUN apk add --no-cache git postgresql-client && \
     go get github.com/lib/pq && \
     go get github.com/robfig/cron && \
-    go get github.com/tidwall/sjson && \
     CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags="-s" -o service-nodes-and-pools && \
     chmod +x wait-for-postgres.sh
 

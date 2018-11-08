@@ -72,7 +72,7 @@ module.exports = function (app) {
       type: DataTypes.BIGINT
     },
     fee: {
-      type: DataTypes.BIGINT
+      type: DataTypes.FLOAT
     }
   },
   {

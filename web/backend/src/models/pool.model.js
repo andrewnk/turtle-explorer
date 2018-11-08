@@ -17,7 +17,7 @@ module.exports = function (app) {
     api: {
       type: DataTypes.STRING
     },
-    type: {
+    software: {
       type: DataTypes.STRING
     },
     mining_address: {
@@ -39,6 +39,7 @@ module.exports = function (app) {
   // eslint-disable-next-line no-unused-vars
   pool.associate = function (models) {
     pool.hasMany(models.pool_data, {foreignKey: 'pool_id', sourceKey: 'id'})
+    pool.hasMany(models.pool_config, {foreignKey: 'pool_id', sourceKey: 'id'})
   };
 
   return pool;

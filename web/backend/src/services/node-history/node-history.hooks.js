@@ -15,34 +15,22 @@ module.exports = {
     find: [
       redisBefore(),
       context => {
+        let acceptableAttributes = [
+          'difficulty',
+          'hashrate',
+          'height',
+          'incoming_connections_count',
+          'outgoing_connections_count',
+          'last_known_block_index',
+          'tx_pool_size',
+          'start_time'
+        ]
+
         let attribute = ''
-        switch (context.params.query.attribute) {
-          case 'difficulty':
-            attribute = "difficulty"
-            break;
-          case 'hashrate':
-            attribute = "hashrate"
-            break;
-          case 'height':
-            attribute = "height"
-            break;
-          case 'incomingConnectionsCount':
-            attribute = "incoming_connections_count"
-            break;
-          case 'outgoingConnectionsCount':
-            attribute = "outgoing_connections_count"
-            break;
-          case 'lastKnownBlockIndex':
-            attribute = "last_known_block_index"
-            break;
-          case 'transactionPool':
-            attribute = "tx_pool_size"
-            break;
-          case 'startTime':
-            attribute = "start_time"
-            break;
-          default:
-            return Promise.resolve(context)
+        if(acceptableAttributes.includes(context.params.query.attribute)) {
+          attribute = context.params.query.attribute
+        } else {
+          return Promise.resolve(context)
         }
 
         let timeBucket = "1 hour"

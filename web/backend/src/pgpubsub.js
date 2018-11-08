@@ -5,8 +5,6 @@ module.exports = function (app) {
     pubsubInstance.addChannel('node')
     pubsubInstance.addChannel('nodeData')
     pubsubInstance.addChannel('pool')
-    pubsubInstance.addChannel('poolNetwork');
-    pubsubInstance.addChannel('poolConfig');
-    pubsubInstance.addChannel('poolPool');
+    pubsubInstance.addChannel('poolData');
     app.set('pubsubClient', pubsubInstance);
 }

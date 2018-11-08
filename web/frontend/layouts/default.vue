@@ -30,55 +30,9 @@ export default {
     },
     created () {
         let promises = []
-        promises.push(this.$store.dispatch('pool/find', { query: { $sort: { name: 1 }}}).then(pools => {
-            let poolPromise = []
-            poolPromise = pools.map(pool => {
-                return this.$store.dispatch('pool-data/find', {
-                    query: {
-                        pool_id: {
-                            $eq: pool.id
-                        },
-                        $sort: {
-                            time: -1
-                        },
-                        $limit: 1
-                    }
-                })
-            })
+        promises.push(this.$store.dispatch('pool/find', { query: { $sort: { name: 1 }}}))
 
-            return Promise.all(poolPromise).then(results => {
-                results.forEach(result => {
-                    if(result.length > 0 && result[0].data) {
-                        this.$store.state.pool.keyedById[result[0].pool_id].data = result[0].data
-                    }
-                })
-            })
-        }))
-
-        promises.push(this.$store.dispatch('node/find').then(nodes => {
-            let nodePromise = []
-            nodePromise = nodes.map(node => {
-                return this.$store.dispatch('node-data/find', {
-                    query: {
-                        node_id: {
-                            $eq: node.id
-                        },
-                        $sort: {
-                            time: -1
-                        },
-                        $limit: 1
-                    }
-                })
-            })
-
-            return Promise.all(nodePromise).then(results => {
-                results.forEach(result => {
-                    if(result.length > 0 && result[0]) {
-                        this.$store.state.node.keyedById[result[0].node_id].data = result[0]
-                    }
-                })
-            })
-        }))
+        promises.push(this.$store.dispatch('node/find', { query: { $sort: { name: 1 }}}))
 
         Promise.all(promises).then(() => this.isLoaded = true)
 
@@ -101,19 +55,9 @@ export default {
                 this.$store.commit('pool/addItem', data)
             }
         })
-        socket.on('notifyPoolNetwork', data => {
-            if(this.$store.state.pool.keyedById[data.pool_id].hasOwnProperty('data')) {
-                this.$store.state.pool.keyedById[data.pool_id].data.network = data.poolNetwork
-            }
-        })
-        socket.on('notifyPoolConfig', data => {
-            if(this.$store.state.pool.keyedById[data.pool_id].hasOwnProperty('data')) {
-                this.$store.state.pool.keyedById[data.pool_id].data.config = data.poolConfig
-            }
-        })
-        socket.on('notifyPoolPool', data => {
-            if(this.$store.state.pool.keyedById[data.pool_id].hasOwnProperty('data')) {
-                this.$store.state.pool.keyedById[data.pool_id].data.pool = data.poolPool
+        socket.on('notifyPoolData', data => {
+            if(this.$store.state.pool.keyedById[data.pool_id]) {
+                this.$store.state.pool.keyedById[data.pool_id].data = data
             }
         })
     }

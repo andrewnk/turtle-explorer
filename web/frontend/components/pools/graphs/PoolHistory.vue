@@ -122,74 +122,50 @@ export default {
                 {
                     id: 1,
                     label: 'Difficulty',
-                    location: 'data.network.difficulty',
-                    name: 'difficulty',
-                    format: (val) => {
-                        return val.toLocaleString()
-                    }
+                    location: 'data.difficulty',
+                    name: 'difficulty'
                 },
                 {
                     id: 2,
                     label: 'Hashrate',
-                    location: 'data.pool.hashrate',
-                    name: 'hashrate',
-                    format: (val) => {
-                        return this.humanReadableHashrate(val)
-                    }
+                    location: 'data.hashrate',
+                    name: 'hashrate'
                 },
                 {
                     id: 3,
                     label: 'Height',
-                    location: 'data.network.height',
-                    name: 'height',
-                    format: (val) => {
-                        return val.toLocaleString()
-                    }
+                    location: 'data.height',
+                    name: 'height'
                 },
                 {
                     id: 4,
                     label: 'Miners',
-                    location: 'data.pool.miners',
-                    name: 'miners',
-                    format: (val) => {
-                        return val.toLocaleString()
-                    }
+                    location: 'data.miners',
+                    name: 'miners'
                 },
                 {
                     id: 5,
                     label: 'Total Blocks',
-                    location: 'data.pool.totalBlocks',
-                    name: 'totalBlocks',
-                    format: (val) => {
-                        return val.toLocaleString()
-                    }
+                    location: 'data.total_blocks',
+                    name: 'total_blocks'
                 },
                 {
                     id: 6,
                     label: 'Total Miners Paid',
-                    location: 'data.pool.totalMinersPaid',
-                    name: 'totalMinersPaid',
-                    format: (val) => {
-                        return val.toLocaleString()
-                    }
+                    location: 'data.miners_paid',
+                    name: 'miners_paid'
                 },
                 {
                     id: 7,
                     label: 'Total Payments',
-                    location: 'data.pool.totalPayments',
-                    name: 'totalPayments',
-                    format: (val) => {
-                        return val.toLocaleString()
-                    }
+                    location: 'data.total_payments',
+                    name: 'total_payments'
                 },
                 {
                     id: 8,
                     label: 'Time',
-                    location: 'data.network.timestamp',
-                    name: 'timestamp',
-                    format: (val) => {
-                        return (new Date(val * 1000)).toUTCString()
-                    }
+                    location: 'data.timestamp',
+                    name: 'timestamp'
                 }
             ],
             options : {
@@ -416,10 +392,9 @@ export default {
                             const catTime = new Date(val[0])
                             return [
                                 catTime.getTime(),
-                                val[1]
+                                parseInt(val[1])
                             ]
                         }),
-                        displayFormat: this.attributes.filter(attribute => attribute.label === label)[0].format,
                         id: pool[0].id,
                         label: label,
                         name: pool[0].name,

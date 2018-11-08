@@ -132,27 +132,27 @@ export default {
                 {
                     id: 4,
                     label: 'Incoming Connection',
-                    name: 'incomingConnectionsCount'
+                    name: 'incoming_connections_count'
                 },
                 {
                     id: 5,
                     label: 'Outgoing Connections',
-                    name: 'outgoingConnectionsCount'
+                    name: 'outgoing_connections_count'
                 },
                 {
                     id: 6,
                     label: 'Last Known Block Index',
-                    name: 'lastKnownBlockIndex'
+                    name: 'last_known_block_index'
                 },
                 {
                     id: 7,
                     label: 'Transaction Pool',
-                    name: 'transactionPool'
+                    name: 'tx_pool_size'
                 },
                 {
                     id: 8,
                     label: 'Time',
-                    name: 'startTime'
+                    name: 'start_time'
                 }
             ],
             options : {

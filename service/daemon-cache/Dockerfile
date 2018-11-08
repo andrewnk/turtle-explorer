@@ -33,7 +33,7 @@ RUN apk add --no-cache git postgresql-client && \
     go get github.com/lib/pq && \
     go get github.com/robfig/cron && \
     go get github.com/tidwall/sjson && \
-    go get github.com/turtlecoin/turtlecoin-rpc-go/turtlecoind && \
+    go get github.com/turtlecoin/turtlecoin-rpc-go/ && \
     CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags="-s" -o service-daemon-cache && \
     chmod +x wait-for-postgres.sh
 

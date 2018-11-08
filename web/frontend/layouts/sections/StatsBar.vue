@@ -10,7 +10,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {{ nodes.height.toLocaleString() }}
+                            {{ nodeHeight.toLocaleString() }}
                         </td>
                     </tr>
                     <tr>
@@ -20,7 +20,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {{ nodes.difficulty.toLocaleString() }}
+                            {{ nodeDifficulty.toLocaleString() }}
                         </td>
                     </tr>
                     <tr>
@@ -30,7 +30,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {{ humanReadableHashrate(nodes.hashrate) }}
+                            {{ humanReadableHashrate(nodeHashrate) }}
                         </td>
                     </tr>
                     <tr>
@@ -114,25 +114,40 @@ export default {
         ...mapGetters('node', { getNodes: 'list' }),
         ...mapGetters('pool', { getPools: 'list' }),
         pools () {
-            return this.getPools.filter(value => value.hasOwnProperty('data') && value.data.hasOwnProperty('pool'))
+            return this.getPools.filter(value => value.hasOwnProperty('data') && value.data !== '')
         },
         poolHashrate () {
-            return this.pools.map(pool => pool.data.pool.hashrate).reduce((acc, val) => acc.length > 0 ? acc : acc + val)
+            return this.pools.map(pool => pool.data.hashrate).reduce((acc, val) => acc.length > 0 ? parseInt(acc) : parseInt(acc) + parseInt(val))
         },
         poolMiners () {
-            return this.pools.map(pool => pool.data.pool.miners).reduce((acc, val) => acc.length > 0 ? acc : acc + val)
+            return this.pools.map(pool => pool.data.miners).reduce((acc, val) => acc.length > 0 ? parseInt(acc) : parseInt(acc) + parseInt(val))
         },
         poolBlocks () {
-            return this.pools.map(pool => pool.data.pool.totalBlocks).reduce((acc, val) => acc.length > 0 ? acc : acc + val)
+            return this.pools.map(pool => pool.data.total_blocks).reduce((acc, val) => acc.length > 0 ? parseInt(acc) : parseInt(acc) + parseInt(val))
         },
         poolPayments () {
-            return this.pools.map(pool => pool.data.pool.totalPayments).reduce((acc, val) => acc.length > 0 ? acc : acc + val)
+            return this.pools.map(pool => pool.data.total_payments).reduce((acc, val) => acc.length > 0 ? parseInt(acc) : parseInt(acc) + parseInt(val))
         },
         poolMinersPaid () {
-            return this.pools.map(pool => pool.data.pool.totalMinersPaid).reduce((acc, val) => acc.length > 0 ? acc : acc + val)
+            return this.pools.map(pool => pool.data.miners_paid).reduce((acc, val) => acc.length > 0 ? parseInt(acc) : parseInt(acc) + parseInt(val))
         },
         nodes () {
-            return this.getNodes.filter(val => val.hasOwnProperty('data')).sort((a, b) => (b.data.start_time - a.data.start_time) || 0)[0].data
+            return this.getNodes.filter(val => val.hasOwnProperty('data'))
+        },
+        nodeHashrate () {
+            // get the most common hashrate among nodes
+            let hashrates = this.nodes.filter(val => parseInt(val.data.hashrate) !== 0).map(val => val.data.hashrate)
+            return this.getMostCommonElement(hashrates)
+        },
+        nodeHeight () {
+            // get the most common height among nodes
+            let heights = this.nodes.filter(val => parseInt(val.data.height) !== 0).map(val => val.data.height)
+            return this.getMostCommonElement(heights)
+        },
+        nodeDifficulty () {
+            // get the most common difficulty among nodes
+            let difficulties = this.nodes.filter(val => parseInt(val.data.difficulty) !== 0).map(val => val.data.difficulty)
+            return this.getMostCommonElement(difficulties)
         },
         fontClass() {
             return this.show ? 'fa-angle-double-left' : 'fa-angle-double-right'

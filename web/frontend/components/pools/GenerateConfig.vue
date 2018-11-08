@@ -12,7 +12,7 @@
                 subtitle=""
                 color="#00853D"
             >
-                <tab-content title="Software &amp; OS" icon="fas fa-wallet" :before-change="validateSoftwareAndOS">
+                <tab-content title="Software &amp; OS" icon="fas fa-save" :before-change="validateSoftwareAndOS">
                     <div class="field is-horizontal">
                         <div class="field-label is-normal">
                             <label class="label">Software</label>
@@ -218,9 +218,7 @@ export default {
             this.$emit('update:isActive', false)
         },
         generateConfig () {
-            console.log(sprintf.sprintf(this.minerConfig.miner.os.command, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet).trim())
             this.minerConfig.result.command = sprintf.sprintf(this.minerConfig.miner.os.command, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet).trim()
-            console.log(sprintf.sprintf(this.minerConfig.miner.os.config, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet).trim())
             this.minerConfig.result.config = sprintf.sprintf(this.minerConfig.miner.os.config, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet).trim()
             return true
         },
