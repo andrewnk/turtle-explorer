@@ -17,9 +17,6 @@ module.exports = function (app) {
     min_payout: {
       type: DataTypes.INTEGER
     },
-    fee: {
-      type: DataTypes.FLOAT
-    },
     hashrate: {
       type: DataTypes.INTEGER
     },

@@ -3,7 +3,7 @@ const DataTypes = Sequelize.DataTypes;
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const poolConfig = sequelizeClient.define('pool_config', {
+  const poolFee = sequelizeClient.define('pool_fee', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true
@@ -11,17 +11,11 @@ module.exports = function (app) {
     pool_id: {
       type: DataTypes.INTEGER
     },
-    fee_id: {
-      type: DataTypes.INTEGER
-    },
-    difficulty: {
-      type: DataTypes.INTEGER
-    },
-    port: {
-      type: DataTypes.INTEGER
-    },
-    description: {
+    fee_type: {
       type: DataTypes.STRING
+    },
+    fee: {
+      type: DataTypes.FLOAT
     }
   },
   {
@@ -34,10 +28,9 @@ module.exports = function (app) {
   });
 
   // eslint-disable-next-line no-unused-vars
-  poolConfig.associate = function (models) {
-    poolConfig.belongsTo(models.pool, {foreignKey: 'pool_id', targetKey: 'id'})
-    poolConfig.belongsTo(models.pool_fee, {foreignKey: 'fee_id', targetKey: 'id'})
+  poolFee.associate = function (models) {
+    poolFee.hasMany(models.pool_config, {foreignKey: 'fee_id', sourceKey: 'id'})
   };
 
-  return poolConfig;
+  return poolFee;
 };

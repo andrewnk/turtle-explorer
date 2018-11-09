@@ -491,7 +491,7 @@ export default {
                 })
 
                 // console.log(this.$refs.historical.chart.get(newVal.id))
-                // const x = this.getAttributeLocation(this.selectedAttribute).split('.').reduce((acc, part) => acc && acc[part], selectedPoolData)
+                // const x = this.getAttributeLocation(this.selectedAttribute).split('.').reduce((a, b) => a && a[b], selectedPoolData)
                 // console.log(x)
             },
             deep: true

@@ -5,7 +5,7 @@ export default {
         },
         getFromattedDate (UTCString) {
             if(typeof UTCString === 'undefined') return
-            const utc = new Date(parseInt(UTCString))
+            const utc = UTCString.length > 12 ? new Date(parseInt(UTCString)) : new Date(parseInt(UTCString * 1000))
             return utc.getUTCMonth() + 1 + '/' + utc.getUTCDate() + '/' + utc.getUTCFullYear() + ' ' + utc.getUTCHours() + ':' + utc.getUTCMinutes() + ':' + utc.getUTCSeconds() + ' UTC'
         },
         convertToUTCStart (date) {
@@ -23,7 +23,7 @@ export default {
             return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
         },
         showCell (props, obj) {
-            return props.reduce((xs, x) => (xs && xs[x]) ? xs[x] : false, obj)
+            return props.reduce((a, b) => (a && a[b]) ? a[b] : false, obj)
         },
         validateWalletAddress (walletAddress) {
 

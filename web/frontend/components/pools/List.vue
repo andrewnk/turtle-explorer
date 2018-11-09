@@ -46,42 +46,44 @@
                 </b-table-column>
                 <b-table-column field="data.miners" label="Miners" sortable numeric>
                     <div :key="props.row.data.miners">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.miners && props.row.data.miners !== "0" ? props.row.data.miners.toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.miners !== "0" ? props.row.data.miners.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.min_payout" label="Min. Payout" sortable numeric>
                     <div :key="props.row.data.min_payout">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.min_payout && props.row.data.min_payout !== "0" ? (props.row.data.min_payout / 100).toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.min_payout !== "0" ? (props.row.data.min_payout / 100).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.fee" label="Fee" sortable numeric>
-                    <div :key="props.row.data.fee">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.fee ? twoDecimals(props.row.data.fee).toLocaleString() + '%' : '' }}
+                    <div :key="getAllFees(props.row.id)">
+                        <div v-if="props.row.data.status !== 'Unreachable'">
+                            <span v-html="getAllFees(props.row.id)"></span>
+                        </div>
                     </div>
                 </b-table-column>
                 <b-table-column field="data.total_payments" label="Total Payments" sortable numeric>
                     <div :key="props.row.data.total_payments">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.total_payments && props.row.data.total_payments !== "0" ? props.row.data.total_payments.toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.total_payments !== "0" ? props.row.data.total_payments.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.miners_paid" label="Miners Paid" sortable numeric>
                     <div :key="props.row.data.miners_paid">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.miners_paid && props.row.data.miners_paid !== "0" ? props.row.data.miners_paid.toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.miners_paid !== "0" ? props.row.data.miners_paid.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.total_blocks" label="Total Blocks" sortable numeric>
                     <div :key="props.row.data.total_blocks">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.total_blocks && props.row.data.total_blocks !== "0" ? props.row.data.total_blocks.toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.total_blocks !== "0" ? props.row.data.total_blocks.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.hashrate" label="Hashrate" sortable numeric>
                     <div :key="props.row.data.hashrate">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.hashrate && props.row.data.hashrate !== "0" ? humanReadableHashrate(parseInt(props.row.data.hashrate), 2) : '' }}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.hashrate !== "0" ? humanReadableHashrate(parseInt(props.row.data.hashrate), 2) : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.height" label="Height" sortable numeric>
                     <div :key="props.row.data.height">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.height && props.row.data.height !== "0" ? props.row.data.height.toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.height !== "0" ? props.row.data.height.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.last_block_found" label="Last Block Found" sortable>
@@ -89,7 +91,7 @@
                         class="has-text-right"
                         :key="props.row.data.last_block_found"
                     >
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.last_block_found && props.row.data.last_block_found !== "0" && props.row.data.last_block_found !== "0" ? getFromattedDate(props.row.data.last_block_found) : '' }}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.last_block_found !== '' ? getFromattedDate(props.row.data.last_block_found) : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.status" label="Status" sortable>
@@ -123,6 +125,8 @@
                                 </div>
                                 <div class="card-content p-t-5">
                                     <p>Address: {{ props.row.mining_address }}</p>
+                                    <p v-if="port.fee_id !== null">Fee Type: {{ getPortFeeType(props.row.id, port.fee_id) }}</p>
+                                    <p v-if="port.fee_id !== null">Fee: {{ getPortFee(props.row.id, port.fee_id) }}%</p>
                                     <p>Port: {{ port.port }}</p>
                                     <p>Difficulty: {{ port.difficulty }}</p>
                                     <div class="field p-t-15">
@@ -199,6 +203,25 @@ export default {
             this.isActive = true
             this.minerConfig.pool = pool
             this.minerConfig.config = config
+        },
+        getAllFees (id) {
+            const pool = this.pools.filter(val => val.id === id)[0]
+            if (pool.fees.length === 1) {
+                return this.twoDecimals(pool.fees[0].fee).toLocaleString() + '%'
+            } else if (pool.fees.length > 1) {
+                //get all fees then narrow those fees by the fees used in ports
+                const feeIds = [...new Set(pool.ports.map(val => val.fee_id))]
+                const fees = pool.fees.filter(val => feeIds.includes(val.id)).map(val => `${val.fee_type} ${this.twoDecimals(val.fee)}%`)
+                return fees.join(`<br/>`)
+            }
+        },
+        getPortFee (id, feeId) {
+            const pool = this.pools.filter(val => val.id === id)[0]
+            return pool.fees.filter(val => val.id === feeId)[0].fee
+        },
+        getPortFeeType (id, feeId) {
+            const pool = this.pools.filter(val => val.id === id)[0]
+            return pool.fees.filter(val => val.id === feeId)[0].fee_type
         }
     },
     watch: {

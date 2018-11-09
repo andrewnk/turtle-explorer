@@ -6,7 +6,8 @@ const poolResolver = {
       resolver: () => async (pool, context) => {
         pool.ports = await context.app.service('pool-config').find({ 
           query: {
-            pool_id: pool.id
+            pool_id: pool.id,
+            $sort: { difficulty: 1 }
           },
           paginate: false }
         )
@@ -25,7 +26,17 @@ const poolResolver = {
 
         pool.data = results[0]
       }
-    }
+    },
+    fees: {
+      resolver: () => async (pool, context) => {
+        pool.fees = await context.app.service('pool-fee').find({ 
+          query: {
+            pool_id: pool.id
+          },
+          paginate: false }
+        )
+      }
+    },
   }
 };
 

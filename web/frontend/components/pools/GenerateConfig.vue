@@ -88,6 +88,18 @@
                                 </span>
                                 {{ config.pool.mining_address }}
                             </li>
+                            <li v-if="config.config.fee_id !== null">
+                                <span class="has-text-weight-semibold">
+                                    Fee Type: 
+                                </span>
+                                {{ getPortFeeType(config.config.fee_id) }}
+                            </li>
+                            <li v-if="config.config.fee_id !== null">
+                                <span class="has-text-weight-semibold">
+                                    Fee: 
+                                </span>
+                                {{ getPortFee(config.config.fee_id) }}%
+                            </li>
                             <li>
                                 <span class="has-text-weight-semibold">
                                     Port: 
@@ -237,10 +249,17 @@ export default {
         },
         copyConfig () {
             this.configCopied = this.minerConfig.result.config !== null ? true : false
-        }
-        ,
+        },
         copyCommand () {
             this.commandCopied = this.minerConfig.result.command !== null ? true : false
+        },
+        getPortFee (feeId) {
+            if(this.config.pool.fees === undefined) return
+            return this.config.pool.fees.filter(val => val.id === feeId)[0].fee
+        },
+        getPortFeeType (feeId) {
+            if(this.config.pool.fees === undefined) return
+            return this.config.pool.fees.filter(val => val.id === feeId)[0].fee_type
         }
     },
     watch: {

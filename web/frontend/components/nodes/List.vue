@@ -88,7 +88,7 @@
                 </b-table-column>
                 <b-table-column field="data.time" label="Timestamp" class="has-text-right" sortable>
                     <div :key="props.row.data.time">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.start_time ? getFromattedDate(props.row.data.start_time * 1000) : ''}}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.start_time ? getFromattedDate(props.row.data.start_time) : ''}}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.version" label="Version" sortable numeric>

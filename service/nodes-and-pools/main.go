@@ -111,12 +111,14 @@ type ForknotePoolConfigData struct {
 }
 
 type NodeJsPoolData struct {
-    MinPayout int
-    Fee float64
+    MinPayout int `json:"min_wallet_payout"`
     Height int `json:"height"`
     Difficulty int `json:"difficulty"`
     Status string
     Timestamp int
+    PPLNSFee float64 `json:"pplns_fee"`
+    PPSFee float64 `json:"pps_fee"`
+    SoloFee float64 `json:"solo_fee"`
 
     Pool struct {
         Miners int `json:"miners"`
@@ -136,6 +138,7 @@ type NodeJsPoolConfigPort struct {
     Port int `json:"port"`
     Difficulty int `json:"difficulty"`
     Description string `json:"description"`
+    FeeType string `json:"pool_type"`
 }
 
 type CryptonoteSocialPoolData struct {
@@ -300,16 +303,18 @@ func setForknotePoolData(id int, api string, name string) {
         status = "Unreachable"
     }
 
-    stmt, err := db.Prepare("INSERT INTO pool_data(time, pool_id, miners, min_payout, fee, hashrate, height, total_payments, miners_paid, total_blocks, last_block_found, difficulty, status, timestamp) VALUES (NOW(),$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)")
+    stmt, err := db.Prepare("INSERT INTO pool_data(time, pool_id, miners, min_payout, hashrate, height, total_payments, miners_paid, total_blocks, last_block_found, difficulty, status, timestamp) VALUES (NOW(),$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)")
     if err != nil {
         log.Println("There was an error preparing to insert the pool data: ", err)
     }
 
-    _, err = stmt.Exec(id, poolData.Pool.Miners, poolData.Config.MinPayout, poolData.Config.Fee, poolData.Pool.Hashrate, poolData.Network.Height, poolData.Pool.TotalPayments, poolData.Pool.MinersPaid, poolData.Pool.TotalBlocks, poolData.Pool.LastBlockFound, poolData.Network.Difficulty, status, poolData.Network.Timestamp)
+    _, err = stmt.Exec(id, poolData.Pool.Miners, poolData.Config.MinPayout, poolData.Pool.Hashrate, poolData.Network.Height, poolData.Pool.TotalPayments, poolData.Pool.MinersPaid, poolData.Pool.TotalBlocks, poolData.Pool.LastBlockFound, poolData.Network.Difficulty, status, poolData.Network.Timestamp)
     if err != nil {
         log.Println("There was an error inserting the pool data: ", name, err)
     }
     stmt.Close()
+
+    setGenericFees(id, poolData.Config.Fee)
 }
 
 func setForknotePoolConfig(id int, api string, name string) {
@@ -377,16 +382,32 @@ func setNodeJsPoolData(id int, api string, name string) {
         log.Println("There was an error getting the nodejs pool's network stats: ", err)
     }
 
-    stmt, err := db.Prepare("INSERT INTO pool_data(time, pool_id, miners, min_payout, fee, hashrate, height, total_payments, miners_paid, total_blocks, last_block_found, difficulty, status, timestamp) VALUES (NOW(),$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)")
+    configStatsUrl := fmt.Sprintf("%[1]sconfig", api)
+    configStatsResponse := queryApi(configStatsUrl, "GET")
+
+    err = json.Unmarshal(configStatsResponse, &poolData)
+    if err != nil {
+        log.Println("There was an error getting the nodejs pool's config stats: ", err)
+    }
+
+    stmt, err := db.Prepare("INSERT INTO pool_data(time, pool_id, miners, min_payout, hashrate, height, total_payments, miners_paid, total_blocks, last_block_found, difficulty, status, timestamp) VALUES (NOW(),$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)")
     if err != nil {
         log.Println("There was an error preparing to insert the pool data: ", err)
     }
 
-    _, err = stmt.Exec(id, poolData.Pool.Miners, 0, 0, poolData.Pool.Hashrate, poolData.Height, poolData.Pool.TotalPayments, poolData.Pool.MinersPaid, poolData.Pool.TotalBlocks, poolData.Pool.LastBlockFound, poolData.Difficulty, status, poolData.Timestamp)
+    _, err = stmt.Exec(id, poolData.Pool.Miners, poolData.MinPayout, poolData.Pool.Hashrate, poolData.Height, poolData.Pool.TotalPayments, poolData.Pool.MinersPaid, poolData.Pool.TotalBlocks, poolData.Pool.LastBlockFound, poolData.Difficulty, status, poolData.Timestamp)
     if err != nil {
         log.Println("There was an error inserting the pool data: ", name, err)
     }
     stmt.Close()
+
+    feeTypes := map[string]float64 {
+        "pplns": poolData.PPLNSFee,
+        "pps":   poolData.PPSFee,
+        "solo":  poolData.SoloFee,
+    }
+
+    setNodeJsFees(id, feeTypes)
 }
 
 func setNodeJsPoolConfig(id int, api string, name string) {
@@ -400,28 +421,35 @@ func setNodeJsPoolConfig(id int, api string, name string) {
     }
 
     for i := 0; i < len(config.Configs); i++ {
+        var feeId int
+        err := db.QueryRow("SELECT id FROM pool_fee WHERE pool_id = $1 and fee_type = $2", id, config.Configs[i].FeeType).Scan(&feeId)
+
+        if err == sql.ErrNoRows {
+            log.Println("There were is no fee associated with this pool config")
+        }
+
         var poolId int
-        err := db.QueryRow("SELECT pool_id FROM pool_config WHERE pool_id = $1 and port = $2 LIMIT 1", id, config.Configs[i].Port).Scan(&poolId)
+        err = db.QueryRow("SELECT pool_id FROM pool_config WHERE pool_id = $1 and port = $2 LIMIT 1", id, config.Configs[i].Port).Scan(&poolId)
 
         if err == sql.ErrNoRows {
             //insert
-            stmt, err := db.Prepare("INSERT INTO pool_config(pool_id, port, difficulty, description) VALUES ($1, $2, $3, $4)")
+            stmt, err := db.Prepare("INSERT INTO pool_config(pool_id, fee_id, port, difficulty, description) VALUES ($1, $2, $3, $4, $5)")
             if err != nil {
-                log.Println("There was an error preparing to insert into the pool_config: ", err)
+                log.Println("There was an error preparing to insert into the nodejs pool_config: ", err)
             }
 
-            _, err = stmt.Exec(id, config.Configs[i].Port, config.Configs[i].Difficulty, config.Configs[i].Description)
+            _, err = stmt.Exec(id, feeId, config.Configs[i].Port, config.Configs[i].Difficulty, config.Configs[i].Description)
             if err != nil {
-                log.Println("There was an error inserting into the pool_config: ", err)
+                log.Println("There was an error inserting into the nodejs pool_config: ", err)
             }
             stmt.Close()
         } else {
             //update
-            stmt, err := db.Prepare("UPDATE pool_config SET difficulty = $1, description = $2 WHERE port = $3 and pool_id = $4")
+            stmt, err := db.Prepare("UPDATE pool_config SET fee_id = $1, difficulty = $2, description = $3 WHERE port = $4 and pool_id = $5")
             if err != nil {
-                log.Println("There was an error preparing to update the pool_config: ", err)
+                log.Println("There was an error preparing to update the nodejs pool_config: ", err)
             }
-            _, err = stmt.Exec(config.Configs[i].Difficulty, config.Configs[i].Description, config.Configs[i].Port, id)
+            _, err = stmt.Exec(feeId, config.Configs[i].Difficulty, config.Configs[i].Description, config.Configs[i].Port, id)
             if err != nil {
                 log.Println("There was an error updating the pool_config: ", err)
             }
@@ -445,16 +473,79 @@ func setCryptonoteSocialPoolData(id int, api string) {
         status = "Unreachable"
     }
 
-    stmt, err := db.Prepare("INSERT INTO pool_data(time, pool_id, miners, min_payout, fee, hashrate, height, total_payments, miners_paid, total_blocks, last_block_found, difficulty, status, timestamp) VALUES (NOW(),$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)")
+    stmt, err := db.Prepare("INSERT INTO pool_data(time, pool_id, miners, min_payout, hashrate, height, total_payments, miners_paid, total_blocks, last_block_found, difficulty, status, timestamp) VALUES (NOW(),$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)")
     if err != nil {
         log.Println("There was an error preparing to insert the pool data: ", err)
     }
 
-    _, err = stmt.Exec(id, poolData.Miners, 0, poolData.Fee, poolData.Hashrate, poolData.Height, 0, 0, 0, poolData.LastBlockFound, 0, status, 0)
+    _, err = stmt.Exec(id, poolData.Miners, 0, poolData.Hashrate, poolData.Height, 0, 0, 0, poolData.LastBlockFound, 0, status, 0)
     if err != nil {
         log.Println("There was an error inserting the pool data: ", err)
     }
     stmt.Close()
+    setGenericFees(id, poolData.Fee)
+}
+
+func setGenericFees(id int, fee float64) {
+    var poolId int
+    err := db.QueryRow("SELECT fee FROM pool_fee WHERE pool_id = $1", id).Scan(&poolId)
+
+    if err == sql.ErrNoRows {
+        //insert
+        stmt, err := db.Prepare("INSERT INTO pool_fee(pool_id, fee) VALUES ($1, $2)")
+        if err != nil {
+            log.Println("There was an error preparing to insert into the generic pool_fee: ", err)
+        }
+
+        _, err = stmt.Exec(id, fee)
+        if err != nil {
+            log.Println("There was an error inserting into the generic pool_fee: ", err)
+        }
+        stmt.Close()
+    } else {
+        //update
+        stmt, err := db.Prepare("UPDATE pool_fee SET fee = $1 WHERE pool_id = $2")
+        if err != nil {
+            log.Println("There was an error preparing to update the generic pool_fee: ", err)
+        }
+        _, err = stmt.Exec(fee, id)
+        if err != nil {
+            log.Println("There was an error updating the generic pool_fee: ", err)
+        }
+        stmt.Close()
+    }
+}
+
+func setNodeJsFees(id int, feeTypes map[string]float64) {
+    for key, value := range feeTypes {
+        var poolId int
+        err := db.QueryRow("SELECT fee FROM pool_fee WHERE pool_id = $1 and fee_type = $2", id, key).Scan(&poolId)
+
+        if err == sql.ErrNoRows {
+            //insert
+            stmt, err := db.Prepare("INSERT INTO pool_fee(pool_id, fee_type, fee) VALUES ($1, $2, $3)")
+            if err != nil {
+                log.Println("There was an error preparing to insert into the nodejs pool_fee: ", err)
+            }
+
+            _, err = stmt.Exec(id, key, value)
+            if err != nil {
+                log.Println("There was an error inserting into the nodejs pool_fee: ", err)
+            }
+            stmt.Close()
+        } else {
+            //update
+            stmt, err := db.Prepare("UPDATE pool_fee SET fee = $1 WHERE pool_id = $2 and fee_type = $3")
+            if err != nil {
+                log.Println("There was an error preparing to update the nodejs pool_fee: ", err)
+            }
+            _, err = stmt.Exec(value, id, key)
+            if err != nil {
+                log.Println("There was an error updating the generic pool_fee: ", err)
+            }
+            stmt.Close()
+        }
+    }
 }
 
 func setNodes() {

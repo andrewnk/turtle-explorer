@@ -97,7 +97,6 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
       pool_id INTEGER NOT NULL references pool(id),
       miners BIGINT NOT NULL DEFAULT 0,
       min_payout BIGINT NOT NULL DEFAULT 0,
-      fee DECIMAL NOT NULL DEFAULT 0,
       hashrate BIGINT NOT NULL DEFAULT 0,
       height BIGINT NOT NULL DEFAULT 0,
       total_payments BIGINT NOT NULL DEFAULT 0,
@@ -123,9 +122,18 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
     CREATE TRIGGER updated_pooldata_trigger AFTER INSERT ON pool_data
     FOR EACH ROW EXECUTE PROCEDURE notify_pool_data();
 
+    CREATE TABLE pool_fee (
+      id SERIAL CONSTRAINT pool_fee_pk PRIMARY KEY,
+      pool_id INTEGER NOT NULL references pool(id),
+      fee_type VARCHAR,
+      fee DECIMAL NOT NULL DEFAULT 0
+    );
+    CREATE INDEX ON pool_fee (pool_id, id);
+
     CREATE TABLE pool_config (
       id SERIAL CONSTRAINT pool_config_pk PRIMARY KEY,
       pool_id INTEGER NOT NULL references pool(id),
+      fee_id INTEGER references pool_fee(id),
       port BIGINT NOT NULL,
       difficulty BIGINT NOT NULL,
       description VARCHAR NOT NULL
@@ -136,6 +144,7 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
     GRANT USAGE, SELECT ON SEQUENCE node_id_seq TO go;
     GRANT USAGE, SELECT ON SEQUENCE pool_id_seq TO go;
     GRANT USAGE, SELECT ON SEQUENCE pool_config_id_seq TO go;
+    GRANT USAGE, SELECT ON SEQUENCE pool_fee_id_seq TO go;
     GRANT SELECT ON ALL TABLES IN SCHEMA public TO web;
 EOSQL
 
