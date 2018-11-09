@@ -46,12 +46,12 @@
                 </b-table-column>
                 <b-table-column field="data.miners" label="Miners" sortable numeric>
                     <div :key="props.row.data.miners">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.miners !== "0" ? props.row.data.miners.toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' ? props.row.data.miners.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.min_payout" label="Min. Payout" sortable numeric>
                     <div :key="props.row.data.min_payout">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.min_payout !== "0" ? (props.row.data.min_payout / 100).toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' ? (props.row.data.min_payout / 100).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.fee" label="Fee" sortable numeric>
@@ -63,27 +63,27 @@
                 </b-table-column>
                 <b-table-column field="data.total_payments" label="Total Payments" sortable numeric>
                     <div :key="props.row.data.total_payments">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.total_payments !== "0" ? props.row.data.total_payments.toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' ? props.row.data.total_payments.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.miners_paid" label="Miners Paid" sortable numeric>
                     <div :key="props.row.data.miners_paid">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.miners_paid !== "0" ? props.row.data.miners_paid.toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' ? props.row.data.miners_paid.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.total_blocks" label="Total Blocks" sortable numeric>
                     <div :key="props.row.data.total_blocks">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.total_blocks !== "0" ? props.row.data.total_blocks.toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' ? props.row.data.total_blocks.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.hashrate" label="Hashrate" sortable numeric>
                     <div :key="props.row.data.hashrate">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.hashrate !== "0" ? humanReadableHashrate(parseInt(props.row.data.hashrate), 2) : '' }}
+                        {{ props.row.data.status !== 'Unreachable' ? humanReadableHashrate(parseInt(props.row.data.hashrate), 2) : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.height" label="Height" sortable numeric>
                     <div :key="props.row.data.height">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.height !== "0" ? props.row.data.height.toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' ? props.row.data.height.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="data.last_block_found" label="Last Block Found" sortable>
