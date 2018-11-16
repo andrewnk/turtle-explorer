@@ -68,7 +68,7 @@ Once all containers are up and running (`docker ps -a`) view the frontend by goi
 Want to contribute? Great, feel free to reach out or submit a PR! 
 
 TODO:
- - Add the ability for a user to generate miner config files for each pool using their wallet
+ - Add more miner software config templates for mining config generation
  - Add the ability to compare pool and node data in a chart
  - Add daemon
  - Add daemon db
