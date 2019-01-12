@@ -8,7 +8,7 @@ const nodeResolver = {
           query: {
             node_id: node.id,
             $limit: 1,
-            $sort: { time: -1, status: 1 }
+            $sort: { time: -1 }
           },
           paginate: false
         })
