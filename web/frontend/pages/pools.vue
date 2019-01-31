@@ -18,10 +18,12 @@
         </div>
         <div class="columns is-centered">
             <div class="column">
-                <pool-history
-                    :pools="pools"
-                    :selectedPools="selectedPools"
-                    :selectedPoolData="selectedPoolData"
+                <historical
+                    :elements="pools"
+                    :selectedElements="selectedPools"
+                    :attributes="graphAttributes"
+                    :model="model"
+                    :historyId="historyId"
                 />
             </div>
         </div>
@@ -40,6 +42,7 @@
 <script>
 import List from '~/components/pools/List.vue'
 import vueMixin from '~/mixins/vueMixin'
+import Historical from '~/components/graphs/Historical.vue'
 import Pie from '~/components/graphs/Pie.vue'
 import PoolHistory from '~/components/pools/graphs/PoolHistory.vue'
 import { mapGetters } from 'vuex'
@@ -58,10 +61,54 @@ export default {
         }
     },
     mixins: [vueMixin],
-    components: { Pie, PoolHistory, List },
+    components: { Pie, PoolHistory, Historical, List },
     data () {
         return {
-            selectedPools: [],
+            graphAttributes: [
+                {
+                    id: 1,
+                    label: 'Pool Difficulty',
+                    name: 'difficulty'
+                },
+                {
+                    id: 2,
+                    label: 'Pool Hashrate',
+                    name: 'hashrate'
+                },
+                {
+                    id: 3,
+                    label: 'Pool Height',
+                    name: 'height'
+                },
+                {
+                    id: 4,
+                    label: 'Pool Miners',
+                    name: 'miners'
+                },
+                {
+                    id: 5,
+                    label: 'Pool Total Blocks',
+                    name: 'total_blocks'
+                },
+                {
+                    id: 6,
+                    label: 'Pool Total Miners Paid',
+                    name: 'miners_paid'
+                },
+                {
+                    id: 7,
+                    label: 'Pool Total Payments',
+                    name: 'total_payments'
+                },
+                {
+                    id: 8,
+                    label: 'Pool Time',
+                    name: 'timestamp'
+                }
+            ],
+            historyId: 'pool_id',
+            model: 'pool-history',
+            selectedPools: []
         }
     },
     computed: {

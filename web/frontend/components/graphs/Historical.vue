@@ -1,39 +1,61 @@
 <template>
     <section>
+        <no-ssr>
+            <div class="columns">
+                <div class="column is-2 is-offset-10 field has-addons end">
+                    <div class="control">
+                        <button class="button" :disabled="liveChart" @click="liveChart = !liveChart" :class="liveChart ? 'is-primary' : 'is-info'">
+                            Live
+                        </button>
+                    </div>
+                    <div class="control">
+                        <button class="button" :disabled="!liveChart" @click="liveChart = !liveChart" :class="!liveChart ? 'is-primary' : 'is-info'">
+                            Historical
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </no-ssr>
         <div class="columns">
-            <b-select
-                expanded
-                v-model="selectedAttribute"
-                class="column is-2 is-offset-5"
-            >
-                <option disabled value="0">Please an attribute</option>
-                <option
-                    v-for="(attribute, index) in compareAttributes"
-                    :value="attribute.id"
-                    :key="index"
+            <no-ssr>
+                <b-select
+                    expanded
+                    v-model="selectedAttribute"
+                    class="column is-2"
+                    :class="liveChart ? 'is-offset-8' : 'is-offset-5'"
                 >
-                    {{ attribute.label }}
-                </option>
-            </b-select>
-            <b-select
-                expanded
-                v-model="selectedCompareAttribute"
-                class="column is-2"
-            >
-                <option value="0">{{ compareOptionText }}</option>
-                <option
-                    v-for="(attribute, index) in compareAgainstAttributes"
-                    :value="attribute.id"
-                    :key="index"
+                    <option disabled value="0">Please an attribute</option>
+                    <option
+                        v-for="(attribute, index) in compareAttributes"
+                        :value="attribute.id"
+                        :key="index"
+                    >
+                        {{ attribute.label }}
+                    </option>
+                </b-select>
+            </no-ssr>
+            <no-ssr>
+                <b-select
+                    expanded
+                    v-model="selectedCompareAttribute"
+                    class="column is-2"
                 >
-                    {{ attribute.label }}
-                </option>
-            </b-select>
+                    <option value="0">{{ compareOptionText }}</option>
+                    <option
+                        v-for="(attribute, index) in compareAgainstAttributes"
+                        :value="attribute.id"
+                        :key="index"
+                    >
+                        {{ attribute.label }}
+                    </option>
+                </b-select>
+            </no-ssr>
             <v-date-picker
                 mode='range'
                 v-model='selectedDates'
                 class="column is-3"
                 id="datepicker"
+                v-if="!liveChart"
             >
                 <b-field
                     :type='inputState.type'
@@ -75,17 +97,32 @@ import Highstock from "highcharts/highstock"
 import DragPanes from 'highcharts/modules/drag-panes.js'
 import Exporting from 'highcharts/modules/exporting.js'
 import ExportData from 'highcharts/modules/export-data.js'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
     name: 'Historical',
     props: {
-        nodes: {
+        attributes: {
             type: Array,
             required: true,
             default: () => []
         },
-        selectedNodes: {
+        elements: {
+            type: Array,
+            required: true,
+            default: () => []
+        },
+        historyId: {
+            type: String,
+            required: true,
+            default: ''
+        },
+        model: {
+            type: String,
+            required: true,
+            default: ''
+        },
+        selectedElements: {
             type: Array,
             required: true,
             default: () => []
@@ -103,9 +140,6 @@ export default {
             selectedCompareAttribute: 0,
             chartParams: {
                 query: {
-                    node_id: {
-                        $in: []
-                    },
                     time: {
                         $gte: '',
                         $lte: ''
@@ -113,48 +147,7 @@ export default {
                     attribute: 'difficulty'
                 }
             },
-            attributes: [
-                {
-                    id: 1,
-                    label: 'Difficulty',
-                    name: 'difficulty'
-                },
-                {
-                    id: 2,
-                    label: 'Hashrate',
-                    name: 'hashrate'
-                },
-                {
-                    id: 3,
-                    label: 'Height',
-                    name: 'height'
-                },
-                {
-                    id: 4,
-                    label: 'Incoming Connection',
-                    name: 'incoming_connections_count'
-                },
-                {
-                    id: 5,
-                    label: 'Outgoing Connections',
-                    name: 'outgoing_connections_count'
-                },
-                {
-                    id: 6,
-                    label: 'Last Known Block Index',
-                    name: 'last_known_block_index'
-                },
-                {
-                    id: 7,
-                    label: 'Transaction Pool',
-                    name: 'tx_pool_size'
-                },
-                {
-                    id: 8,
-                    label: 'Time',
-                    name: 'start_time'
-                }
-            ],
+            liveChart: true,
             options : {
                 chart: {
                     backgroundColor: '#3c3c3c',
@@ -164,7 +157,6 @@ export default {
                     }
                 },
                 colors: [
-                    '#f5f1f2',
                     '#b1e033',
                     '#ce289f',
                     '#6ca890',
@@ -184,7 +176,23 @@ export default {
                     '#3afa02',
                     '#45afd0',
                     '#b8fe38',
-                    '#8213f2'
+                    '#8213f2',
+                    '#d19fe8',
+                    '#4363d8',
+                    '#f58231',
+                    '#e6194B',
+                    '#b43018',
+                    '#6da007',
+                    '#fa3dc5',
+                    '#37fd50',
+                    '#deaa2b',
+                    '#3fa02d',
+                    '#19138b',
+                    '#e7e771',
+                    '#0de3a2',
+                    '#4fcd0c',
+                    '#ffcc3d',
+                    '#f13e96'
                 ],
                 credits: {
                     enabled: false
@@ -293,18 +301,23 @@ export default {
         Exporting(Highstock)
         ExportData(Highstock)
         const today = new Date()
-        const startDate = this.convertToUTCStart(today)
+        const startDate = today - 30 * 60000
         const endDate = this.convertToUTCEnd(today)
         this.selectedDates.start = new Date(startDate)
         this.selectedDates.end = new Date(endDate)
 
         this.chartParams.query.time.$gte = startDate
         this.chartParams.query.time.$lte = endDate
-        this.chartParams.query.node_id.$in = this.selectedNodes
+        this.$set(this.chartParams.query, this.historyId, { $in: '' } )
+        this.chartParams.query[this.historyId].$in = this.selectedElements
         this.chartParams.attribute = this.getAttributeName(this.selectedAttribute)
     },
     computed: {
-        ...mapGetters('node-history', { getChartData: 'list' }),
+        ...mapState({
+            getChartData (state, getters) {
+                return getters[`${this.model}/list`]
+            }
+        }),
         inputState() {
             if (!this.selectedDates) {
                 return {
@@ -370,10 +383,10 @@ export default {
         },
         addSeries (label, axisId) {
             this.$refs.historical.showLoading()
-            this.$store.dispatch('node-history/find', this.chartParams).then(() => {
+            this.$store.dispatch(`${this.model}/find`, this.chartParams).then(() => {
                 this.$refs.historical.chart.get(axisId).setTitle({text: label})
                 this.getChartData.forEach((result, index) => {
-                    const node = this.nodes.filter(node => node.id === result.node_id)
+                    const element = this.elements.filter(element => element.id === result[this.historyId])
                     this.$refs.historical.addSeries({
                         data: result.data.map(val => {
                             const catTime = new Date(val[0])
@@ -382,9 +395,9 @@ export default {
                                 parseInt(val[1])
                             ]
                         }),
-                        id: node[0].id,
+                        id: element[0].id,
                         label: label,
-                        name: node[0].name,
+                        name: element[0].name,
                         yAxis: axisId
                     })
                 })
@@ -392,15 +405,25 @@ export default {
                 this.$refs.historical.chart.hideLoading()
             })
         },
+        addPoints (seriesArray, elementData, dataPoint) {
+            if(seriesArray === undefined || !seriesArray.hasOwnProperty('series') || seriesArray.series.length === 0) return
+            seriesArray.series.forEach(series => {
+                if(series.options.id === elementData.id) {
+                    const lastSeriesElement = series.data[series.data.length-1]
+                    if(lastSeriesElement === undefined || lastSeriesElement.y === elementData[dataPoint]) return
+                    series.addPoint([Date.now(), elementData[dataPoint]], false, true)
+                }
+            })
+        },
         clearData () {
-            this.$store.commit('node-history/clearAll')
+            this.$store.commit(`${this.model}/clearAll`)
             this.$refs.historical.removeSeries()
         },
         getAttributeLabel (id) {
-            return this.attributes.filter(val => val.id === id)[0].label
+            return this.attributes.filter(val => val.id === id)[0] ? this.attributes.filter(val => val.id === id)[0].label : ''
         },
         getAttributeName (id) {
-            return this.attributes.filter(val => val.id === id)[0].name
+            return this.attributes.filter(val => val.id === id)[0] ? this.attributes.filter(val => val.id === id)[0].name : ''
         }
     },
     watch: {
@@ -444,15 +467,53 @@ export default {
             this.addSecondaryYAxis()
             this.addSeries(this.getAttributeLabel(this.selectedCompareAttribute), 'secondary')
         },
-        selectedNodes: {
+        selectedElements: {
             handler: function(newVal, oldVal) {
                 if(newVal === oldVal) return
 
-                this.chartParams.query.node_id.$in = newVal
+                this.chartParams.query[`${this.historyId}`].$in = newVal
                 this.clearData()
                 this.addSeries(this.getAttributeLabel(this.selectedAttribute), 'primary')
             },
             deep: true
+        },
+        elements: {
+            handler: function(newVal, oldVal) {
+                if(!this.liveChart) return
+                // get selected and selected compare attibute names
+                const attributeName = this.getAttributeName(this.selectedAttribute)
+                const compareAttributeName = this.getAttributeName(this.selectedCompareAttribute)
+                
+                //get selected and selected compare data
+                const selectedElementData = newVal.filter(element => {
+                    return this.selectedElements.includes(element.id)
+                }).map(element => {
+                    if(!element.data) return
+
+                    return {
+                        id: element.id,
+                        attribute: attributeName && element.data.hasOwnProperty(attributeName) ? parseInt(element.data[attributeName]) : 0,
+                        compareAttribute: compareAttributeName && element.data.hasOwnProperty(compareAttributeName) ? parseInt(element.data[compareAttributeName]) : 0
+                    }
+                })
+
+                // loop through each element in array add new data point
+                selectedElementData.forEach(elementData => {
+                    if(!elementData.attribute || this.$refs.historical === undefined) return
+                    let primary = this.$refs.historical.chart.get('primary')
+                    this.addPoints(primary, elementData, 'attribute')
+
+                    let secondary = this.$refs.historical.chart.get('secondary')
+                    this.addPoints(secondary, elementData, 'compareAttribute')
+                })
+
+                if(this.$refs.historical !== undefined) {
+                    this.$refs.historical.chart.redraw()
+                }
+
+            },
+            deep: true,
+            immediate: true
         }
     }
 }

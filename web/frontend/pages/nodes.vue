@@ -2,9 +2,12 @@
     <section class="container is-block">
         <div class="columns is-centered">
             <div class="column">
-                <node-history
-                    :nodes="nodes"
-                    :selectedNodes="selectedNodes"
+                <historical
+                    :elements="nodes"
+                    :selectedElements="selectedNodes"
+                    :attributes="graphAttributes"
+                    :model="model"
+                    :historyId="historyId"
                 />
             </div>
         </div>
@@ -22,7 +25,7 @@
 
 <script>
 import List from '~/components/nodes/List.vue'
-import NodeHistory from '~/components/nodes/graphs/NodeHistory.vue'
+import Historical from '~/components/graphs/Historical.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -38,10 +41,54 @@ export default {
             ]
         }
     },
-    components: { List, NodeHistory },
+    components: { List, Historical },
     data () {
         return {
-            selectedNodes: []
+            selectedNodes: [],
+            graphAttributes: [
+                {
+                    id: 1,
+                    label: 'Node Difficulty',
+                    name: 'difficulty'
+                },
+                {
+                    id: 2,
+                    label: 'Node Hashrate',
+                    name: 'hashrate'
+                },
+                {
+                    id: 3,
+                    label: 'Node Height',
+                    name: 'height'
+                },
+                {
+                    id: 4,
+                    label: 'Node Incoming Connection',
+                    name: 'incoming_connections_count'
+                },
+                {
+                    id: 5,
+                    label: 'Node Outgoing Connections',
+                    name: 'outgoing_connections_count'
+                },
+                {
+                    id: 6,
+                    label: 'Node Last Known Block Index',
+                    name: 'last_known_block_index'
+                },
+                {
+                    id: 7,
+                    label: 'Node Transaction Pool',
+                    name: 'tx_pool_size'
+                },
+                {
+                    id: 8,
+                    label: 'Node Time',
+                    name: 'start_time'
+                }
+            ],
+            historyId: 'node_id',
+            model: 'node-history'
         }
     },
     computed: {
