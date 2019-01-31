@@ -64,6 +64,6 @@ module.exports = {
     { src: '~/plugins/vue-cookie', ssr: false, injectAs: 'cookie' }
   ],
   render: {
-    ssr: false
+    ssr: true
   }
 }
