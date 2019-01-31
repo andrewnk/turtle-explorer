@@ -1,9 +1,11 @@
 <template>
     <div id="app">
         <navigation/>
-        <b-notification :closable="false">
-            <b-loading :is-full-page="true" :active="!isLoaded" :can-cancel="false"/>
-        </b-notification>
+        <no-ssr>
+            <b-notification :closable="false">
+                <b-loading :is-full-page="true" :active="!isLoaded" :can-cancel="false"/>
+            </b-notification>
+        </no-ssr>
         <stats-bar v-if="isLoaded"/>
         <nuxt class="main" v-if="isLoaded"/>
         <footer-section/>
@@ -25,17 +27,10 @@ export default {
     },
     data () {
         return {
-            isLoaded: false
+            isLoaded: true
         }
     },
     created () {
-        let promises = []
-        promises.push(this.$store.dispatch('pool/find', { query: { $sort: { name: 1 }}}))
-
-        promises.push(this.$store.dispatch('node/find', { query: { $sort: { name: 1 }}}))
-
-        Promise.all(promises).then(() => this.isLoaded = true)
-
         socket.on('notifyNode', data => {
             if(this.$store.state.node.keyedById[data.node_id]) {
                 this.$store.state.node.keyedById[data.node_id] = data

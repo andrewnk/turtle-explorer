@@ -48,8 +48,19 @@ const store = () => new Vuex.Store({
         node_id: null,
         data: ''
       }
-    }),
-  ]
+    })
+  ],
+  actions: {
+    async nuxtServerInit({ commit, dispatch }) {
+      const pools = await dispatch('pool/find', { query: { $sort: { name: 1 }}})
+      const nodes = await dispatch('node/find', { query: { $sort: { name: 1 }}})
+
+      return [
+        pools,
+        nodes
+      ]
+    }
+  }
 })
 
 export default store
