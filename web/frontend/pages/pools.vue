@@ -27,15 +27,17 @@
                 />
             </div>
         </div>
-        <div class="columns is-centered">
-            <div class="column">
-                <list
-                    :pools="pools"
-                    :isLoading="!pools.length > 0"
-                    @updated-pool-selection="updatePoolSelection($event)"
-                />
+        <no-ssr>
+            <div class="columns is-centered">
+                <div class="column">
+                    <list
+                        :pools="pools"
+                        :isLoading="!pools.length > 0"
+                        @updated-pool-selection="updatePoolSelection($event)"
+                    />
+                </div>
             </div>
-        </div>
+        </no-ssr>
     </section>
 </template>
 

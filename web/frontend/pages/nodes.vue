@@ -11,15 +11,17 @@
                 />
             </div>
         </div>
-        <div class="columns is-centered">
-            <div class="column">
-                <list
-                    :nodes="nodes"
-                    :isLoading="!nodes.length > 0"
-                    @updated-node-selection="updateNodeSelection($event)"
-                />
+        <no-ssr>
+            <div class="columns is-centered">
+                <div class="column">
+                    <list
+                        :nodes="nodes"
+                        :isLoading="!nodes.length > 0"
+                        @updated-node-selection="updateNodeSelection($event)"
+                    />
+                </div>
             </div>
-        </div>
+        </no-ssr>
     </section>
 </template>
 
