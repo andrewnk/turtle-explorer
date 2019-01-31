@@ -1,24 +1,30 @@
 <template>
     <section>
-        <generate-config
-            :config="minerConfig"
-            :is-active="isActive"
-            v-on:update:isActive="isActive = $event"
-        />
-        <b-field grouped class="is-pulled-right" >
-            <b-input v-model="search" placeholder="Search"></b-input>
-            <b-select v-model="perPage" class="is-pulled-right">
-                <option value="5">5 per page</option>
-                <option value="10">10 per page</option>
-                <option value="15">15 per page</option>
-                <option value="20">20 per page</option>
-                <option :value="this.searchResults.length">All</option>
-            </b-select>
-        </b-field>
-        <b-taglist attached>
-            <b-tag type="is-dark">Total Pools</b-tag>
-            <b-tag type="is-primary">{{ this.searchResults.length }}</b-tag>
-        </b-taglist>
+        <no-ssr>
+            <generate-config
+                :config="minerConfig"
+                :is-active="isActive"
+                v-on:update:isActive="isActive = $event"
+            />
+        </no-ssr>
+        <no-ssr>
+            <b-field grouped class="is-pulled-right" >
+                <b-input v-model="search" placeholder="Search"></b-input>
+                <b-select v-model="perPage" class="is-pulled-right">
+                    <option value="5">5 per page</option>
+                    <option value="10">10 per page</option>
+                    <option value="15">15 per page</option>
+                    <option value="20">20 per page</option>
+                    <option :value="this.searchResults.length">All</option>
+                </b-select>
+            </b-field>
+        </no-ssr>
+        <no-ssr>
+            <b-taglist attached>
+                <b-tag type="is-dark">Total Pools</b-tag>
+                <b-tag type="is-primary">{{ this.searchResults.length }}</b-tag>
+            </b-taglist>
+        </no-ssr>
         <b-table
             :data="searchResults"
             :is-row-checkable="(row) => true"
@@ -66,17 +72,17 @@
                         {{ props.row.data.status !== 'Unreachable' ? props.row.data.total_payments.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.miners_paid" label="Miners Paid" sortable numeric>
+                <b-table-column field="data.miners_paid" label="Miners Paid" :custom-sort="sortMinersPaid" sortable numeric>
                     <div :key="props.row.data.miners_paid">
                         {{ props.row.data.status !== 'Unreachable' ? props.row.data.miners_paid.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.total_blocks" label="Total Blocks" sortable numeric>
+                <b-table-column field="data.total_blocks" label="Total Blocks" :custom-sort="sortBlocks" sortable numeric>
                     <div :key="props.row.data.total_blocks">
                         {{ props.row.data.status !== 'Unreachable' ? props.row.data.total_blocks.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.hashrate" label="Hashrate" sortable numeric>
+                <b-table-column field="data.hashrate" label="Hashrate" :custom-sort="sortHashrate" sortable numeric>
                     <div :key="props.row.data.hashrate">
                         {{ props.row.data.status !== 'Unreachable' ? humanReadableHashrate(parseInt(props.row.data.hashrate), 2) : '' }}
                     </div>
@@ -199,6 +205,15 @@ export default {
         this.searchResults = this.fuseObject.list
     },
     methods: {
+        sortMinersPaid (a, b, isAsc) {
+            console.log(a)
+        },
+        sortBlocks (a, b, isAsc) {
+            return isAsc ? b.data.total_blocks - a.data.total_blocks : a.data.total_blocks - b.data.total_blocks
+        },
+        sortHashrate (a, b, isAsc) {
+            return isAsc ? b.data.hashrate - a.data.hashrate : a.data.hashrate - b.data.hashrate
+        },
         loadConfig (pool, config) {
             this.isActive = true
             this.minerConfig.pool = pool

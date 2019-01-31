@@ -1,19 +1,23 @@
 <template>
     <section>
-        <b-field grouped class="is-pulled-right" >
-            <b-input v-model="search" placeholder="Search"></b-input>
-            <b-select v-model="perPage" class="is-pulled-right">
-                <option value="5">5 per page</option>
-                <option value="10">10 per page</option>
-                <option value="15">15 per page</option>
-                <option value="20">20 per page</option>
-                <option :value="this.searchResults.length">All</option>
-            </b-select>
-        </b-field>
-        <b-taglist attached>
-            <b-tag type="is-dark">Total Nodes</b-tag>
-            <b-tag type="is-primary">{{ this.searchResults.length }}</b-tag>
-        </b-taglist>
+        <no-ssr>
+            <b-field grouped class="is-pulled-right" >
+                <b-input v-model="search" placeholder="Search"></b-input>
+                <b-select v-model="perPage" class="is-pulled-right">
+                    <option value="5">5 per page</option>
+                    <option value="10">10 per page</option>
+                    <option value="15">15 per page</option>
+                    <option value="20">20 per page</option>
+                    <option :value="this.searchResults.length">All</option>
+                </b-select>
+            </b-field>
+        </no-ssr>
+        <no-ssr>
+            <b-taglist attached>
+                <b-tag type="is-dark">Total Nodes</b-tag>
+                <b-tag type="is-primary">{{ this.searchResults.length }}</b-tag>
+            </b-taglist>
+        </no-ssr>
         <b-table
             :data="searchResults"
             :is-row-checkable="(row) => true"
@@ -164,11 +168,7 @@ export default {
             deep: true
         },
         search: function(newVal) {
-            if(newVal.length > 0) {
-                this.searchResults = this.fuseObject.search(newVal).map(val => val.item)
-            } else {
-                this.searchResults = this.fuseObject.list
-            }
+            this.searchResults = newVal.length > 0 ? this.fuseObject.search(newVal).map(val => val.item) : this.fuseObject.list
         }
     }
 }
