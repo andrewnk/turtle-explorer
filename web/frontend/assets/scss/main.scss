@@ -26,7 +26,7 @@ a {
     color: #f5f1f2;
 }
 
-a.navbar-item.is-active:not(:hover), .navbar-link.is-active:not(:hover), a.navbar-item:hover, a.navbar-item.is-active, .navbar-link:hover, .navbar-link.is-active {
+a.navbar-item.is-active:not(:hover), .navbar-link.is-active:not(:hover), a.navbar-item:hover, a.navbar-item.is-active, .navbar-link:hover, .navbar-link.is-active, .navbar-item.has-dropdown:hover .navbar-link, .navbar-item.has-dropdown.is-active .navbar-link, .navbar-dropdown a.navbar-item:hover {
     background: $primary;
 }
 
@@ -57,8 +57,13 @@ a.navbar-item.is-active:not(:hover), .navbar-link.is-active:not(:hover), a.navba
     opacity: 0;
 }
 
-.modal-background {
+.modal-background, .navbar-dropdown {
     background: transparent;
+}
+
+.navbar-dropdown {
+    border: 1px solid $primary;
+    padding: 0;
 }
 
 .vue-form-wizard {
@@ -69,10 +74,15 @@ a.navbar-item.is-active:not(:hover), .navbar-link.is-active:not(:hover), a.navba
 th,
 .table,
 .b-table .table tr.detail,
-.card,
-.card-header-title {
+.card {
     color: #fefefe !important;
     background: #3c3c3c;
+}
+
+.card-header-title {
+    color: #fefefe !important;
+    background: $primary;
+    padding: 0.55rem;
 }
 
 .b-table .table tr.detail {
@@ -81,18 +91,17 @@ th,
     border-bottom: 1px solid;
 }
 
-.card,
-.card-header-title {
-    background: #1f1f1f;
-}
-
 .navbar-item,
 .navbar-link,
 .navbar-item:hover,
 .navbar-link:hover,
-.has-text-white,
+.has-text-white
 pre {
     color: #fefefe !important;
+}
+
+.navbar-link::after {
+    border-color: #fefefe;
 }
 
 .table td, .table th {
@@ -134,6 +143,7 @@ pre {
 .slide-fade-enter-active {
     transition: all .3s ease;
 }
+
 .slide-fade-leave-active {
     transform: translateX(0%);
 }
@@ -142,7 +152,7 @@ pre {
     word-wrap: break-word;
 }
 
-$spaceamounts: (5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100);
+$spaceamounts: (0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100);
 $sides: (top, bottom, left, right);
 
 @each $space in $spaceamounts {
@@ -158,14 +168,18 @@ $sides: (top, bottom, left, right);
 }
 
 @each $space in $spaceamounts {
-    .width-#{$space} {
-        width: #{$space}% !important;
+    .m-a-#{$space} {
+        margin: #{$space}px !important;
+    }
+
+    .p-a-#{$space} {
+        padding: #{$space}px !important;
     }
 }
 
 @each $space in $spaceamounts {
-    .width-#{$space}-px {
-        width: #{$space}px !important;
+    .width-#{$space} {
+        width: #{$space}% !important;
     }
 }
 
@@ -219,4 +233,16 @@ pre {
 
 .navbar-menu {
     background-color: $background;
+}
+
+.vue-form-wizard a {
+    color: $primary;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.end {
+    justify-content: flex-end !important;
 }
