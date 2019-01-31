@@ -1,5 +1,9 @@
 const { fastJoin } = require('feathers-hooks-common');
 
+const today = new Date()
+const endDate = today.getTime()
+const startDate = today.setMinutes(today.getMinutes() - 30)
+
 const nodeResolver = {
   joins: {
     data: {
@@ -8,7 +12,11 @@ const nodeResolver = {
           query: {
             node_id: node.id,
             $limit: 1,
-            $sort: { time: -1 }
+            $sort: { time: -1 },
+            time: {
+              $gte: startDate,
+              $lte: endDate
+            }
           },
           paginate: false
         })
@@ -33,7 +41,9 @@ module.exports = {
         if(context.result) {
             const sorted = Object.keys(context.result)
             .sort(function(a, b) {
-              return context.result[a].data.status.localeCompare(context.result[b].data.status); // Organize the category array
+              if(context.result[a].hasOwnProperty('data') && context.result[a].data !== undefined) {
+                return context.result[a].data.status.localeCompare(context.result[b].data.status); // Organize the category array
+              }
             })
             .map(function(index) {
               return context.result[index]
