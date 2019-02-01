@@ -301,7 +301,7 @@ export default {
         Exporting(Highstock)
         ExportData(Highstock)
         const today = new Date()
-        const startDate = today - 30 * 60000
+        const startDate = today.setMinutes(today.getMinutes() - 30)
         const endDate = this.convertToUTCEnd(today)
         this.selectedDates.start = new Date(startDate)
         this.selectedDates.end = new Date(endDate)
