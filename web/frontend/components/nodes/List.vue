@@ -29,78 +29,88 @@
             focusable
             checkable
         >
+            <template slot-scope="props" slot="header">
+                <b-tooltip :label="props.column.meta" v-if="toolTipActive && props.column.meta.length > 0">
+                    <div @click="setSortValue(props.column.field)">
+                        {{ props.column.label }}
+                    </div>
+                </b-tooltip>
+                <div v-else @click="setSortValue(props.column.field)">
+                    {{ props.column.label }}
+                </div>
+            </template>
             <template slot-scope="props">
-                <b-table-column field="name" label="Name" sortable>
+                <b-table-column field="name" meta="" label="Name" sortable>
                     <div :key="props.row.name">
                         {{ props.row.name }}
                     </div>
                 </b-table-column>
-                <b-table-column field="url" label="Url" sortable>
+                <b-table-column field="url" meta="" label="Url" sortable>
                     <div :key="props.row.url">
                         {{ props.row.url }}
                     </div>
                 </b-table-column>
-                <b-table-column field="port" label="Port" sortable>
+                <b-table-column field="port" meta="" label="Port" sortable>
                     <div :key="props.row.port">
                         {{ props.row.port }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.height" label="Height" sortable numeric>
+                <b-table-column field="height" meta="" :custom-sort="sorter" label="Height" sortable numeric>
                     <div :key="props.row.data.height">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.height ? props.row.data.height.toLocaleString() : ''}}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.difficulty" label="Difficulty" sortable numeric>
+                <b-table-column field="difficulty" :custom-sort="sorter" meta="" label="Difficulty" sortable numeric>
                     <div :key="props.row.data.difficulty">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.difficulty ? props.row.data.difficulty.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.hashrate" label="Hashrate" sortable numeric>
+                <b-table-column field="hashrate" :custom-sort="sorter" meta="" label="Hashrate" sortable numeric>
                     <div :key="props.row.data.hashrate">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.hashrate ? humanReadableHashrate(props.row.data.hashrate) : ''}}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.txcount" label="TX Count" sortable numeric>
+                <b-table-column field="tx_count" :custom-sort="sorter" meta="" label="TX Count" sortable numeric>
                     <div :key="props.row.data.txcount">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.tx_count ? props.row.data.tx_count.toLocaleString() : ''}}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.txpoolsize" label="TX Pool" sortable numeric>
+                <b-table-column field="tx_pool_size" :custom-sort="sorter" meta="" label="TX Pool" sortable numeric>
                     <div :key="props.row.data.txpoolsize">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.tx_pool_size ? props.row.data.tx_pool_size.toLocaleString() : ''}}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.incoming" label="Incoming Conn" sortable numeric>
+                <b-table-column field="incoming_connections_count" meta="" :custom-sort="sorter" label="Incoming Conn" sortable numeric>
                     <div :key="props.row.data.incoming">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.incoming_connections_count ? props.row.data.incoming_connections_count.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.outgoing" label="Outgoing Conn" sortable numeric>
+                <b-table-column field="outgoing_connections_count" meta="" :custom-sort="sorter" label="Outgoing Conn" sortable numeric>
                     <div :key="props.row.data.outgoing">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.outgoing_connections_count ? props.row.data.outgoing_connections_count.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.last_known_block_index" label="Block Index" sortable>
+                <b-table-column field="last_known_block_index" :custom-sort="sorter" meta="" label="Block Index" sortable>
                     <div :key="props.row.data.last_known_block_index">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.last_known_block_index ? props.row.data.last_known_block_index.toLocaleString() : ''}}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.fee" label="Fee" sortable>
+                <b-table-column field="fee" :custom-sort="sorter" meta="" label="Fee" sortable>
                     <div :key="props.row.data.fee">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.fee ? (props.row.data.fee / 100).toLocaleString() : ''}}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.time" label="Timestamp" class="has-text-right" sortable>
+                <b-table-column field="start_time" label="Timestamp" meta="" :custom-sort="sorter" class="has-text-right" sortable>
                     <div :key="props.row.data.time">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.start_time ? getFromattedDate(props.row.data.start_time) : ''}}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.version" label="Version" sortable numeric>
+                <b-table-column field="version" label="Version" :custom-sort="sorter" meta="" sortable numeric>
                     <div :key="props.row.data.version">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.version ? props.row.data.version : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.status" label="Status" sortable>
+                <b-table-column field="data.status" label="Status" :custom-sort="sorter" meta="" sortable>
                     <div
                         class="has-text-right"
                         :key="props.row.data.status"
@@ -129,6 +139,10 @@ export default {
         isLoading: {
             type: Boolean,
             default: true
+        },
+        toolTipActive: {
+            type: Boolean,
+            default: true
         }
     },
     data () {
@@ -137,7 +151,8 @@ export default {
             perPage: 10,
             search: '',
             selectedNodes: [],
-            searchResults: []
+            searchResults: [],
+            sortValue: ''
         }
     },
     mounted () {
@@ -157,6 +172,19 @@ export default {
                 ]
             })
         this.searchResults = this.fuseObject.list
+    },
+    methods: {
+        setSortValue (val) {
+            this.sortValue = val
+        },
+        sorter (a, b, isAsc) {
+            if(!this.sortValue || !a.data.hasOwnProperty(this.sortValue) || !b.data.hasOwnProperty(this.sortValue)) return
+
+            const first = (typeof a.data[this.sortValue] === 'string') ? a.data[this.sortValue] : parseFloat(a.data[this.sortValue])
+            const next = (typeof b.data[this.sortValue] === 'string') ? b.data[this.sortValue] : parseFloat(b.data[this.sortValue])
+
+            return isAsc ? next - first : first - next
+        }
     },
     watch: {
         selectedNodes: {

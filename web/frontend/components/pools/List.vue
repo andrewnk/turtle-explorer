@@ -36,8 +36,18 @@
             focusable
             checkable
         >
+            <template slot-scope="props" slot="header">
+                <b-tooltip :label="props.column.meta" v-if="toolTipActive && props.column.meta.length > 0">
+                    <div @click="setSortValue(props.column.field)">
+                        {{ props.column.label }}
+                    </div>
+                </b-tooltip>
+                <div v-else @click="setSortValue(props.column.field)">
+                    {{ props.column.label }}
+                </div>
+            </template>
             <template slot-scope="props">
-                <b-table-column field="name" label="Name" sortable>
+                <b-table-column field="name" meta="" label="Name" sortable>
                     <div v-if="props.row.trusted">
                         <a
                             :href="props.row.url"
@@ -50,49 +60,49 @@
                         {{ props.row.name }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.miners" label="Miners" sortable numeric>
+                <b-table-column field="miners" :custom-sort="sorter" meta="" label="Miners" sortable numeric>
                     <div :key="props.row.data.miners">
                         {{ props.row.data.status !== 'Unreachable' ? props.row.data.miners.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.min_payout" label="Min. Payout" sortable numeric>
+                <b-table-column field="min_payout" :custom-sort="sorter" meta="" label="Min. Payout" sortable numeric>
                     <div :key="props.row.data.min_payout">
                         {{ props.row.data.status !== 'Unreachable' ? (props.row.data.min_payout / 100).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.fee" label="Fee" sortable numeric>
+                <b-table-column field="fee" label="Fee" sortable numeric>
                     <div :key="getAllFees(props.row.id)">
                         <div v-if="props.row.data.status !== 'Unreachable'">
                             <span v-html="getAllFees(props.row.id)"></span>
                         </div>
                     </div>
                 </b-table-column>
-                <b-table-column field="data.total_payments" label="Total Payments" sortable numeric>
+                <b-table-column field="total_payments" :custom-sort="sorter" meta="" label="Total Payments" sortable numeric>
                     <div :key="props.row.data.total_payments">
                         {{ props.row.data.status !== 'Unreachable' ? props.row.data.total_payments.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.miners_paid" label="Miners Paid" :custom-sort="sortMinersPaid" sortable numeric>
+                <b-table-column field="miners_paid" :custom-sort="sorter" meta="" label="Miners Paid" sortable numeric>
                     <div :key="props.row.data.miners_paid">
                         {{ props.row.data.status !== 'Unreachable' ? props.row.data.miners_paid.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.total_blocks" label="Total Blocks" :custom-sort="sortBlocks" sortable numeric>
+                <b-table-column field="total_blocks" :custom-sort="sorter" meta="" label="Total Blocks" sortable numeric>
                     <div :key="props.row.data.total_blocks">
                         {{ props.row.data.status !== 'Unreachable' ? props.row.data.total_blocks.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.hashrate" label="Hashrate" :custom-sort="sortHashrate" sortable numeric>
+                <b-table-column field="hashrate" :custom-sort="sorter" meta="" label="Hashrate" sortable numeric>
                     <div :key="props.row.data.hashrate">
                         {{ props.row.data.status !== 'Unreachable' ? humanReadableHashrate(parseInt(props.row.data.hashrate), 2) : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.height" label="Height" sortable numeric>
+                <b-table-column field="height" :custom-sort="sorter" label="Height" meta="" sortable numeric>
                     <div :key="props.row.data.height">
                         {{ props.row.data.status !== 'Unreachable' ? props.row.data.height.toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.last_block_found" label="Last Block Found" sortable>
+                <b-table-column field="last_block_found" :custom-sort="sorter" meta="" label="Last Block Found" sortable>
                     <div
                         class="has-text-right"
                         :key="props.row.data.last_block_found"
@@ -100,7 +110,7 @@
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.last_block_found !== '' ? getFromattedDate(props.row.data.last_block_found) : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.status" label="Status" sortable>
+                <b-table-column field="status" label="Status" sortable>
                     <div
                         class="has-text-right"
                         :key="props.row.data.status"
@@ -171,6 +181,10 @@ export default {
         isLoading: {
             type: Boolean,
             default: true
+        },
+        toolTipActive: {
+            type: Boolean,
+            default: true
         }
     },
     data () {
@@ -205,14 +219,16 @@ export default {
         this.searchResults = this.fuseObject.list
     },
     methods: {
-        sortMinersPaid (a, b, isAsc) {
-            console.log(a)
+        setSortValue (val) {
+            this.sortValue = val
         },
-        sortBlocks (a, b, isAsc) {
-            return isAsc ? b.data.total_blocks - a.data.total_blocks : a.data.total_blocks - b.data.total_blocks
-        },
-        sortHashrate (a, b, isAsc) {
-            return isAsc ? b.data.hashrate - a.data.hashrate : a.data.hashrate - b.data.hashrate
+        sorter (a, b, isAsc) {
+            if(!this.sortValue || !a.data.hasOwnProperty(this.sortValue) || !b.data.hasOwnProperty(this.sortValue)) return
+
+            const first = (typeof a.data[this.sortValue] === 'string') ? a.data[this.sortValue] : parseFloat(a.data[this.sortValue])
+            const next = (typeof b.data[this.sortValue] === 'string') ? b.data[this.sortValue] : parseFloat(b.data[this.sortValue])
+
+            return isAsc ? next - first : first - next
         },
         loadConfig (pool, config) {
             this.isActive = true
