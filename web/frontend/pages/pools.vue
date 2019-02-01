@@ -46,7 +46,6 @@ import List from '~/components/pools/List.vue'
 import vueMixin from '~/mixins/vueMixin'
 import Historical from '~/components/graphs/Historical.vue'
 import Pie from '~/components/graphs/Pie.vue'
-import PoolHistory from '~/components/pools/graphs/PoolHistory.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -63,7 +62,7 @@ export default {
         }
     },
     mixins: [vueMixin],
-    components: { Pie, PoolHistory, Historical, List },
+    components: { Pie, Historical, List },
     data () {
         return {
             graphAttributes: [
