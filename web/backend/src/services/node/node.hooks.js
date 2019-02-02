@@ -1,9 +1,5 @@
 const { fastJoin } = require('feathers-hooks-common');
 
-const today = new Date()
-const endDate = today.getTime()
-const startDate = today.setMinutes(today.getMinutes() - 10)
-
 const nodeResolver = {
   joins: {
     data: {
@@ -11,13 +7,7 @@ const nodeResolver = {
         let results = await context.app.service('node-data').find({
           query: {
             node_id: node.id,
-            status: 'OK',
-            $limit: 1,
-            $sort: { time: -1 },
-            time: {
-              $gte: startDate,
-              $lte: endDate
-            }
+            status: 'OK'
           },
           paginate: false
         })
