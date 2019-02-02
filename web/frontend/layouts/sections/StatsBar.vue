@@ -10,7 +10,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {{ nodeHeight.toLocaleString() }}
+                            {{ parseInt(nodeHeight).toLocaleString() }}
                         </td>
                     </tr>
                     <tr>
@@ -20,7 +20,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {{ nodeDifficulty.toLocaleString() }}
+                            {{ parseInt(nodeDifficulty).toLocaleString() }}
                         </td>
                     </tr>
                     <tr>
@@ -50,7 +50,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {{ poolMiners.toLocaleString() }}
+                            {{ parseInt(poolMiners).toLocaleString() }}
                         </td>
                     </tr>
                     <tr>
@@ -60,7 +60,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {{ poolBlocks.toLocaleString() }}
+                            {{ parseInt(poolBlocks).toLocaleString() }}
                         </td>
                     </tr>
                     <tr>
@@ -70,7 +70,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {{ poolPayments.toLocaleString() }}
+                            {{ parseInt(poolPayments).toLocaleString() }}
                         </td>
                     </tr>
                     <tr>
@@ -80,7 +80,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {{ poolMinersPaid.toLocaleString() }}
+                            {{ parseInt(poolMinersPaid).toLocaleString() }}
                         </td>
                     </tr>
                 </tbody>

@@ -1,16 +1,18 @@
 <template>
     <section class="container is-block">
-        <div class="columns is-centered">
-            <div class="column">
-                <historical
-                    :elements="nodes"
-                    :selectedElements="selectedNodes"
-                    :attributes="graphAttributes"
-                    :model="model"
-                    :historyId="historyId"
-                />
+        <no-ssr>
+            <div class="columns is-centered">
+                <div class="column">
+                    <historical
+                        :elements="nodes"
+                        :selectedElements="selectedNodes"
+                        :attributes="graphAttributes"
+                        :model="model"
+                        :historyId="historyId"
+                    />
+                </div>
             </div>
-        </div>
+        </no-ssr>
         <no-ssr>
             <div class="columns is-centered">
                 <div class="column">

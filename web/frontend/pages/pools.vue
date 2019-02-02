@@ -2,31 +2,37 @@
     <section class="container is-block">
         <div class="columns is-centered">
             <div class="column is-6">
-                <pie
-                    :series="hashrates"
-                    titleText="Current Pool Hashrates"
-                    seriesName="Hashrate"
-                />
+                <no-ssr>
+                    <pie
+                        :series="hashrates"
+                        titleText="Current Pool Hashrates"
+                        seriesName="Hashrate"
+                    />
+                </no-ssr>
             </div>
             <div class="column is-6">
-                <pie
-                    :series="miners"
-                    titleText="Total Pool Miners"
-                    seriesName="Miners"
-                />
+                <no-ssr>
+                    <pie
+                        :series="miners"
+                        titleText="Total Pool Miners"
+                        seriesName="Miners"
+                    />
+                </no-ssr>
             </div>
         </div>
-        <div class="columns is-centered">
-            <div class="column">
-                <historical
-                    :elements="pools"
-                    :selectedElements="selectedPools"
-                    :attributes="graphAttributes"
-                    :model="model"
-                    :historyId="historyId"
-                />
+        <no-ssr>
+            <div class="columns is-centered">
+                <div class="column">
+                    <historical
+                        :elements="pools"
+                        :selectedElements="selectedPools"
+                        :attributes="graphAttributes"
+                        :model="model"
+                        :historyId="historyId"
+                    />
+                </div>
             </div>
-        </div>
+        </no-ssr>
         <no-ssr>
             <div class="columns is-centered">
                 <div class="column">

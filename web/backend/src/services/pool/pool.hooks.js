@@ -2,7 +2,7 @@ const { fastJoin } = require('feathers-hooks-common');
 
 const today = new Date()
 const endDate = today.getTime()
-const startDate = today.setMinutes(today.getMinutes() - 30)
+const startDate = today.setMinutes(today.getMinutes() - 10)
 
 const poolResolver = {
   joins: {
@@ -22,6 +22,7 @@ const poolResolver = {
         let results = await context.app.service('pool-data').find({
           query: {
             pool_id: pool.id,
+            status: 'OK',
             $limit: 1,
             $sort: { time: -1 },
             time: {
@@ -59,17 +60,10 @@ module.exports = {
     all: [
       fastJoin(poolResolver),
       context => {
+        //filter out where data doesn't exist
         if(context.result) {
-            const sorted = Object.keys(context.result)
-            .sort(function(a, b) {
-              if(context.result[a].hasOwnProperty('data') && context.result[a].data !== undefined) {
-                return context.result[a].data.status.localeCompare(context.result[b].data.status); // Organize the category array
-              }
-            })
-            .map(function(index) {
-              return context.result[index]
-            });
-            context.result = sorted
+          const cleanedResults = context.result.filter(pool => pool.data !== undefined)
+          context.result = cleanedResults
         }
         return context
       }

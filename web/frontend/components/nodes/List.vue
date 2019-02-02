@@ -57,12 +57,12 @@
                 </b-table-column>
                 <b-table-column field="height" meta="" :custom-sort="sorter" label="Height" sortable numeric>
                     <div :key="props.row.data.height">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.height ? props.row.data.height.toLocaleString() : ''}}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.height ? parseInt(props.row.data.height).toLocaleString() : ''}}
                     </div>
                 </b-table-column>
                 <b-table-column field="difficulty" :custom-sort="sorter" meta="" label="Difficulty" sortable numeric>
                     <div :key="props.row.data.difficulty">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.difficulty ? props.row.data.difficulty.toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.difficulty ? parseInt(props.row.data.difficulty).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="hashrate" :custom-sort="sorter" meta="" label="Hashrate" sortable numeric>
@@ -72,27 +72,27 @@
                 </b-table-column>
                 <b-table-column field="tx_count" :custom-sort="sorter" meta="" label="TX Count" sortable numeric>
                     <div :key="props.row.data.txcount">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.tx_count ? props.row.data.tx_count.toLocaleString() : ''}}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.tx_count ? parseInt(props.row.data.tx_count).toLocaleString() : ''}}
                     </div>
                 </b-table-column>
                 <b-table-column field="tx_pool_size" :custom-sort="sorter" meta="" label="TX Pool" sortable numeric>
                     <div :key="props.row.data.txpoolsize">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.tx_pool_size ? props.row.data.tx_pool_size.toLocaleString() : ''}}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.tx_pool_size ? parseInt(props.row.data.tx_pool_size).toLocaleString() : ''}}
                     </div>
                 </b-table-column>
                 <b-table-column field="incoming_connections_count" meta="" :custom-sort="sorter" label="Incoming Conn" sortable numeric>
                     <div :key="props.row.data.incoming">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.incoming_connections_count ? props.row.data.incoming_connections_count.toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.incoming_connections_count ? parseInt(props.row.data.incoming_connections_count).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="outgoing_connections_count" meta="" :custom-sort="sorter" label="Outgoing Conn" sortable numeric>
                     <div :key="props.row.data.outgoing">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.outgoing_connections_count ? props.row.data.outgoing_connections_count.toLocaleString() : '' }}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.outgoing_connections_count ? parseInt(props.row.data.outgoing_connections_count).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
                 <b-table-column field="last_known_block_index" :custom-sort="sorter" meta="" label="Block Index" sortable>
                     <div :key="props.row.data.last_known_block_index">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.last_known_block_index ? props.row.data.last_known_block_index.toLocaleString() : ''}}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.last_known_block_index ? parseInt(props.row.data.last_known_block_index).toLocaleString() : ''}}
                     </div>
                 </b-table-column>
                 <b-table-column field="fee" :custom-sort="sorter" meta="" label="Fee" sortable>
