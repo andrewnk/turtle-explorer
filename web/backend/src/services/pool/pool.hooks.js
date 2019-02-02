@@ -2,7 +2,7 @@ const { fastJoin } = require('feathers-hooks-common');
 
 const today = new Date()
 const endDate = today.getTime()
-const startDate = today.setMinutes(today.getMinutes() - 10)
+const startDate = today.setMinutes(today.getMinutes() - 60)
 
 const poolResolver = {
   joins: {
