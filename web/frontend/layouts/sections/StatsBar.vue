@@ -5,7 +5,7 @@
                 <tbody>
                     <tr>
                         <th>
-                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The most common height among public nodes' : ''">
+                            <b-tooltip position="is-right" :class="enableTooltips ? 'pointer' : ''" :label="enableTooltips ? 'The most common height among public nodes' : ''">
                                 Height
                                 <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
                             </b-tooltip>
@@ -18,7 +18,7 @@
                     </tr>
                     <tr>
                         <th>
-                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The most common difficulty among public nodes' : ''">
+                            <b-tooltip position="is-right" :class="enableTooltips ? 'pointer' : ''" :label="enableTooltips ? 'The most common difficulty among public nodes' : ''">
                                 Difficulty
                                 <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
                             </b-tooltip>
@@ -31,7 +31,7 @@
                     </tr>
                     <tr>
                         <th>
-                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The most common hashrate among public nodes' : ''">
+                            <b-tooltip position="is-right" :class="enableTooltips ? 'pointer' : ''" :label="enableTooltips ? 'The most common hashrate among public nodes' : ''">
                                 Node Hashrate
                                 <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
                             </b-tooltip>
@@ -44,7 +44,7 @@
                     </tr>
                     <tr>
                         <th>
-                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The sum of pool hashrates' : ''">
+                            <b-tooltip position="is-right" :class="enableTooltips ? 'pointer' : ''" :label="enableTooltips ? 'The sum of pool hashrates' : ''">
                                 Pool Hashrate
                                 <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
                             </b-tooltip>
@@ -57,7 +57,7 @@
                     </tr>
                     <tr>
                         <th>
-                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The number of miners reported by the pools' : ''">
+                            <b-tooltip position="is-right" :class="enableTooltips ? 'pointer' : ''" :label="enableTooltips ? 'The number of miners reported by the pools' : ''">
                                 Miners
                                 <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
                             </b-tooltip>
@@ -70,7 +70,7 @@
                     </tr>
                     <tr>
                         <th>
-                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The number of blocks mined by pools' : ''">
+                            <b-tooltip position="is-right" :class="enableTooltips ? 'pointer' : ''" :label="enableTooltips ? 'The number of blocks mined by pools' : ''">
                                 Blocks
                                 <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
                             </b-tooltip>
@@ -83,7 +83,7 @@
                     </tr>
                     <tr>
                         <th>
-                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The number payments pools have paid out' : ''">
+                            <b-tooltip position="is-right" :class="enableTooltips ? 'pointer' : ''" :label="enableTooltips ? 'The number payments pools have paid out' : ''">
                                 Payments
                                 <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
                             </b-tooltip>
@@ -96,7 +96,7 @@
                     </tr>
                     <tr>
                         <th>
-                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The number of miners pools have made payments to' : ''">
+                            <b-tooltip position="is-right" :class="enableTooltips ? 'pointer' : ''" :label="enableTooltips ? 'The number of miners pools have made payments to' : ''">
                                 Miners Paid
                                 <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
                             </b-tooltip>
