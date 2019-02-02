@@ -1,11 +1,14 @@
 <template>
-    <section id="stats-container" v-if="isLoaded">
+    <section id="stats-container">
         <transition name="slide-fade">
             <table class="table" key="table" id="stats-bar-table" v-show="show">
                 <tbody>
                     <tr>
                         <th>
-                            Height
+                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The most common height among public nodes' : ''">
+                                Height
+                                <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
+                            </b-tooltip>
                         </th>
                     </tr>
                     <tr>
@@ -15,7 +18,10 @@
                     </tr>
                     <tr>
                         <th>
-                            Difficulty
+                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The most common difficulty among public nodes' : ''">
+                                Difficulty
+                                <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
+                            </b-tooltip>
                         </th>
                     </tr>
                     <tr>
@@ -25,7 +31,10 @@
                     </tr>
                     <tr>
                         <th>
-                            Node Hashrate
+                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The most common hashrate among public nodes' : ''">
+                                Node Hashrate
+                                <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
+                            </b-tooltip>
                         </th>
                     </tr>
                     <tr>
@@ -35,7 +44,10 @@
                     </tr>
                     <tr>
                         <th>
-                            Pool Hashrate
+                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The sum of pool hashrates' : ''">
+                                Pool Hashrate
+                                <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
+                            </b-tooltip>
                         </th>
                     </tr>
                     <tr>
@@ -45,7 +57,10 @@
                     </tr>
                     <tr>
                         <th>
-                            Miners
+                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The number of miners reported by the pools' : ''">
+                                Miners
+                                <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
+                            </b-tooltip>
                         </th>
                     </tr>
                     <tr>
@@ -55,7 +70,10 @@
                     </tr>
                     <tr>
                         <th>
-                            Blocks
+                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The number of blocks mined by pools' : ''">
+                                Blocks
+                                <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
+                            </b-tooltip>
                         </th>
                     </tr>
                     <tr>
@@ -65,7 +83,10 @@
                     </tr>
                     <tr>
                         <th>
-                            Payments
+                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The number payments pools have paid out' : ''">
+                                Payments
+                                <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
+                            </b-tooltip>
                         </th>
                     </tr>
                     <tr>
@@ -75,7 +96,10 @@
                     </tr>
                     <tr>
                         <th>
-                            Miners Paid
+                            <b-tooltip position="is-right" class="pointer" :label="enableTooltips ? 'The number of miners pools have made payments to' : ''">
+                                Miners Paid
+                                <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
+                            </b-tooltip>
                         </th>
                     </tr>
                     <tr>
@@ -99,12 +123,6 @@ import { mapGetters } from 'vuex'
 export default {
     name: 'StatsBar',
     mixins: [vueMixin],
-    props: {
-        isLoaded: {
-            type: Boolean,
-            default: true
-        }
-    },
     data () {
         return {
             show: true
@@ -113,6 +131,7 @@ export default {
     computed: {
         ...mapGetters('node', { getNodes: 'list' }),
         ...mapGetters('pool', { getPools: 'list' }),
+        ...mapGetters(['enableTooltips']),
         pools () {
             return this.getPools.filter(value => value.hasOwnProperty('data') && value.data !== '')
         },

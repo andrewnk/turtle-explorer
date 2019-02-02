@@ -50,6 +50,14 @@ const store = () => new Vuex.Store({
       }
     })
   ],
+  state: () => ({
+    enableTooltips: true
+  }),
+  getters: {
+    enableTooltips: state => {
+      return state.enableTooltips
+    }
+  },
   actions: {
     async nuxtServerInit({ commit, dispatch }) {
       const pools = await dispatch('pool/find', { query: { $sort: { name: 1 }}})
@@ -59,6 +67,11 @@ const store = () => new Vuex.Store({
         pools,
         nodes
       ]
+    }
+  },
+  mutations: {
+    toggleTooltips (state) {
+      state.enableTooltips = !state.enableTooltips
     }
   }
 })

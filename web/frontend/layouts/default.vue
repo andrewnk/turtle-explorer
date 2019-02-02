@@ -2,13 +2,15 @@
     <div id="app">
         <navigation/>
         <no-ssr>
-            <b-notification :closable="false">
-                <b-loading :is-full-page="true" :active="!isLoaded" :can-cancel="false"/>
-            </b-notification>
+            <stats-bar/>
         </no-ssr>
-        <stats-bar v-if="isLoaded"/>
-        <nuxt class="main" v-if="isLoaded"/>
+        <nuxt class="main"/>
         <footer-section/>
+        <no-ssr>
+            <b-switch v-model="enableTooltips" class="tooltipSwitch" type="primary">
+                Tooltips
+            </b-switch>
+        </no-ssr>
     </div>
 </template>
 
@@ -17,7 +19,7 @@ import FooterSection from '~/layouts/sections/Footer'
 import Navigation from '~/layouts/sections/Navigation'
 import StatsBar from '~/layouts/sections/StatsBar'
 import socket from '~/config/socket'
-import { mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
 
 export default {
     components: {
@@ -27,7 +29,7 @@ export default {
     },
     data () {
         return {
-            isLoaded: true
+            enableTooltips: true
         }
     },
     created () {
@@ -55,6 +57,22 @@ export default {
                 this.$store.state.pool.keyedById[data.pool_id].data = data
             }
         })
+    },
+    methods: {
+        ...mapMutations({ toggleTooltips: 'toggleTooltips'})
+    },
+    watch: {
+        enableTooltips: function(newVal, oldVal) {
+            this.toggleTooltips()
+        }
     }
 }
 </script>
+
+<style>
+    .tooltipSwitch {
+        position:fixed;
+        right: 10px;
+        bottom: 10px;
+    }
+</style>

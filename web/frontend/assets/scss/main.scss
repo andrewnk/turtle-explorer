@@ -71,6 +71,15 @@ a.navbar-item.is-active:not(:hover), .navbar-link.is-active:not(:hover), a.navba
     border: 1px solid $primary;
 }
 
+.tooltipSwitch {
+    color: #fefefe;
+}
+
+.tooltip-helper {
+    margin-left: 3px;
+    font-size: 0.55rem;
+}
+
 th,
 .table,
 .b-table .table tr.detail,

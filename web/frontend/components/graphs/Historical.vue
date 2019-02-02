@@ -4,14 +4,20 @@
             <div class="columns">
                 <div class="column is-2 is-offset-10 field has-addons end">
                     <div class="control">
-                        <button class="button" :disabled="liveChart" @click="liveChart = !liveChart" :class="liveChart ? 'is-primary' : 'is-info'">
-                            Live
-                        </button>
+                        <b-tooltip position="is-bottom" class="pointer" :label="enableTooltips ? 'View live data' : ''">
+                            <button class="button" :disabled="liveChart" @click="liveChart = !liveChart" :class="liveChart ? 'is-primary' : 'is-info'">
+                                Live
+                                <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
+                            </button>
+                        </b-tooltip>
                     </div>
                     <div class="control">
-                        <button class="button" :disabled="!liveChart" @click="liveChart = !liveChart" :class="!liveChart ? 'is-primary' : 'is-info'">
-                            Historical
-                        </button>
+                        <b-tooltip position="is-bottom" class="pointer" :label="enableTooltips ? 'View historical data' : ''">
+                            <button class="button" :disabled="!liveChart" @click="liveChart = !liveChart" :class="!liveChart ? 'is-primary' : 'is-info'">
+                                Historical
+                                <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
+                            </button>
+                        </b-tooltip>
                     </div>
                 </div>
             </div>
@@ -318,6 +324,7 @@ export default {
                 return getters[`${this.model}/list`]
             }
         }),
+        ...mapGetters(['enableTooltips']),
         inputState() {
             if (!this.selectedDates) {
                 return {
