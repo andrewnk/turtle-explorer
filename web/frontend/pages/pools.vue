@@ -75,42 +75,106 @@ export default {
                 {
                     id: 1,
                     label: 'Pool Difficulty',
-                    name: 'difficulty'
+                    name: 'difficulty',
+                    format: {
+                        yAxis: (obj) => {
+                            return this.formatNumber(parseInt(obj.value), 1)
+                        },
+                        tooltip: function (x, y, name, label) {
+                            return name + '<br/>' + label + ': ' + y.toLocaleString()
+                        }.bind(this)
+                    }
                 },
                 {
                     id: 2,
                     label: 'Pool Hashrate',
-                    name: 'hashrate'
+                    name: 'hashrate',
+                    format: {
+                        yAxis: (obj) => {
+                            return this.humanReadableHashrate(obj.value, 0)
+                        },
+                        tooltip: function (x, y, name, label) {
+                            return name + '<br/>' + label + ': ' + this.humanReadableHashrate(y)
+                        }.bind(this)
+                    }
                 },
                 {
                     id: 3,
                     label: 'Pool Height',
-                    name: 'height'
+                    name: 'height',
+                    format: {
+                        yAxis: (obj) => {
+                            return this.formatNumber(parseInt(obj.value), 3)
+                        },
+                        tooltip: function (x, y, name, label) {
+                            return name + '<br/>' + label + ': ' + y.toLocaleString()
+                        }.bind(this)
+                    }
                 },
                 {
                     id: 4,
                     label: 'Pool Miners',
-                    name: 'miners'
+                    name: 'miners',
+                    format: {
+                        yAxis: (obj) => {
+                            return this.formatNumber(parseInt(obj.value), 1)
+                        },
+                        tooltip: function (x, y, name, label) {
+                            return name + '<br/>' + label + ': ' + y.toLocaleString()
+                        }.bind(this)
+                    }
                 },
                 {
                     id: 5,
                     label: 'Pool Total Blocks',
-                    name: 'total_blocks'
+                    name: 'total_blocks',
+                    format: {
+                        yAxis: (obj) => {
+                            return this.formatNumber(parseInt(obj.value), 2)
+                        },
+                        tooltip: function (x, y, name, label) {
+                            return name + '<br/>' + label + ': ' + y.toLocaleString()
+                        }.bind(this)
+                    }
                 },
                 {
                     id: 6,
                     label: 'Pool Total Miners Paid',
-                    name: 'miners_paid'
+                    name: 'miners_paid',
+                    format: {
+                        yAxis: (obj) => {
+                            return this.formatNumber(parseInt(obj.value), 1)
+                        },
+                        tooltip: function (x, y, name, label) {
+                            return name + '<br/>' + label + ': ' + y.toLocaleString()
+                        }.bind(this)
+                    }
                 },
                 {
                     id: 7,
                     label: 'Pool Total Payments',
-                    name: 'total_payments'
+                    name: 'total_payments',
+                    format: {
+                        yAxis: (obj) => {
+                            return this.formatNumber(parseInt(obj.value), 1)
+                        },
+                        tooltip: function (x, y, name, label) {
+                            return name + '<br/>' + label + ': ' + y.toLocaleString()
+                        }.bind(this)
+                    }
                 },
                 {
                     id: 8,
                     label: 'Pool Time',
-                    name: 'timestamp'
+                    name: 'timestamp',
+                    format: {
+                        yAxis: (obj) => {
+                            return this.getFormattedDate(obj.value)
+                        },
+                        tooltip: function (x, y, name, label) {
+                            return name + '<br/>' + label + ': ' + this.getFormattedDate(y)
+                        }.bind(this)
+                    }
                 }
             ],
             historyId: 'pool_id',

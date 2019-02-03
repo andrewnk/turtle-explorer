@@ -30,9 +30,10 @@
             checkable
         >
             <template slot-scope="props" slot="header">
-                <b-tooltip :label="props.column.meta" v-if="toolTipActive && props.column.meta.length > 0">
-                    <div @click="setSortValue(props.column.field)">
+                <b-tooltip :label="enableTooltips ? props.column.meta : ''" position="is-top" v-if="toolTipActive && props.column.meta.length > 0" multilined animated>
+                    <div @click="setSortValue(props.column.field)" class="no-wrap">
                         {{ props.column.label }}
+                        <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
                     </div>
                 </b-tooltip>
                 <div v-else @click="setSortValue(props.column.field)">
@@ -40,77 +41,77 @@
                 </div>
             </template>
             <template slot-scope="props">
-                <b-table-column field="name" meta="" label="Name" sortable>
+                <b-table-column field="name" meta="The node name" label="Name" sortable>
                     <div :key="props.row.name">
                         {{ props.row.name }}
                     </div>
                 </b-table-column>
-                <b-table-column field="url" meta="" label="Url" sortable>
+                <b-table-column field="url" meta="The node RPC url" label="Url" sortable>
                     <div :key="props.row.url">
                         {{ props.row.url }}
                     </div>
                 </b-table-column>
-                <b-table-column field="port" meta="" label="Port" sortable>
+                <b-table-column field="port" meta="The node RPC port" label="Port" sortable>
                     <div :key="props.row.port">
                         {{ props.row.port }}
                     </div>
                 </b-table-column>
-                <b-table-column field="height" meta="" :custom-sort="sorter" label="Height" sortable numeric>
+                <b-table-column field="height" meta="The height of the blockchain" :custom-sort="sorter" label="Height" sortable>
                     <div :key="props.row.data.height">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.height ? parseInt(props.row.data.height).toLocaleString() : ''}}
                     </div>
                 </b-table-column>
-                <b-table-column field="difficulty" :custom-sort="sorter" meta="" label="Difficulty" sortable numeric>
+                <b-table-column field="difficulty" :custom-sort="sorter" meta="The difficulty according to the node" label="Difficulty" sortable>
                     <div :key="props.row.data.difficulty">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.difficulty ? parseInt(props.row.data.difficulty).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="hashrate" :custom-sort="sorter" meta="" label="Hashrate" sortable numeric>
+                <b-table-column field="hashrate" :custom-sort="sorter" meta="The global hashrate according to the node" label="Hashrate" sortable>
                     <div :key="props.row.data.hashrate">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.hashrate ? humanReadableHashrate(props.row.data.hashrate) : ''}}
                     </div>
                 </b-table-column>
-                <b-table-column field="tx_count" :custom-sort="sorter" meta="" label="TX Count" sortable numeric>
+                <b-table-column field="tx_count" :custom-sort="sorter" meta="The total number of transactions according to the node" label="TX Count" sortable>
                     <div :key="props.row.data.txcount">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.tx_count ? parseInt(props.row.data.tx_count).toLocaleString() : ''}}
                     </div>
                 </b-table-column>
-                <b-table-column field="tx_pool_size" :custom-sort="sorter" meta="" label="TX Pool" sortable numeric>
+                <b-table-column field="tx_pool_size" :custom-sort="sorter" meta="The current transactions in the pool according to the node" label="TX Pool" sortable>
                     <div :key="props.row.data.txpoolsize">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.tx_pool_size ? parseInt(props.row.data.tx_pool_size).toLocaleString() : ''}}
                     </div>
                 </b-table-column>
-                <b-table-column field="incoming_connections_count" meta="" :custom-sort="sorter" label="Incoming Conn" sortable numeric>
+                <b-table-column field="incoming_connections_count" meta="The number of incoming connections for the node" :custom-sort="sorter" label="Incoming Conn" sortable>
                     <div :key="props.row.data.incoming">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.incoming_connections_count ? parseInt(props.row.data.incoming_connections_count).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="outgoing_connections_count" meta="" :custom-sort="sorter" label="Outgoing Conn" sortable numeric>
+                <b-table-column field="outgoing_connections_count" meta="The number of outgoing connections for the node" :custom-sort="sorter" label="Outgoing Conn" sortable>
                     <div :key="props.row.data.outgoing">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.outgoing_connections_count ? parseInt(props.row.data.outgoing_connections_count).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="last_known_block_index" :custom-sort="sorter" meta="" label="Block Index" sortable>
+                <b-table-column field="last_known_block_index" :custom-sort="sorter" meta="The global block index according to the node" label="Block Index" sortable>
                     <div :key="props.row.data.last_known_block_index">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.last_known_block_index ? parseInt(props.row.data.last_known_block_index).toLocaleString() : ''}}
                     </div>
                 </b-table-column>
-                <b-table-column field="fee" :custom-sort="sorter" meta="" label="Fee" sortable>
+                <b-table-column field="fee" :custom-sort="sorter" meta="The fee the node charges to process a transaction" label="Fee" sortable>
                     <div :key="props.row.data.fee">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.fee ? (props.row.data.fee / 100).toLocaleString() : ''}}
                     </div>
                 </b-table-column>
                 <b-table-column field="start_time" label="Timestamp" meta="" :custom-sort="sorter" class="has-text-right" sortable>
                     <div :key="props.row.data.time">
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.start_time ? getFromattedDate(props.row.data.start_time) : ''}}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.start_time ? getFormattedDate(props.row.data.start_time) : ''}}
                     </div>
                 </b-table-column>
-                <b-table-column field="version" label="Version" :custom-sort="sorter" meta="" sortable numeric>
+                <b-table-column field="version" label="Version" :custom-sort="sorter" meta="Daemon version" sortable>
                     <div :key="props.row.data.version">
                         {{ props.row.data.status !== 'Unreachable' && props.row.data.version ? props.row.data.version : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="data.status" label="Status" :custom-sort="sorter" meta="" sortable>
+                <b-table-column field="data.status" label="Status" :custom-sort="sorter" meta="Whether or not the node RPC API is reachable" sortable>
                     <div
                         class="has-text-right"
                         :key="props.row.data.status"
@@ -126,6 +127,7 @@
 <script>
 import vueMixin from '~/mixins/vueMixin.js'
 import fuse from 'fuse.js'
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'List',
@@ -172,6 +174,9 @@ export default {
                 ]
             })
         this.searchResults = this.fuseObject.list
+    },
+    computed: {
+        ...mapGetters(['enableTooltips']),
     },
     methods: {
         setSortValue (val) {

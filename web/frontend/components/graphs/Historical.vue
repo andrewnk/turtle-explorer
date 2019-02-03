@@ -4,7 +4,7 @@
             <div class="columns">
                 <div class="column is-2 is-offset-10 field has-addons end">
                     <div class="control">
-                        <b-tooltip position="is-bottom" :class="enableTooltips ? 'pointer' : ''" :label="enableTooltips ? 'View live data' : ''">
+                        <b-tooltip position="is-bottom" :class="enableTooltips ? 'pointer' : ''" :label="enableTooltips ? 'View live data' : ''" multilined animated>
                             <button class="button" :disabled="liveChart" @click="liveChart = !liveChart" :class="liveChart ? 'is-primary' : 'is-info'">
                                 Live
                                 <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
@@ -12,7 +12,7 @@
                         </b-tooltip>
                     </div>
                     <div class="control">
-                        <b-tooltip position="is-bottom" :class="enableTooltips ? 'pointer' : ''" :label="enableTooltips ? 'View historical data' : ''">
+                        <b-tooltip position="is-bottom" :class="enableTooltips ? 'pointer' : ''" :label="enableTooltips ? 'View historical data' : ''" multilined animated>
                             <button class="button" :disabled="!liveChart" @click="liveChart = !liveChart" :class="!liveChart ? 'is-primary' : 'is-info'">
                                 Historical
                                 <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
@@ -279,7 +279,8 @@ export default {
                     labels: {
                         style: {
                             color: '#E0E0E3'
-                        }
+                        },
+                        reserveSpace: true
                     },
                     lineColor: '#707073',
                     minorGridLineColor: '#505053',
@@ -289,9 +290,6 @@ export default {
                         width: 1,
                         color: '#808080'
                     }],
-                    resize: {
-                        enabled: true
-                    },
                     title: {
                         style: {
                             color: '#A0A0A3'
@@ -317,6 +315,7 @@ export default {
         this.$set(this.chartParams.query, this.historyId, { $in: '' } )
         this.chartParams.query[this.historyId].$in = this.selectedElements
         this.chartParams.attribute = this.getAttributeName(this.selectedAttribute)
+        this.formatYAxis(this.selectedAttribute, 'primary')
     },
     computed: {
         ...mapState({
@@ -350,14 +349,25 @@ export default {
     methods: {
         addSecondaryYAxis () {
             this.clearSecondaryAxis()
+            const selectedAttributeObject = this.getAttribute(this.selectedCompareAttribute)
+            let formatter = function() {
+                return this.value
+            }
+
+            if(selectedAttributeObject && selectedAttributeObject.hasOwnProperty('format') && selectedAttributeObject.format.hasOwnProperty('yAxis')) {
+
+                formatter = selectedAttributeObject.format.yAxis
+            }
 
             const newAxis = Object.assign({
-                height: '40%',
+                height: '45%',
                 id: 'secondary',
                 labels: {
+                    formatter: formatter,
                     style: {
                         color: '#E0E0E3'
-                    }
+                    },
+                    reserveSpace: true
                 },
                 lineColor: '#707073',
                 minorGridLineColor: '#505053',
@@ -382,14 +392,22 @@ export default {
         },
         resizePrimaryYAxis () {
             this.$refs.historical.chart.get('primary').update({
-                height: parseInt(this.selectedCompareAttribute) === 0 ? '100%' : '60%',
-                resize: {
-                    enabled: typeof this.$refs.historical.chart.get('secondary') === 'undefined' ? false : true
-                }
+                height: parseInt(this.selectedCompareAttribute) === 0 ? '100%' : '55%'
             })
         },
         addSeries (label, axisId) {
             this.$refs.historical.showLoading()
+            const selectedAttributeObject = (axisId === 'primary') ? this.getAttribute(this.selectedAttribute) : this.getAttribute(this.selectedCompareAttribute)
+
+            let formatter = function() {
+                return this.x + '<br/>' + this.y
+            }
+
+            if(selectedAttributeObject && selectedAttributeObject.hasOwnProperty('format') && selectedAttributeObject.format.hasOwnProperty('tooltip')) {
+
+                formatter = selectedAttributeObject.format.tooltip
+            }
+
             this.$store.dispatch(`${this.model}/find`, this.chartParams).then(() => {
                 this.$refs.historical.chart.get(axisId).setTitle({text: label})
                 this.getChartData.forEach((result, index) => {
@@ -405,7 +423,12 @@ export default {
                         id: element[0].id,
                         label: label,
                         name: element[0].name,
-                        yAxis: axisId
+                        yAxis: axisId,
+                        tooltip: {
+                            pointFormatter: function () {
+                                return formatter(this.x, this.y, this.series.name, this.series.options.label)
+                            }
+                        }
                     })
                 })
 
@@ -426,11 +449,28 @@ export default {
             this.$store.commit(`${this.model}/clearAll`)
             this.$refs.historical.removeSeries()
         },
+        getAttribute (id) {
+            return this.attributes.filter(val => val.id === id)[0] ? this.attributes.filter(val => val.id === id)[0] : ''
+        },
         getAttributeLabel (id) {
-            return this.attributes.filter(val => val.id === id)[0] ? this.attributes.filter(val => val.id === id)[0].label : ''
+            const attribute = this.getAttribute(id)
+            return attribute.hasOwnProperty('label') ? attribute.label : ''
         },
         getAttributeName (id) {
-            return this.attributes.filter(val => val.id === id)[0] ? this.attributes.filter(val => val.id === id)[0].name : ''
+            const attribute = this.getAttribute(id)
+            return attribute.hasOwnProperty('label') ? attribute.name : ''
+        },
+        formatYAxis (attribute, chartType) {
+            const selectedAttributeObject = this.getAttribute(attribute)
+            let chart = (chartType === 'primary') ? this.$refs.historical.chart.options.yAxis[0] : this.$refs.historical.chart.options.yAxis[1]
+            if(selectedAttributeObject && selectedAttributeObject.hasOwnProperty('format') && selectedAttributeObject.format.hasOwnProperty('yAxis')) {
+
+                chart.labels.formatter = selectedAttributeObject.format.yAxis
+            } else {
+                chart.labels.formatter = function() {
+                    return this.value
+                }
+            }
         }
     },
     watch: {
@@ -453,6 +493,8 @@ export default {
         selectedAttribute: function(newVal, oldVal) {
             if(newVal === oldVal) return
 
+            this.formatYAxis(this.selectedAttribute, 'primary')
+
             this.selectedCompareAttribute = 0
             this.chartParams.query.attribute = this.getAttributeName(newVal)
             this.clearData()
@@ -473,6 +515,8 @@ export default {
             this.chartParams.query.attribute = this.getAttributeName(newVal)
             this.addSecondaryYAxis()
             this.addSeries(this.getAttributeLabel(this.selectedCompareAttribute), 'secondary')
+
+            // this.formatYAxis(this.selectedCompareAttribute, 'secondary')
         },
         selectedElements: {
             handler: function(newVal, oldVal) {

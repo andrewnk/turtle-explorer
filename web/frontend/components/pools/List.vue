@@ -37,9 +37,10 @@
             checkable
         >
             <template slot-scope="props" slot="header">
-                <b-tooltip :label="props.column.meta" v-if="toolTipActive && props.column.meta.length > 0">
-                    <div @click="setSortValue(props.column.field)">
+                <b-tooltip :label="enableTooltips ? props.column.meta : ''" position="is-top" v-if="toolTipActive && props.column.meta.length > 0" multilined animated>
+                    <div @click="setSortValue(props.column.field)" class="no-wrap">
                         {{ props.column.label }}
+                        <sup v-if="enableTooltips" class="tooltip-helper">?</sup>
                     </div>
                 </b-tooltip>
                 <div v-else @click="setSortValue(props.column.field)">
@@ -47,7 +48,7 @@
                 </div>
             </template>
             <template slot-scope="props">
-                <b-table-column field="name" meta="" label="Name" sortable>
+                <b-table-column field="name" meta="The pool name" label="Name" sortable>
                     <div v-if="props.row.trusted">
                         <a
                             :href="props.row.url"
@@ -60,57 +61,57 @@
                         {{ props.row.name }}
                     </div>
                 </b-table-column>
-                <b-table-column field="miners" :custom-sort="sorter" meta="" label="Miners" sortable numeric>
+                <b-table-column field="miners" :custom-sort="sorter" meta="Number of miners currently mining on the pool" label="Miners" sortable>
                     <div :key="props.row.data.miners">
                         {{ props.row.data.status !== 'Unreachable' ? parseInt(props.row.data.miners).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="min_payout" :custom-sort="sorter" meta="" label="Min. Payout" sortable numeric>
+                <b-table-column field="min_payout" :custom-sort="sorter" meta="The pool's minimum payout" label="Min. Payout" sortable>
                     <div :key="props.row.data.min_payout">
                         {{ props.row.data.status !== 'Unreachable' ? (props.row.data.min_payout / 100).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="fee" label="Fee" sortable numeric>
+                <b-table-column field="fee" meta="The fee and fee type (if available)" label="Fee" sortable>
                     <div :key="getAllFees(props.row.id)">
                         <div v-if="props.row.data.status !== 'Unreachable'">
                             <span v-html="getAllFees(props.row.id)"></span>
                         </div>
                     </div>
                 </b-table-column>
-                <b-table-column field="total_payments" :custom-sort="sorter" meta="" label="Total Payments" sortable numeric>
+                <b-table-column field="total_payments" meta="The total payments the pool has made" :custom-sort="sorter" label="Total Payments" sortable>
                     <div :key="props.row.data.total_payments">
                         {{ props.row.data.status !== 'Unreachable' ? parseInt(props.row.data.total_payments).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="miners_paid" :custom-sort="sorter" meta="" label="Miners Paid" sortable numeric>
+                <b-table-column field="miners_paid" :custom-sort="sorter" meta="The total miners the pool has made payments to" label="Miners Paid" sortable>
                     <div :key="props.row.data.miners_paid">
                         {{ props.row.data.status !== 'Unreachable' ? parseInt(props.row.data.miners_paid).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="total_blocks" :custom-sort="sorter" meta="" label="Total Blocks" sortable numeric>
+                <b-table-column field="total_blocks" :custom-sort="sorter" meta="The total blocks the pool has found" label="Total Blocks" sortable>
                     <div :key="props.row.data.total_blocks">
                         {{ props.row.data.status !== 'Unreachable' ? parseInt(props.row.data.total_blocks).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="hashrate" :custom-sort="sorter" meta="" label="Hashrate" sortable numeric>
+                <b-table-column field="hashrate" :custom-sort="sorter" meta="The pool hashrate" label="Hashrate" sortable>
                     <div :key="props.row.data.hashrate">
                         {{ props.row.data.status !== 'Unreachable' ? humanReadableHashrate(parseInt(props.row.data.hashrate), 2) : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="height" :custom-sort="sorter" label="Height" meta="" sortable numeric>
+                <b-table-column field="height" :custom-sort="sorter" label="Height" meta="The height according to the pool" sortable>
                     <div :key="props.row.data.height">
                         {{ props.row.data.status !== 'Unreachable' ? parseInt(props.row.data.height).toLocaleString() : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="last_block_found" :custom-sort="sorter" meta="" label="Last Block Found" sortable>
+                <b-table-column field="last_block_found" :custom-sort="sorter" meta="The last block found by the pool" label="Last Block Found" sortable>
                     <div
                         class="has-text-right"
                         :key="props.row.data.last_block_found"
                     >
-                        {{ props.row.data.status !== 'Unreachable' && props.row.data.last_block_found !== '' ? getFromattedDate(props.row.data.last_block_found) : '' }}
+                        {{ props.row.data.status !== 'Unreachable' && props.row.data.last_block_found !== '' ? getFormattedDate(props.row.data.last_block_found) : '' }}
                     </div>
                 </b-table-column>
-                <b-table-column field="status" label="Status" sortable>
+                <b-table-column field="status" meta="Whether or not the pool api is reachable" label="Status" sortable>
                     <div
                         class="has-text-right"
                         :key="props.row.data.status"
@@ -118,7 +119,7 @@
                         {{ props.row.data.status }}
                     </div>
                 </b-table-column>
-                <b-table-column field="trusted" label="Trusted" sortable class="has-text-centered">
+                <b-table-column field="trusted" meta="Whether or not the pool is trusted by the community" label="Trusted" sortable class="has-text-centered">
                     <i class="fas" :class="props.row.trusted ? 'fa-check' : 'fa-ban'"></i>
                 </b-table-column>
             </template>
@@ -167,6 +168,7 @@
 import GenerateConfig from '~/components/pools/GenerateConfig'
 import vueMixin from '~/mixins/vueMixin'
 import fuse from 'fuse.js'
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'List',
@@ -217,6 +219,9 @@ export default {
                 ]
             })
         this.searchResults = this.fuseObject.list
+    },
+    computed: {
+        ...mapGetters(['enableTooltips']),
     },
     methods: {
         setSortValue (val) {

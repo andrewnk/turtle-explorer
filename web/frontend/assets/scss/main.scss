@@ -157,10 +157,6 @@ pre {
     transform: translateX(0%);
 }
 
-.wrap-word {
-    word-wrap: break-word;
-}
-
 $spaceamounts: (0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100);
 $sides: (top, bottom, left, right);
 
@@ -198,6 +194,10 @@ $sides: (top, bottom, left, right);
 
 .wrap-word {
     word-wrap: break-word;
+}
+
+.no-wrap {
+    white-space: nowrap;
 }
 
 pre {
@@ -254,4 +254,12 @@ pre {
 
 .end {
     justify-content: flex-end !important;
+}
+
+.switch input[type="checkbox"] + .check::before {
+    background: #fefefe;
+}
+
+.switch:focus input[type="checkbox"] + .check, .switch:focus input[type="checkbox"]:checked + .check {
+    box-shadow: none;
 }
