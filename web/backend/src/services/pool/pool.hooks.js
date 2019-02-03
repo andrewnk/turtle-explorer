@@ -1,5 +1,8 @@
 const { fastJoin } = require('feathers-hooks-common');
 
+const today = new Date()
+const startDate = today.setMinutes(today.getMinutes() - 1)
+
 const poolResolver = {
   joins: {
     ports: {
@@ -18,7 +21,12 @@ const poolResolver = {
         let results = await context.app.service('pool-data').find({
           query: {
             pool_id: pool.id,
-            status: 'OK'
+            status: 'OK',
+            $limit: 1,
+            $sort: { time: -1 },
+            time: {
+              $gte: startDate
+            }
           },
           paginate: false
         })
